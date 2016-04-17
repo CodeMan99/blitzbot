@@ -1,0 +1,31 @@
+{
+  "name": "blitzbot",
+  "version": "1.0.0",
+  "description": "WOT Blitz stat bot for Discord.",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/CodeMan99/blitzbot.git"
+  },
+  "keywords": [
+    "blitz",
+    "wot",
+    "tanks",
+    "bot",
+    "discord"
+  ],
+  "author": "Cody A. Taylor",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CodeMan99/blitzbot/issues"
+  },
+  "homepage": "https://github.com/CodeMan99/blitzbot#readme",
+  "dependencies": {
+    "commander": "^2.9.0",
+    "discord.js": "^7.0.1",
+    "wotblitz": "^0.1.3"
+  }
+}
