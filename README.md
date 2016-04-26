@@ -3,13 +3,6 @@ blitzbot [![Build Status](https://travis-ci.org/CodeMan99/blitzbot.svg?branch=ma
 
 Statistics chat bot for World of Tanks Blitz on Discord.
 
-Usage
------
-
-Install using `npm install -g blitzbot`. Create a Discord account for the bot to use.
-Run `blitzbot -u <username>` to connect to Discord. Follow the prompts to connect to
-a particular server.
-
 Warning
 -------
 
