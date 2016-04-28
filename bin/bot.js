@@ -50,11 +50,11 @@ commands.wr = {
     wotblitz.players.info([record.account_id], [], ['statistics.all.battles', 'statistics.all.wins'], null, function(iErr, info) {
       if (iErr) return cb(iErr);
 
-      var wins = helpers.getFieldByPath(info[record.account_id], 'statistics.all.wins');
-      var battles = helpers.getFieldByPath(info[record.account_id], 'statistics.all.battles');
+      var wins = info[record.account_id].statistics.all.wins;
+      var battles = info[record.account_id].statistics.all.battles;
       var percent = (wins / battles) * 100;
 
-      client.reply(msg, 'You have won ' + wins + ' of ' + battles + '. That is ' + percent.toFixed(2) + '% victory!', {}, function(rErr, sent) {
+      client.reply(msg, 'You have won ' + wins + ' of ' + battles + ' battles. That is ' + percent.toFixed(2) + '% victory!', {}, function(rErr, sent) {
         if (rErr) return cb(rErr);
 
         console.log('sent msg: ' + sent);
@@ -109,11 +109,11 @@ client.on('message', function(message) {
   var command = text[i];
   var args = text.slice(i + 1);
 
+  if (!(command in commands)) return;
+
   async.auto({
     record: function(cb) { db.findOne({_id: userId}, cb); },
     runCmd: ['record', function(cb, d) {
-      if (!(command in commands)) return cb(null);
-
       console.log(userId + ' -- running command: "' + command + '"');
 
       var obj = commands[command];
