@@ -47,14 +47,17 @@ commands.wr = {
   'args': 0,
   'description': 'Get the win rate of your account.',
   'fn': function(msg, record, cb) {
-    wotblitz.players.info([record.account_id], [], ['statistics.all.battles', 'statistics.all.wins'], null, function(iErr, info) {
+    var fields = ['statistics.all.battles', 'statistics.all.wins'];
+
+    wotblitz.players.info([record.account_id], [], fields, null, function(iErr, info) {
       if (iErr) return cb(iErr);
 
       var wins = info[record.account_id].statistics.all.wins;
       var battles = info[record.account_id].statistics.all.battles;
       var percent = (wins / battles) * 100;
+      var send = 'You have won ' + wins + ' of ' + battles + ' battles. That is ' + percent.toFixed(2) + '% victory!';
 
-      client.reply(msg, 'You have won ' + wins + ' of ' + battles + ' battles. That is ' + percent.toFixed(2) + '% victory!', {}, function(rErr, sent) {
+      client.reply(msg, send, {}, function(rErr, sent) {
         if (rErr) return cb(rErr);
 
         console.log('sent msg: ' + sent);
@@ -93,11 +96,11 @@ commands.help.fn = function(msg, helpFor, cb) {
     commands[key].signatures.forEach(function(signature) {
       lines.push('`' + signature + '` -- ' + commands[key].description);
     });
-  }
+  };
 
   if (helpFor) {
     if (helpFor in commands) {
-      push(helpFor)
+      push(helpFor);
     } else {
       lines.push('Unknown command: ' + helpFor);
     }
@@ -113,7 +116,6 @@ commands.help.fn = function(msg, helpFor, cb) {
     cb(null);
   });
 };
-  
 
 client.on('ready', function() {
   console.log('blitzbot ready!');
@@ -127,11 +129,11 @@ client.on('message', function(message) {
 
   var userId = message.author.id;
   var text = message.cleanContent.split(' ');
-  var i = text.findIndex(function(e, i, a) {
+  var index = text.findIndex(function(e, i, a) {
     return (message.channel.isPrivate && e === 'help') || (i > 0 && a[i - 1] === '@' + client.user.username);
   });
-  var command = text[i];
-  var args = text.slice(i + 1);
+  var command = text[index];
+  var args = text.slice(index + 1);
 
   if (!(command in commands)) return;
 
@@ -148,7 +150,9 @@ client.on('message', function(message) {
         if (d.record && d.record.account_id) {
           arr.push(d.record);
         } else {
-          return client.reply(message, "I don't know who you are! Do `@blitzbot add <screenname>` first.", {}, function(aErr) {
+          var send = "I don't know who you are! Do `@blitzbot add <screenname>` first.";
+
+          return client.reply(message, send, {}, function(aErr) {
             if (aErr) return cb(aErr);
 
             cb(null);
@@ -167,12 +171,13 @@ client.on('message', function(message) {
       console.log(userId + ' -- update document');
 
       var newRecord = d.runCmd;
+
       newRecord._id = userId;
       delete newRecord.updatedAt;
 
       db.update({_id: userId}, newRecord, {upsert: true}, cb);
     }],
-  }, function(err, data) {
+  }, function(err) {
     if (err) return console.error(helpers.getFieldByPath(err, 'response.error.text') || err.stack || err);
 
     console.log(userId + ' -- done');
@@ -182,6 +187,6 @@ client.on('message', function(message) {
 async.auto({
   loadDb: function(cb) { db.loadDatabase(cb); },
   discordLogin: function(cb) { client.loginWithToken(auth.user.token, null, null, cb); },
-}, function(err, data) {
+}, function(err) {
   if (err) return console.error(helpers.getFieldByPath(err, 'response.error.text') || err.stack || err);
 });
