@@ -83,7 +83,31 @@ commands.help = {
 
 // done last so that the help function can read the entire "commands" structure
 commands.help.fn = function(msg, helpFor, cb) {
-  client.sendMessage(msg.author, 'Help is not yet implemented.', {}, function(err, sent) {
+  if (typeof helpFor === 'function') {
+    cb = helpFor;
+    helpFor = null;
+  }
+
+  var lines = [];
+  var push = function(key) {
+    commands[key].signatures.forEach(function(signature) {
+      lines.push('`' + signature + '` -- ' + commands[key].description);
+    });
+  }
+
+  if (helpFor) {
+    if (helpFor in commands) {
+      push(helpFor)
+    } else {
+      lines.push('Unknown command: ' + helpFor);
+    }
+  } else {
+    Object.keys(commands).forEach(push);
+  }
+
+  async.each(lines, function(send, callback) {
+    client.sendMessage(msg.author, send, {}, callback);
+  }, function(err) {
     if (err) return cb(err);
 
     cb(null);
