@@ -4,8 +4,12 @@ var Datastore = require('nedb');
 var Discord = require('discord.js');
 var async = require('async');
 var auth = require('../blitzbot.json');
+
+// set WarGaming API key, so require does not return an init function
+process.env.APPLICATION_ID = '48fe1a85faacb26a079a627f8483cb6f';
+
 var helpers = require('../lib/helpers.js');
-var wotblitz = require('wotblitz')('48fe1a85faacb26a079a627f8483cb6f');
+var wotblitz = require('wotblitz');
 
 var client = new Discord.Client();
 var db = new Datastore({
