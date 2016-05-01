@@ -47,7 +47,51 @@ commands.add = {
   'signatures': ['@blitzbot add <screenname>'],
 };
 
-commands.wr = {
+commands.tankWinRate = {
+  'args': 1,
+  'description': 'Get your win rate on the given tank (replace spaces with dashes).',
+  'fn': function(msg, record, tankName, cb) {
+    var fields = ['name', 'nation', 'tier'];
+
+    tankName = tankName.replace(/-/g, ' ');
+
+    wotblitz.tankopedia.vehicles(null, [], fields, function(vErr, tanks) {
+      if (vErr) return cb(vErr);
+
+      var tankIds = Object.keys(tanks).filter(function(id) {
+        // this is not good enough, WarGaming is not very careful about giving tank unique names
+        return tanks[id].name.indexOf(tankName) > -1;
+      });
+
+      if (tankIds.length < 1) {
+        cb(null);
+      }
+
+      fields = ['tank_id', 'all.battles', 'all.wins'];
+
+      wotblitz.tankStats.stats(Number(record.account_id), tankIds, null, fields, null, function(sErr, stats) {
+        if (sErr) return cb(sErr);
+
+        var lines = stats[record.account_id].map(function(stat) {
+          var tankopedia = tanks[stat.tank_id];
+          var winRate = (stat.all.wins / stat.all.battles) * 100;
+
+          return tankopedia.name + ' (' + tankopedia.nation + ', ' + tankopedia.tier + '): ' + winRate.toFixed(2) + '%';
+        });
+
+        client.reply(msg, lines.join('\n'), {}, function(rErr) {
+          if (rErr) return cb(rErr);
+
+          cb(null);
+        });
+      });
+    });
+  },
+  'passRecord': true,
+  'signatures': ['@blitzbot tank-win-rate <tank-name>'],
+};
+
+commands.winRate = {
   'args': 0,
   'description': 'Get the win rate of your account.',
   'fn': function(msg, record, cb) {
@@ -74,7 +118,7 @@ commands.wr = {
     });
   },
   'passRecord': true,
-  'signatures': ['@blitzbot wr'],
+  'signatures': ['@blitzbot win-rate'],
 };
 
 commands.help = {
@@ -136,7 +180,8 @@ client.on('message', function(message) {
   var index = text.findIndex(function(e, i, a) {
     return (message.channel.isPrivate && e === 'help') || (i > 0 && a[i - 1] === '@' + client.user.username);
   });
-  var command = text[index];
+  // force command to camelcase
+  var command = text[index].toLowerCase().replace(/-[A-Za-z]/g, function(m) { return m[1].toUpperCase(); });
   var args = text.slice(index + 1);
 
   if (!(command in commands)) return;
