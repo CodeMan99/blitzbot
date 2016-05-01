@@ -1,3 +1,5 @@
+process.env.APPLICATION_ID = 'demo'; // not a real ID, setting for require.
+
 var test = require('tape');
 var helpers = require('../lib/helpers.js');
 
@@ -53,4 +55,15 @@ test('helpers.getFieldByPath', function(t) {
   t.equal(helpers.getFieldByPath(complexObj, 'status.spouse'), null, 'able to return null');
 
   t.end();
+});
+
+
+test('helpers.loadSession', function(t) {
+  var sess = helpers.loadSession(function(cb) { cb(null, true) });
+
+  sess.save(function(err, value) {
+    t.error(err, 'called modified save method');
+    t.ok(value, 'modified save method returned a value');
+    t.end();
+  });
 });
