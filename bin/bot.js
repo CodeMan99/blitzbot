@@ -47,6 +47,66 @@ commands.add = {
   'signatures': ['@blitzbot add <screenname>'],
 };
 
+commands.roster = {
+  'args': 1,
+  'description': 'List a clan roster. Defaults to your clan if none specified.',
+  'fn': function(msg, record, tag, cb) {
+    if (typeof tag === 'function') {
+      cb = tag;
+      tag = null;
+    }
+
+    // if a tag was provided and is does not follow the rules
+    if (tag && !tag.match(/^[A-Z0-9-_]{2,5}$/)) return cb(null);
+
+    var doRoster = function(clan_id) {
+      wotblitz.clans.info([clan_id], ['members'], ['name', 'members'], null, function(iErr, info) {
+        if (iErr) return cb(iErr);
+
+        var members = info[clan_id].members;
+        var roleOrder = Array.prototype.indexOf.bind(['commander', 'executive_officer', 'private']);
+        var roleStyle = {commander: /* bold */ '**', executive_officer: /* italics */ '*', private: null};
+        var names = Object.keys(members)
+          .map(function(id) { return members[id]; })
+          .sort(helpers.sortBy({name: 'role', primer: roleOrder}, 'joined_at'))
+          .map(function(member) {
+            var style = roleStyle[member.role];
+
+            return [style, member.account_name.replace(/([*_~])/g, '\\$1'), style].join('');
+          });
+
+        client.reply(msg, 'The roster for `' + info[clan_id].name + '` is: ' + names.join(', '), {}, function(rErr) {
+          if (rErr) return cb(rErr);
+
+          cb(null);
+        });
+      });
+    };
+
+    if (tag) {
+      wotblitz.clans.list(tag, null, 1, ['clan_id', 'tag'], null, function(lErr, list) {
+        if (lErr) return cb(lErr);
+
+        var result = list.find(function(clan) {
+          return clan.tag === tag;
+        });
+
+        if (!result) return cb(null);
+
+        doRoster(result.clan_id);
+      });
+    } else {
+      wotblitz.clans.accountinfo([record.account_id], [], ['clan_id'], null, function(aErr, accountinfo) {
+        if (aErr) return cb(aErr);
+
+        doRoster(accountinfo[record.account_id].clan_id);
+      });
+    }
+  },
+  'passRecord': true,
+  'signatures': ['@blitzbot roster [clan-tag]'],
+};
+
 commands.tankWinRate = {
   'args': 1,
   'description': 'Get your win rate on the given tank (replace spaces with dashes).',
