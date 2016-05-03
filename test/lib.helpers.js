@@ -59,11 +59,49 @@ test('helpers.getFieldByPath', function(t) {
 
 
 test('helpers.loadSession', function(t) {
-  var sess = helpers.loadSession(function(cb) { cb(null, true) });
+  var sess = helpers.loadSession(function(cb) { cb(null, true); });
 
   sess.save(function(err, value) {
     t.error(err, 'called modified save method');
     t.ok(value, 'modified save method returned a value');
     t.end();
   });
+});
+
+test('helpers.sortBy', function(t) {
+  var cmp = helpers.sortBy(
+    {name: 'index', reverse: true},
+    {name: 'first', primer: function(s) { return s.toLowerCase(); }},
+    'year'
+  );
+  var a = {index: 0, first: "Joe", year: 1991};
+  var b = {index: 0, first: "JOE", year: 1991};
+
+  t.equal(typeof cmp, 'function', 'sortBy returns a comparator function');
+  t.equal(cmp(a, b), 0, '"first" comparison is case in-sensitive');
+
+  b.year = 1992;
+  t.equal(cmp(a, b), -1, '1991 is less than 1992');
+
+  b.index = 1;
+  t.equal(cmp(a, b), 1, '0 is less than 1, but reversed');
+
+  a.index = 2;
+  t.equal(cmp(a, b), -1, '2 is greater than 1, but reversed');
+
+  b.index = 2;
+  b.first = 'brad';
+  t.equal(cmp(a, b), 1, '"j" is greater than "b"');
+
+  a.first = 'ANDY';
+  t.equal(cmp(a, b), -1, '"a" is less than "b"');
+
+  b.first = 'andy';
+  a.year = 1993;
+  t.equal(cmp(a, b), 1, '1993 is greater than 1994');
+
+  a = b;
+  t.equal(cmp(a, b), 0, 'a copy is the same');
+
+  t.end();
 });
