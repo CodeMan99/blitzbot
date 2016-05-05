@@ -75,9 +75,10 @@ commands.roster = {
             return [style, member.account_name.replace(/([*_~])/g, '\\$1'), style].join('');
           });
 
-        client.reply(msg, 'The roster for `' + info[clan_id].name + '` is: ' + names.join(', '), {}, function(rErr) {
+        client.reply(msg, 'The roster for `' + info[clan_id].name + '` is: ' + names.join(', '), {}, function(rErr, sent) {
           if (rErr) return cb(rErr);
 
+          console.log('sent msg: ' + sent);
           cb(null);
         });
       });
@@ -139,9 +140,10 @@ commands.tankWinRate = {
           return tankopedia.name + ' (' + tankopedia.nation + ', ' + tankopedia.tier + '): ' + winRate.toFixed(2) + '%';
         });
 
-        client.reply(msg, lines.join('\n'), {}, function(rErr) {
+        client.reply(msg, lines.join('\n'), {}, function(rErr, sent) {
           if (rErr) return cb(rErr);
 
+          console.log('sent msg: ' + sent);
           cb(null);
         });
       });
@@ -261,9 +263,10 @@ client.on('message', function(message) {
         } else {
           var send = "I don't know who you are! Do `@blitzbot add <screenname>` first.";
 
-          return client.reply(message, send, {}, function(aErr) {
+          return client.reply(message, send, {}, function(aErr, sent) {
             if (aErr) return cb(aErr);
 
+            console.log('sent msg: ' + sent);
             cb(null);
           });
         }
