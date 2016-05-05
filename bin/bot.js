@@ -56,9 +56,6 @@ commands.roster = {
       tag = null;
     }
 
-    // if a tag was provided and is does not follow the rules
-    if (tag && !tag.match(/^[A-Z0-9-_]{2,5}$/)) return cb(null);
-
     var doRoster = function(clan_id) {
       wotblitz.clans.info([clan_id], ['members'], ['name', 'members'], null, function(iErr, info) {
         if (iErr) return cb(iErr);
@@ -74,8 +71,9 @@ commands.roster = {
 
             return [style, member.account_name.replace(/([*_~])/g, '\\$1'), style].join('');
           });
+        var text = 'The roster for `' + info[clan_id].name + '` is: ' + names.join(', ');
 
-        client.reply(msg, 'The roster for `' + info[clan_id].name + '` is: ' + names.join(', '), {}, function(rErr, sent) {
+        client.reply(msg, text, {}, function(rErr, sent) {
           if (rErr) return cb(rErr);
 
           console.log('sent msg: ' + sent);
@@ -85,6 +83,11 @@ commands.roster = {
     };
 
     if (tag) {
+      tag = tag.toUpperCase();
+
+      // if a tag does not follow the rules
+      if (!tag.match(/^[A-Z0-9-_]{2,5}$/)) return cb(null);
+
       wotblitz.clans.list(tag, null, 1, ['clan_id', 'tag'], null, function(lErr, list) {
         if (lErr) return cb(lErr);
 
