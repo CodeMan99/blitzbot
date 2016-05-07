@@ -4,6 +4,7 @@ var Datastore = require('nedb');
 var Discord = require('discord.js');
 var async = require('async');
 var auth = require('../blitzbot.json');
+var pkg = require('../package.json');
 
 // set WarGaming API key, so require does not return an init function
 process.env.APPLICATION_ID = '48fe1a85faacb26a079a627f8483cb6f';
@@ -56,6 +57,22 @@ commands.add = {
   'passRecord': false,
   'signatures': ['@blitzbot add <screenname>'],
 };
+
+commands.hello = commands.hi = {
+  'args': 0,
+  'description': 'Just saying hello.',
+  'fn': function(msg, cb) {
+    client.reply(msg, 'Hello! Try saying `@blitzbot help` to learn about me.', {}, function(err, sent) {
+      if (err) return cb(err);
+
+      console.log('sent msg: ' + sent);
+      cb(null);
+    });
+  },
+  'passRecord': false,
+};
+commands.hello.signatures = ['@blitz hello'];
+commands.hi.signatures = ['@blitz hi'];
 
 commands.masteryList = {
   'args': 2,
@@ -246,6 +263,23 @@ commands.tankWinRate = {
   },
   'passRecord': true,
   'signatures': ['@blitzbot tank-win-rate <tank-name>'],
+};
+
+commands.version = {
+  'args': 0,
+  'description': 'Replies the current blitzbot version.',
+  'fn': function(msg, cb) {
+    var text = pkg.name + ' version ' + pkg.version + ', written by <@86558039594774528>';
+
+    client.sendMessage(msg, text, {}, function(err, sent) {
+      if (err) return cb(err);
+
+      console.log('sent msg: ' + sent);
+      cb(null);
+    });
+  },
+  'passRecord': false,
+  'signatures': ['@blitzbot version'],
 };
 
 commands.winRate = {
