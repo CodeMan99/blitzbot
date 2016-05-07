@@ -23,6 +23,16 @@ commands.add = {
   'args': 1,
   'description': 'Associate your blitz screenname with discord.',
   'fn': function(msg, screenname, cb) {
+    if (typeof screenname === 'function') {
+      cb = screenname;
+      return client.reply(msg, 'You must specify your blitz screenname. Do *not* include the tag.', {}, function(err, sent) {
+        if (err) return cb(null);
+
+        console.log('sent msg: ' + sent);
+        cb(null);
+      });
+    }
+
     screenname = screenname.toLowerCase();
 
     wotblitz.players.list(screenname, null, function(pErr, players) {
@@ -49,7 +59,7 @@ commands.add = {
 
 commands.masteryList = {
   'args': 2,
-  'description': 'List tanks at the given mastery level, sorted by battle count (default: "Mastery")',
+  'description': 'List tanks at the given mastery level, sorted by battle count (default: "Mastery").',
   'fn': function(msg, record, name1, name2, cb) {
     var name;
 
@@ -187,6 +197,16 @@ commands.tankWinRate = {
   'args': 1,
   'description': 'Get your win rate on the given tank (replace spaces with dashes).',
   'fn': function(msg, record, tankName, cb) {
+    if (typeof tankName === 'function') {
+      cb = tankName;
+      return client.reply(msg, 'No tank specified.', {}, function(err, sent) {
+        if (err) return cb(err);
+
+        console.log('sent msg: ' + sent);
+        cb(null);
+      });
+    }
+
     var fields = ['name', 'nation', 'tier'];
 
     tankName = tankName.replace(/-/g, ' ');
