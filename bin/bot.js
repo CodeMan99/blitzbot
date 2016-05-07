@@ -47,6 +47,78 @@ commands.add = {
   'signatures': ['@blitzbot add <screenname>'],
 };
 
+commands.masteryList = {
+  'args': 2,
+  'description': 'List tanks at the given mastery level, sorted by battle count (default: "Mastery")',
+  'fn': function(msg, record, name1, name2, cb) {
+    var name;
+
+    if (typeof name1 === 'function') {
+      cb = name1;
+      name = 'mastery';
+    } else if (typeof name2 ===  'function') {
+      cb = name2;
+      name = name1.toLowerCase();
+    } else {
+      name = name1.toLowerCase() + ' ' + name2.toLowerCase();
+    }
+
+    var level = ['3rd class', '2nd class', '1st class', 'mastery'].indexOf(name) + 1;
+    var fields = ['mark_of_mastery', 'tank_id', 'all.battles'];
+
+    if (level < 1) return cb(null);
+
+    wotblitz.tankStats.stats(record.account_id, [], null, fields, null, function(sErr, stats) {
+      if (sErr) return cb(sErr);
+
+      var tankIds = stats[record.account_id]
+        .filter(function(s) { return s.mark_of_mastery === level; })
+        .sort(function(a, b) { return a.all.battles - b.all.battles; })
+        .map(function(s) { return s.tank_id; });
+      var limit = 100;
+      var chunked = [];
+
+      if (tankIds.length === 0) {
+        client.reply(msg, 'I did *not* find any tanks at "' + name + '!', {}, function(rErr, sent) {
+          if (rErr) return cb(rErr);
+
+          console.log('sent msg: ' + sent);
+          cb(null);
+        });
+      }
+
+      for (var i = 0; i < tankIds.length; i += limit) {
+        chunked.push(tankIds.slice(i, i + limit));
+      }
+
+      fields = ['name', 'tier', 'nation'];
+      async.map(chunked, function(tankIdsChunk, mapCb) {
+        wotblitz.tankopedia.vehicles(tankIdsChunk, [], fields, mapCb);
+      }, function(mErr, chunkedData) {
+        if (mErr) return cb(mErr);
+
+        var data = chunkedData.reduce(function(memo, obj) {
+          Object.keys(obj).forEach(function(k) { memo[k] = obj[k]; });
+          return memo;
+        }, {});
+        var text = Object.keys(data)
+          .sort(function(a, b) { return tankIds.indexOf(Number(a)) - tankIds.indexOf(Number(b)); })
+          .map(function(id) { return data[id].name + ' (' + data[id].nation + ', ' + data[id].tier + ')'; })
+          .join(' ; ');
+
+        client.reply(msg, text, {}, function(rErr1, sent1) {
+          if (rErr1) return cb(rErr1);
+
+          console.log('sent msg: ' + sent1);
+          cb(null);
+        });
+      });
+    });
+  },
+  'passRecord': true,
+  'signatures': ['@blitzbot mastery-list [level]'],
+};
+
 commands.roster = {
   'args': 1,
   'description': 'List a clan roster. Defaults to your clan if none specified.',
