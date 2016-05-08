@@ -371,6 +371,9 @@ client.on('message', function(message) {
   var index = text.findIndex(function(e, i, a) {
     return (message.channel.isPrivate && e === 'help') || (i > 0 && a[i - 1] === '@' + client.user.username);
   });
+
+  if (index < 0) return;
+
   // force command to camelcase
   var command = text[index].toLowerCase().replace(/-[A-Za-z]/g, function(m) { return m[1].toUpperCase(); });
   var args = text.slice(index + 1);
