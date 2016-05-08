@@ -226,19 +226,17 @@ commands.tankWinRate = {
 
     var fields = ['name', 'nation', 'tier'];
 
-    tankName = tankName.replace(/-/g, ' ');
+    tankName = tankName.replace(/-/g, ' ').toLowerCase();
 
     wotblitz.tankopedia.vehicles(null, [], fields, function(vErr, tanks) {
       if (vErr) return cb(vErr);
 
       var tankIds = Object.keys(tanks).filter(function(id) {
         // this is not good enough, WarGaming is not very careful about giving tank unique names
-        return tanks[id].name.indexOf(tankName) > -1;
+        return tanks[id].name.toLowerCase().indexOf(tankName) > -1;
       });
 
-      if (tankIds.length < 1) {
-        cb(null);
-      }
+      if (tankIds.length < 1) return cb(null);
 
       fields = ['tank_id', 'all.battles', 'all.wins'];
 
