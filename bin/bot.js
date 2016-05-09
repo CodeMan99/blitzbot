@@ -237,6 +237,14 @@ commands.tankWinRate = {
       });
 
       if (tankIds.length < 1) return cb(null);
+      if (tankIds.length > 100) {
+        return client.reply(msg, 'Found too many vehicles with `' + tankName + '`.', {}, function(rErr, sent) {
+          if (rErr) return cb(rErr);
+
+          console.log('sent msg': + sent);
+          cb(null);
+        });
+      }
 
       fields = ['tank_id', 'all.battles', 'all.wins'];
 
