@@ -24,11 +24,11 @@ var commands = {};
 
 commands.add = {
   'args': 1,
-  'description': 'Associate your blitz screenname with discord.',
+  'description': 'Associate your blitz screen-name with discord.',
   'fn': function(msg, screenname, cb) {
     if (typeof screenname === 'function') {
       cb = screenname;
-      return client.reply(msg, 'You must specify your blitz screenname. Do *not* include the tag.', {}, function(err, sent) {
+      return client.reply(msg, 'You must specify your blitz screen-name. Do *not* include the tag.', {}, function(err, sent) {
         if (err) return cb(null);
 
         console.log('sent msg: ' + sent);
@@ -57,7 +57,7 @@ commands.add = {
     });
   },
   'passRecord': false,
-  'signatures': ['@blitzbot add <screenname>'],
+  'signatures': ['@blitzbot add <screen-name>'],
 };
 
 commands.hello = {
@@ -404,7 +404,7 @@ client.on('message', function(message) {
         if (d.record && d.record.account_id) {
           arr.push(d.record);
         } else {
-          var send = "I don't know who you are! Do `@blitzbot add <screenname>` first.";
+          var send = "I don't know who you are! Do `@blitzbot add <screen-name>` first.";
 
           return client.reply(message, send, {}, function(aErr, sent) {
             if (aErr) return cb(aErr);
