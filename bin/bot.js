@@ -91,7 +91,9 @@ commands.masteryList = {
       name = name1.toLowerCase() + ' ' + name2.toLowerCase();
     }
 
-    var level = ['3rd class', '2nd class', '1st class', 'mastery'].indexOf(name) + 1;
+    var level = ['3rd class', '2nd class', '1st class', 'mastery'].findIndex(function(l) {
+      return l === name || l.startsWith(name);
+    }) + 1;
     var fields = ['mark_of_mastery', 'tank_id', 'all.battles'];
 
     if (level < 1) return cb(null);
