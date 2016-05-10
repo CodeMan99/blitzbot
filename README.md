@@ -6,7 +6,7 @@ Statistics chat bot for World of Tanks Blitz on Discord.
 Commands
 --------
 
-The following are commands of v1.2.3. An argument in `[braces]` is optional. An argument in `<arrows>` is required.
+The following are commands of v1.2.4. An argument in `[braces]` is optional. An argument in `<arrows>` is required.
 
  * `@blitzbot help [command]` -- List all known commands or get help for a particular command.
  * `(direct message): help [command]` -- List all known commands or get help for a particular command.

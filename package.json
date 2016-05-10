@@ -1,6 +1,6 @@
 {
   "name": "blitzbot",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "WOT Blitz stat bot for Discord.",
   "bin": "bin/bot.js",
   "scripts": {

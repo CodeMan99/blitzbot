@@ -246,7 +246,7 @@ commands.tankWinRate = {
         return client.reply(msg, 'Found too many vehicles with `' + tankName + '`.', {}, function(rErr, sent) {
           if (rErr) return cb(rErr);
 
-          console.log('sent msg': + sent);
+          console.log('sent msg:' + sent);
           cb(null);
         });
       }
