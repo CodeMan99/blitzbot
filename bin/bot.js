@@ -12,7 +12,9 @@ process.env.APPLICATION_ID = '48fe1a85faacb26a079a627f8483cb6f';
 var helpers = require('../lib/helpers.js');
 var wotblitz = require('wotblitz');
 
-var client = new Discord.Client();
+var client = new Discord.Client({
+  autoReconnect: true,
+});
 var db = new Datastore({
   filename: './blitzbot.db',
   timestampData: true,
