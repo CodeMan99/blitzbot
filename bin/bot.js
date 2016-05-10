@@ -384,7 +384,7 @@ client.on('message', function(message) {
   if (index < 0) return;
 
   // force command to camelcase
-  var command = text[index].toLowerCase().replace(/-[A-Za-z]/g, function(m) { return m[1].toUpperCase(); });
+  var command = text[index].toLowerCase().replace(/-[a-z]/g, function(m) { return m[1].toUpperCase(); });
   var args = text.slice(index + 1);
 
   if (!(command in commands)) return;
