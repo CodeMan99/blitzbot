@@ -58,7 +58,7 @@ commands.add = {
   'signatures': ['@blitzbot add <screenname>'],
 };
 
-commands.hello = commands.hi = {
+commands.hello = {
   'args': 0,
   'description': 'Just saying hello.',
   'fn': function(msg, cb) {
@@ -71,6 +71,7 @@ commands.hello = commands.hi = {
   },
   'passRecord': false,
 };
+commands.hi = Object.assign({}, commands.hello);
 commands.hello.signatures = ['@blitz hello'];
 commands.hi.signatures = ['@blitz hi'];
 
