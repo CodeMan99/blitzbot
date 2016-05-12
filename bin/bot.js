@@ -60,6 +60,30 @@ commands.add = {
   'signatures': ['@blitzbot add <screen-name>'],
 };
 
+command.changes = {
+  'args': 1,
+  'description': 'Get the update notes from the author (defaults to current version).',
+  'fn': function(msg, version, cb) {
+    if (typeof version === 'function') {
+      cb = version;
+      version = pkg.version;
+    }
+
+    if (!(version in pkg.changeLog)) return;
+
+    var lines = ['Change Log for `' + pkg.name + '`, version **' + version + '**.'].concat(pkg.changeLog[version]);
+
+    client.reply(msg, lines.join('\n'), {}, function(err, sent) {
+      if (err) return cb(err);
+
+      console.log('sent msg: ' + sent);
+      cb(null);
+    });
+  },
+  'passRecord': false,
+  'signatures': ['@blitzbot changes [version]'],
+};
+
 commands.hello = {
   'args': 0,
   'description': 'Just saying hello.',
@@ -246,7 +270,7 @@ commands.tankWinRate = {
         return client.reply(msg, 'Found too many vehicles with `' + tankName + '`.', {}, function(rErr, sent) {
           if (rErr) return cb(rErr);
 
-          console.log('sent msg:' + sent);
+          console.log('sent msg: ' + sent);
           cb(null);
         });
       }
