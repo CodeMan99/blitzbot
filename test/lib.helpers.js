@@ -98,7 +98,7 @@ test('helpers.sortBy', function(t) {
 
   b.first = 'andy';
   a.year = 1993;
-  t.equal(cmp(a, b), 1, '1993 is greater than 1994');
+  t.equal(cmp(a, b), 1, '1993 is greater than 1992');
 
   a = b;
   t.equal(cmp(a, b), 0, 'a copy is the same');
