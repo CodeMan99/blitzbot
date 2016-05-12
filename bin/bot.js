@@ -60,7 +60,7 @@ commands.add = {
   'signatures': ['@blitzbot add <screen-name>'],
 };
 
-command.changes = {
+commands.changes = {
   'args': 1,
   'description': 'Get the update notes from the author (defaults to current version).',
   'fn': function(msg, version, cb) {
