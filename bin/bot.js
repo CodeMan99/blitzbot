@@ -260,7 +260,8 @@ commands.tankWinRate = {
           var tankopedia = tanks[stat.tank_id];
           var winRate = (stat.all.wins / stat.all.battles) * 100;
 
-          return tankopedia.name + ' (' + tankopedia.nation + ', ' + tankopedia.tier + '): ' + winRate.toFixed(2) + '%';
+          return tankopedia.name + ' (' + tankopedia.nation + ', ' + tankopedia.tier + '): ' +
+            winRate.toFixed(2) + '% after ' + stat.all.battles + ' battles.';
         });
 
         client.reply(msg, lines.join('\n'), {}, function(rErr, sent) {

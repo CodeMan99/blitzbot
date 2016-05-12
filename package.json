@@ -32,5 +32,10 @@
   },
   "devDependencies": {
     "tape": "^4.5.1"
+  },
+  "changeLog": {
+    "1.2.5": [
+      "The *tank-win-rate* command now includes battle count."
+    ]
   }
 }
