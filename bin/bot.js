@@ -13,10 +13,13 @@ var cmd = require('../lib/command');
 
 (function() { // Add commands scope, no need to pollute module scope.
   var add = require('../lib/command/add.js');
+  var devel = require('../lib/command/development.js');
   var greet = require('../lib/command/greet.js');
   var wr = require('../lib/command/winRate.js');
 
   cmd.Commands.addCommand(add);
+  cmd.Commands.addCommand(devel.changes);
+  cmd.Commands.addCommand(devel.version);
   cmd.Commands.addCommand(greet.hello);
   cmd.Commands.addCommand(greet.hi);
   cmd.Commands.addCommand(wr.winRate);
