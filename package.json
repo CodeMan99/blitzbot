@@ -32,5 +32,11 @@
   },
   "devDependencies": {
     "tape": "^4.5.1"
+  },
+  "changeLog": {
+    "unreleased": [
+      "Fixed the dash/space issue in `tank-win-rate` vehicle name searching.",
+      "Created a new command structure, making the bot more modular."
+    ]
   }
 }
