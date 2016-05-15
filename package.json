@@ -35,6 +35,7 @@
   },
   "changeLog": {
     "unreleased": [
+      "Added response when the `add` command does not find an account.",
       "Fixed the dash/space issue in `tank-win-rate` vehicle name searching.",
       "Created a new command structure, making the bot more modular."
     ]
