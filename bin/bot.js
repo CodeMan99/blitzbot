@@ -86,7 +86,7 @@ client.on('message', function(message) {
         if (d.record && d.record.account_id) {
           args.push(d.record);
         } else {
-          var send = "I don't know who you are! Do `" + mention + "add <screen-name>` first.";
+          var send = 'I don\'t know who you are! Do `' + mention + 'add <screen-name>` first.';
 
           return client.reply(message, send, {}, function(aErr, sent) {
             if (aErr) return cb(aErr);
