@@ -15,6 +15,7 @@ var cmd = require('../lib/command');
   var add = require('../lib/command/add.js');
   var devel = require('../lib/command/development.js');
   var greet = require('../lib/command/greet.js');
+  var masteryList = require('../lib/command/masteryList.js');
   var wr = require('../lib/command/winRate.js');
 
   cmd.Commands.addCommand(add);
@@ -22,6 +23,7 @@ var cmd = require('../lib/command');
   cmd.Commands.addCommand(devel.version);
   cmd.Commands.addCommand(greet.hello);
   cmd.Commands.addCommand(greet.hi);
+  cmd.Commands.addCommand(masteryList);
   cmd.Commands.addCommand(wr.winRate);
   cmd.Commands.addCommand(wr.tankWinRate);
   cmd.Commands.addCommand(cmd.createHelp());
