@@ -8,27 +8,28 @@ var auth = require('../blitzbot.json');
 // set WarGaming API key, so require does not return an init function
 process.env.APPLICATION_ID = '48fe1a85faacb26a079a627f8483cb6f';
 
+var Commands = require('../lib/command').Commands;
 var helpers = require('../lib/helpers.js');
-var cmd = require('../lib/command');
 
 (function() { // Add commands scope, no need to pollute module scope.
   var add = require('../lib/command/add.js');
+  var createHelp = require('../lib/command').createHelp;
   var devel = require('../lib/command/development.js');
   var greet = require('../lib/command/greet.js');
   var masteryList = require('../lib/command/masteryList.js');
   var roster = require('../lib/command/roster.js');
   var wr = require('../lib/command/winRate.js');
 
-  cmd.Commands.addCommand(add);
-  cmd.Commands.addCommand(devel.changes);
-  cmd.Commands.addCommand(devel.version);
-  cmd.Commands.addCommand(greet.hello);
-  cmd.Commands.addCommand(greet.hi);
-  cmd.Commands.addCommand(masteryList);
-  cmd.Commands.addCommand(roster);
-  cmd.Commands.addCommand(wr.winRate);
-  cmd.Commands.addCommand(wr.tankWinRate);
-  cmd.Commands.addCommand(cmd.createHelp());
+  Commands.addCommand(add);
+  Commands.addCommand(devel.changes);
+  Commands.addCommand(devel.version);
+  Commands.addCommand(greet.hello);
+  Commands.addCommand(greet.hi);
+  Commands.addCommand(masteryList);
+  Commands.addCommand(roster);
+  Commands.addCommand(wr.winRate);
+  Commands.addCommand(wr.tankWinRate);
+  Commands.addCommand(createHelp());
 })();
 
 var client = new Discord.Client({
@@ -38,7 +39,7 @@ var db = new Datastore({
   filename: './blitzbot.db',
   timestampData: true,
 });
-var commands = new cmd.Commands(client, db);
+var commands = new Commands(client, db);
 
 client.on('ready', function() {
   console.log('blitzbot ready!');
@@ -101,7 +102,7 @@ client.on('message', function(message) {
         Array.prototype.push.apply(args, textArgs.split(options.argSplit).slice(0, options.argCount));
       }
 
-      cmd.Commands.prototype[command].apply(commands, args).then(update => cb(null, update), cb);
+      Commands.prototype[command].apply(commands, args).then(update => cb(null, update), cb);
     }],
     update: ['runCmd', function(cb, d) {
       if (!d.runCmd) return cb(null);
