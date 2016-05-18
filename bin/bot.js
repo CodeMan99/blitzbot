@@ -6,7 +6,7 @@ var async = require('async');
 var auth = require('../blitzbot.json');
 
 // set WarGaming API key, so require does not return an init function
-process.env.APPLICATION_ID = '48fe1a85faacb26a079a627f8483cb6f';
+process.env.APPLICATION_ID = auth.wotblitz.key;
 
 var Commands = require('../lib/command').Commands;
 var helpers = require('../lib/helpers.js');
