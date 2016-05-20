@@ -105,19 +105,29 @@ client.on('message', function(message) {
         Array.prototype.push.apply(args, textArgs.split(options.argSplit).slice(0, options.argCount));
       }
 
-      Commands.prototype[command].apply(commands, args).then(update => cb(null, update), cb);
+      Commands.prototype[command].apply(commands, args).then(result => {
+        if (!result) return cb(null);
+        if (result.sentMsg) {
+          if (Array.isArray(result.sentMsg)) result.sentMsg = result.sentMsg.join('\n');
+
+          console.log('sent msg: ' + result.sentMsg);
+        }
+
+        cb(null, result.updateFields);
+      }, cb);
     }],
     update: ['runCmd', function(cb, d) {
       if (!d.runCmd) return cb(null);
 
       console.log(userId + ' -- update document');
 
-      var newRecord = d.runCmd;
+      var updateFields = d.runCmd;
 
-      newRecord._id = userId;
-      delete newRecord.updatedAt;
+      // add '_id' and remove 'updatedAt' so that upserting works every time, safely.
+      updateFields._id = userId;
+      delete updateFields.updatedAt;
 
-      db.update({_id: userId}, newRecord, {upsert: true}, cb);
+      db.update({_id: userId}, updateFields, {upsert: true}, cb);
     }],
   }, function(err) {
     if (err) return console.error(helpers.getFieldByPath(err, 'response.error.text') || err.stack || err);
