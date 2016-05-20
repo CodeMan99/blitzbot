@@ -4,6 +4,7 @@ var Datastore = require('nedb');
 var Discord = require('discord.js');
 var async = require('async');
 var auth = require('../blitzbot.json');
+var pkg = require('../package.json');
 
 // set WarGaming API key, so require does not return an init function
 process.env.APPLICATION_ID = auth.wotblitz.key;
@@ -40,6 +41,8 @@ var db = new Datastore({
   timestampData: true,
 });
 var commands = new Commands(client, db);
+
+client.userAgent = {url: pkg.homepage, version: pkg.version};
 
 client.on('ready', function() {
   console.log('blitzbot ready!');
