@@ -1,6 +1,20 @@
 var test = require('tape');
 var qs = require('querystring');
+var mockery = require('mockery');
+
+mockery.registerAllowable('querystring');
+mockery.registerAllowable('../lib/createUrl.js');
+mockery.registerMock('../blitzbot.json', {
+  app: {
+    client_id: 'fakeclientid',
+  },
+});
+mockery.enable();
+
 var createUrl = require('../lib/createUrl.js');
+
+mockery.disable();
+mockery.deregisterAll();
 
 // the permissions is the only thing that varies in createUrl at the moment
 function parse(url) {

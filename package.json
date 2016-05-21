@@ -33,6 +33,7 @@
   "devDependencies": {
     "eslint": "^2.10.2",
     "faucet": "0.0.1",
+    "mockery": "^1.7.0",
     "tape": "^4.5.1"
   },
   "changeLog": {
