@@ -1,5 +1,3 @@
-process.env.APPLICATION_ID = 'demo'; // not a real ID, setting for require.
-
 var test = require('tape');
 var helpers = require('../lib/helpers.js');
 

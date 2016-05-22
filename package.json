@@ -4,7 +4,7 @@
   "description": "WOT Blitz stat bot for Discord.",
   "bin": "bin/bot.js",
   "scripts": {
-    "test": "faucet test/*.js",
+    "test": "APPLICATION_ID=test-app-id-invalid faucet test/*.js",
     "lint": "eslint --format tap bin/*.js lib/*.js lib/command/*.js test/*.js | faucet"
   },
   "repository": {
