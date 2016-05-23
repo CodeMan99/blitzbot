@@ -39,6 +39,7 @@
   },
   "changeLog": {
     "unreleased": [
+      "Added `mastery-list` \"None\" option to list tanks without any badge.",
       "Faster clan `roster` command when looking up your own clan multiple times.",
       "Added count and percentage of played tanks to `mastery-list`.",
       "Removed order from the `mastery-list`. Seperated entries with a new line.",
