@@ -19,8 +19,9 @@ var db = new Datastore({
   filename: './blitzbot.db',
   timestampData: true,
 });
-
 var commands = {};
+
+client.userAgent = {url: pkg.homepage, version: pkg.version};
 
 commands.add = {
   'args': 1,

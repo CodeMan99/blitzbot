@@ -1,6 +1,6 @@
 {
   "name": "blitzbot",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "WOT Blitz stat bot for Discord.",
   "bin": "bin/bot.js",
   "scripts": {
@@ -35,6 +35,7 @@
   },
   "changeLog": {
     "1.2.6": [
+      "Added a valid user-agent string so discord tracking knows about blitzbot.",
       "Fixed bug in *tank-win-rate* when looking up a tank that has never been played."
     ],
     "1.2.5": [
