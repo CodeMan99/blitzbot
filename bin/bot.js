@@ -280,6 +280,9 @@ commands.tankWinRate = {
       wotblitz.tankStats.stats(Number(record.account_id), tankIds, null, fields, null, function(sErr, stats) {
         if (sErr) return cb(sErr);
 
+        // tank stats route does *not* error when the tank_id has no information.
+        if (!stats[record.account_id]) return cb(null);
+
         var lines = stats[record.account_id].map(function(stat) {
           var tankopedia = tanks[stat.tank_id];
           var winRate = (stat.all.wins / stat.all.battles) * 100;

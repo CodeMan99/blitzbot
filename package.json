@@ -34,6 +34,9 @@
     "tape": "^4.5.1"
   },
   "changeLog": {
+    "1.2.6": [
+      "Fixed bug in *tank-win-rate* when looking up a tank that has never been played."
+    ],
     "1.2.5": [
       "Added new *changes* command.",
       "The *tank-win-rate* command now includes battle count."
