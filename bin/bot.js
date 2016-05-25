@@ -161,7 +161,7 @@ commands.masteryList = {
         var text = Object.keys(data)
           .sort(function(a, b) { return tankIds.indexOf(Number(a)) - tankIds.indexOf(Number(b)); })
           .map(function(id) { return data[id].name + ' (' + data[id].nation + ', ' + data[id].tier + ')'; })
-          .join(' ; ');
+          .join('\n');
 
         client.reply(msg, text, {}, function(rErr1, sent1) {
           if (rErr1) return cb(rErr1);
