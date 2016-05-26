@@ -6,12 +6,13 @@ Statistics chat bot for World of Tanks Blitz on Discord.
 Commands
 --------
 
-The following are commands of v1.2.4. An argument in `[braces]` is optional. An argument in `<arrows>` is required.
+The following are commands of v1.2.6. An argument in `[braces]` is optional. An argument in `<arrows>` is required.
 
  * `@blitzbot help [command]` -- List all known commands or get help for a particular command.
  * `(direct message): help [command]` -- List all known commands or get help for a particular command.
- * `@blitz hi` -- Just saying hello.
- * `@blitz hello` -- Just saying hello.
+ * `@blitzbot hi` -- Just saying hello.
+ * `@blitzbot hello` -- Just saying hello.
+ * `@blitzbot changes [version]` -- Get the update notes from the author (defaults to current version).
  * `@blitzbot version` -- Replies the current blitzbot version.
  * `@blitzbot add <screen name>` -- Associate your blitz screen name with discord.
  * `@blitzbot win-rate` -- Get the win rate of your account.
