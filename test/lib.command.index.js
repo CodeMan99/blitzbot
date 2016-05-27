@@ -27,12 +27,12 @@ test('Command', (t) => {
 
 test('Commands', (t) => {
   t.ok(new Commands(), 'constructor creates an instance without arguments.');
-  t.deepEqual(Object.keys(Commands.prototype), ['$has'], 'contains no commands by default.');
-  t.notOk(new Commands().$has('setup'), 'can detect that a command has yet to be added.');
+  t.deepEqual(Object.keys(Commands.prototype), [], 'contains no commands by default.');
+  t.notOk(Commands.has('setup'), 'can detect that a command has yet to be added.');
 
-  Commands.addCommand(new Command(() => {}, null, 'setup'));
+  Commands.add(new Command(() => {}, null, 'setup'));
 
-  t.ok(new Commands().$has('setup'), 'can detect that a command was added.');
+  t.ok(Commands.has('setup'), 'can detect that a command was added.');
 
   // teardown
   delete Commands.prototype.setup;
@@ -69,7 +69,9 @@ test('createHelp', (t) => {
     },
   });
 
-  t.test('createHelp sub test 1', (st) => {
+  t.test('call help command without collection', (st) => {
+    st.equal(Commands.has('help'), false, 'verify help is not part of the collection');
+
     callHelp({/* message */}).then(result => {
       st.deepEqual(result, {
         sentMsg: [
@@ -77,9 +79,6 @@ test('createHelp', (t) => {
           '`(in direct message) help [command]` -- List of all known commands or get help for a particular command.',
         ],
       }, 'help adds its own description');
-
-      // teardown
-      delete Commands.prototype.help;
 
       st.end();
     }, error => { st.fail(error); st.end(); });
@@ -89,7 +88,7 @@ test('createHelp', (t) => {
 });
 
 test('Commands and help together.', (t) => {
-  Commands.addCommand(new Command(function echo(msg) {
+  Commands.add(new Command(function echo(msg) {
     return this.client.sendMessage({/* channel */}, msg).then(sent => {
       return {sentMsg: sent};
     });
@@ -97,7 +96,7 @@ test('Commands and help together.', (t) => {
     description: 'Echo whatever you say to me.',
     signatures: ['@BOTNAME echo'],
   }));
-  Commands.addCommand(createHelp());
+  Commands.add(createHelp());
 
   var fakeClient = {
     user: {
@@ -134,6 +133,18 @@ test('Commands and help together.', (t) => {
           '`@testbot1 echo` -- Echo whatever you say to me.',
         ],
       }, 'help can tell about a specific command.');
+
+      st.end();
+    }, error => { st.fail(error); st.end(); });
+  });
+
+  t.test('help, non-existant command', (st) => {
+    st.equal(Commands.has('non-existant'), false, 'verify command does not exist');
+
+    commands.help({/* message */}, 'non-existant').then(result => {
+      st.deepEqual(result, {
+        sentMsg: ['Unknown command: non-existant'],
+      }, 'response regardless of command');
 
       st.end();
     }, error => { st.fail(error); st.end(); });

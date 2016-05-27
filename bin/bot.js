@@ -21,16 +21,16 @@ var helpers = require('../lib/helpers.js');
   var roster = require('../lib/command/roster.js');
   var wr = require('../lib/command/winRate.js');
 
-  Commands.addCommand(add);
-  Commands.addCommand(devel.changes);
-  Commands.addCommand(devel.version);
-  Commands.addCommand(greet.hello);
-  Commands.addCommand(greet.hi);
-  Commands.addCommand(masteryList);
-  Commands.addCommand(roster);
-  Commands.addCommand(wr.winRate);
-  Commands.addCommand(wr.tankWinRate);
-  Commands.addCommand(createHelp());
+  Commands.add(add);
+  Commands.add(devel.changes);
+  Commands.add(devel.version);
+  Commands.add(greet.hello);
+  Commands.add(greet.hi);
+  Commands.add(masteryList);
+  Commands.add(roster);
+  Commands.add(wr.winRate);
+  Commands.add(wr.tankWinRate);
+  Commands.add(createHelp());
 })();
 
 var client = new Discord.Client({
@@ -73,7 +73,7 @@ client.on('message', function(message) {
 
   var command = text.slice(start, end);
 
-  if (!commands.$has(command)) return;
+  if (!Commands.has(command)) return;
 
   var options = commands[command].options;
   var textArgs = text.slice(end).trim();
