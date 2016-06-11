@@ -1,10 +1,8 @@
-process.env.APPLICATION_ID = 'demo'; // not a real ID, setting for require.
-
 var test = require('tape');
 var helpers = require('../lib/helpers.js');
 
 test('helpers.getFieldByPath', function(t) {
-  "use strict";
+  'use strict';
 
   var complexObj = {
     name: {
@@ -39,7 +37,9 @@ test('helpers.getFieldByPath', function(t) {
   t.equal(helpers.getFieldByPath(complexObj, 'invalid'), null, 'invalid path returns null');
   t.equal(helpers.getFieldByPath(complexObj, 'foo.bar'), null, 'invalid long path returns null');
 
-  t.deepEqual(helpers.getFieldByPath(complexObj, 'name'), {first: 'Big', last: 'Guy'}, 'valid path short returns the inner object');
+  t.deepEqual(
+    helpers.getFieldByPath(complexObj, 'name'), {first: 'Big', last: 'Guy'}, 'valid path short returns the inner object'
+  );
   t.equal(helpers.getFieldByPath(complexObj, 'name.first'), 'Big', 'valid long path returns the string value');
   t.equal(helpers.getFieldByPath(complexObj, 'location.state.full'), 'Washington', 'valid long path returns the string value');
 
@@ -57,8 +57,9 @@ test('helpers.getFieldByPath', function(t) {
   t.end();
 });
 
-
 test('helpers.loadSession', function(t) {
+  'use strict';
+
   var sess = helpers.loadSession(function(cb) { cb(null, true); });
 
   sess.save(function(err, value) {
@@ -69,13 +70,15 @@ test('helpers.loadSession', function(t) {
 });
 
 test('helpers.sortBy', function(t) {
+  'use strict';
+
   var cmp = helpers.sortBy(
     {name: 'index', reverse: true},
     {name: 'first', primer: function(s) { return s.toLowerCase(); }},
     'year'
   );
-  var a = {index: 0, first: "Joe", year: 1991};
-  var b = {index: 0, first: "JOE", year: 1991};
+  var a = {index: 0, first: 'Joe', year: 1991};
+  var b = {index: 0, first: 'JOE', year: 1991};
 
   t.equal(typeof cmp, 'function', 'sortBy returns a comparator function');
   t.equal(cmp(a, b), 0, '"first" comparison is case in-sensitive');
