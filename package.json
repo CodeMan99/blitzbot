@@ -1,6 +1,6 @@
 {
   "name": "blitzbot",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "WOT Blitz stat bot for Discord.",
   "bin": "bin/bot.js",
   "scripts": {
@@ -38,6 +38,9 @@
     "tape": "^4.5.1"
   },
   "changeLog": {
+    "2.0.1": [
+      "Fixed updating existing records."
+    ],
     "2.0.0": [
       "Added very basic history to the `win-rate` command.",
       "Added `mastery-list` \"None\" option to list tanks without any badge.",

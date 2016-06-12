@@ -127,7 +127,7 @@ client.on('message', function(message) {
       updateFields._id = userId;
       delete updateFields.updatedAt;
 
-      db.update({_id: userId}, updateFields, {upsert: true}, cb);
+      db.update({_id: userId}, {$set: updateFields}, {upsert: true}, cb);
     }],
   }, function(err) {
     if (err) return console.error(helpers.getFieldByPath(err, 'response.error.text') || err.stack || err);
