@@ -6,7 +6,7 @@ Statistics chat bot for World of Tanks Blitz on Discord.
 Commands
 --------
 
-The following are commands of v1.2.6. An argument in `[braces]` is optional. An argument in `<arrows>` is required.
+The following are commands as of v2.0.1. An argument in `[braces]` is optional. An argument in `<arrows>` is required.
 
  * `@blitzbot help [command]` -- List all known commands or get help for a particular command.
  * `(direct message): help [command]` -- List all known commands or get help for a particular command.
@@ -19,6 +19,36 @@ The following are commands of v1.2.6. An argument in `[braces]` is optional. An 
  * `@blitzbot tank-win-rate <tank-name>` -- Get your win rate on the given tank (replace spaces with dashes).
  * `@blitzbot mastery-list [level]` -- List tanks at the given mastery level, sorted by battle count (default: "Mastery").
  * `@blitzbot roster [clan-tag]` -- List a clan roster. Defaults to your clan if none specified.
+
+Installation Setup
+------------------
+
+Running your own instance probably isn't nessary unless you are forking this project. The setup is
+pretty easy however.
+
+ 1. Install [node.js](https://nodejs.org).
+ 2. Get a WarGaming [application id](https://na.wargaming.net/developers/applications/).
+ 3. Create a Discord [api application](https://discordapp.com/developers/applications/me).
+ 4. Create a Discord user. Use a unique name, not "blitzbot" please.
+ 5. Install the bot globally: `npm install -g blitzbot`. Alternatively, create your own package with `npm pack` and install that.
+ 6. Create a file called "blitzbot.json" in the root of the install, in it store the values from steps 2-4.
+
+     ```json
+     {
+       "app": {
+         "secret": "-- discord application secret here --"
+       },
+       "user": {
+         "token": "-- discord user token here --"
+       },
+       "wotblitz": {
+         "key": "-- WarGaming application id here --"
+       }
+     }
+     ```
+
+Finally, start the bot by running the command `blitzbot` in your shell. It is suggested to run the code var a process monitor
+like [forever](https://www.npmjs.com/package/forever), so when your bot crashes it will be silent to your audience.
 
 Work in progress
 ----------------
