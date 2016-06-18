@@ -39,6 +39,7 @@
   },
   "changeLog": {
     "unreleased": [
+      "Changed the *mastery-list* command to direct message really long lists.",
       "Added new *donate* command."
     ],
     "2.0.1": [

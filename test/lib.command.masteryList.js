@@ -4,6 +4,7 @@ var masteryList = require('../lib/command/masteryList.js');
 var callMasteryList = masteryList.fn.bind({
   client: {
     reply: (message, text) => Promise.resolve(`@${message.author}, ${text}`),
+    sendMessage: (channel, text) => Promise.resolve(text),
   },
 });
 
@@ -67,9 +68,9 @@ test('command.masteryList', (t) => {
     callMasteryList({author: 'john2 [TC]'}, {nickname: 'john2', account_id: 100991240}).then(result => {
       st.deepEqual(result, {
         sentMsg: [
-          '@john2 [TC], You have 2 tanks at Mastery, 20.00% of your 10 total tanks.',
-          'T-34 (ussr, 5)',
+          '@john2 [TC], T-34 (ussr, 5)',
           'T1 Heavy (usa, 5)',
+          'You have 2 tanks at Mastery, 20.00% of your 10 total tanks.',
         ].join('\n'),
       }, 'responds with the "Mastery" list');
 
@@ -128,10 +129,10 @@ test('command.masteryList', (t) => {
     callMasteryList({author: 'bill4 [TC]'}, {nickname: 'bill4', account_id: 100991241}, 'none').then(result => {
       st.deepEqual(result, {
         sentMsg: [
-          '@bill4 [TC], You have 3 tanks at None, 27.27% of your 11 total tanks.',
-          'Löwe (germany, 8)',
+          '@bill4 [TC], Löwe (germany, 8)',
           'Centurion Mk. I (uk, 8)',
           'STA-1 (japan, 8)',
+          'You have 3 tanks at None, 27.27% of your 11 total tanks.',
         ].join('\n'),
       }, 'responds with the "None" list');
 
@@ -193,10 +194,10 @@ test('command.masteryList', (t) => {
     callMasteryList({author: 'greg3 [TC]'}, {nickname: 'greg3', account_id: 100991242}, '3rd class').then(result => {
       st.deepEqual(result, {
         sentMsg: [
-          '@greg3 [TC], You have 3 tanks at 3rd class, 21.43% of your 14 total tanks.',
-          'T-26 (ussr, 2)',
+          '@greg3 [TC], T-26 (ussr, 2)',
           'Pz.Kpfw. II (germany, 2)',
           'T2 Medium Tank (usa, 2)',
+          'You have 3 tanks at 3rd class, 21.43% of your 14 total tanks.',
         ].join('\n'),
       }, 'responds with the "3rd class" list');
 
@@ -259,12 +260,12 @@ test('command.masteryList', (t) => {
     callMasteryList({author: 'dude9 [TC]'}, {nickname: 'dude9', account_id: 100991243}, '2nd class').then(result => {
       st.deepEqual(result, {
         sentMsg: [
-          '@dude9 [TC], You have 5 tanks at 2nd class, 38.46% of your 13 total tanks.',
-          'BT-2 (ussr, 2)',
+          '@dude9 [TC], BT-2 (ussr, 2)',
           'Pz.Kpfw. II Ausf. G (germany, 3)',
           'Vickers Medium Mk. II (uk, 2)',
           'M2 Medium Tank (usa, 3)',
           'Pz.Kpfw. 38 (t) (germany, 3)',
+          'You have 5 tanks at 2nd class, 38.46% of your 13 total tanks.',
         ].join('\n'),
       }, 'responds with the "2nd class" list');
 
@@ -325,10 +326,10 @@ test('command.masteryList', (t) => {
     callMasteryList({author: 'bigjoe [TC]'}, {nickname: 'bigjoe', account_id: 100991244}, '1st class').then(result => {
       st.deepEqual(result, {
         sentMsg: [
-          '@bigjoe [TC], You have 3 tanks at 1st class, 23.08% of your 13 total tanks.',
-          'M4 Sherman (usa, 5)',
+          '@bigjoe [TC], M4 Sherman (usa, 5)',
           'Covenanter (uk, 4)',
           'Type 3 Chi-Nu Kai (japan, 5)',
+          'You have 3 tanks at 1st class, 23.08% of your 13 total tanks.',
         ].join('\n'),
       }, 'responds with the "1st class" list');
 
@@ -392,9 +393,9 @@ test('command.masteryList', (t) => {
     callMasteryList({author: 'lilgal [TC]'}, {nickname: 'lilgal', account_id: 100991245}, 'm').then(result => {
       st.deepEqual(result, {
         sentMsg: [
-          '@lilgal [TC], You have 2 tanks at Mastery, 11.76% of your 17 total tanks.',
-          'T-34 (ussr, 5)',
+          '@lilgal [TC], T-34 (ussr, 5)',
           'T1 Heavy (usa, 5)',
+          'You have 2 tanks at Mastery, 11.76% of your 17 total tanks.',
         ].join('\n'),
       }, 'responds with the "Mastery" list');
 
@@ -520,13 +521,15 @@ test('command.masteryList', (t) => {
       });
 
     callMasteryList({author: 'tanker2 [TC]'}, {nickname: 'tanker2', account_id: 100991248}, '1st').then(result => {
-      var lines = result.sentMsg.split('\n');
+      st.ok(result.sentMsg.length > 1, 'sent multiple messages');
 
-      st.equal(lines.length, count + 1, 'responded with the expected number of lines');
+      var lineCount = result.sentMsg.join('\n').split('\n').length;
+
+      st.equal(lineCount, count + 1, 'responded with the expected number of lines');
       st.equal(
-        lines[0],
+        result.sentMsg[result.sentMsg.length - 1],
         '@tanker2 [TC], You have ' + count + ' tanks at 1st class, 100.00% of your ' + count + ' total tanks.',
-        'first line of the response is correct'
+        'last line of the response is correct'
       );
 
       st.ok(tankStats.isDone() && tankopedia1.isDone() && tankopedia2.isDone(), 'three requests were made');
