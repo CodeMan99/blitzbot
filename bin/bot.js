@@ -16,6 +16,7 @@ var helpers = require('../lib/helpers.js');
   var add = require('../lib/command/add.js');
   var createHelp = require('../lib/command').createHelp;
   var devel = require('../lib/command/development.js');
+  var donate = require('../lib/command/donate.js');
   var greet = require('../lib/command/greet.js');
   var masteryList = require('../lib/command/masteryList.js');
   var roster = require('../lib/command/roster.js');
@@ -23,6 +24,7 @@ var helpers = require('../lib/helpers.js');
 
   Commands.add(add);
   Commands.add(devel.changes);
+  Commands.add(donate);
   Commands.add(devel.version);
   Commands.add(greet.hello);
   Commands.add(greet.hi);
