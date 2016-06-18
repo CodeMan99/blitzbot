@@ -6,7 +6,7 @@ Statistics chat bot for World of Tanks Blitz on Discord.
 Commands
 --------
 
-The following are commands as of v2.0.1. An argument in `[braces]` is optional. An argument in `<arrows>` is required.
+The following are commands as of v2.1.0. An argument in `[braces]` is optional. An argument in `<arrows>` is required.
 
  * `@blitzbot help [command]` -- List all known commands or get help for a particular command.
  * `(direct message): help [command]` -- List all known commands or get help for a particular command.
@@ -19,6 +19,7 @@ The following are commands as of v2.0.1. An argument in `[braces]` is optional. 
  * `@blitzbot tank-win-rate <tank-name>` -- Get your win rate on the given tank (replace spaces with dashes).
  * `@blitzbot mastery-list [level]` -- List tanks at the given mastery level, sorted by battle count (default: "Mastery").
  * `@blitzbot roster [clan-tag]` -- List a clan roster. Defaults to your clan if none specified.
+ * `@blitzbot donate` -- Get a link to generously donate via paypal.
 
 Installation Setup
 ------------------
