@@ -3,7 +3,7 @@ var mockery = require('mockery');
 
 mockery.registerAllowable('./index.js');
 mockery.registerAllowable('../lib/command/donate.js');
-mockery.registerMock('../../wotblitz.json', {
+mockery.registerMock('../../blitzbot.json', {
   paypal: {
     me: 'https://paypal.me/CodeMan99',
   },
