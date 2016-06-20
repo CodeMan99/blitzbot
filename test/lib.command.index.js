@@ -63,9 +63,7 @@ test('createHelp', t => {
       user: {
         username: 'testbot',
       },
-      sendMessage: function(channel, text) {
-        return Promise.resolve(text);
-      },
+      sendMessage: (channel, text) => Promise.resolve(text),
     },
   });
 
@@ -102,9 +100,7 @@ test('Commands and help together.', t => {
     user: {
       username: 'testbot1',
     },
-    sendMessage: function(channel, text) {
-      return Promise.resolve(text);
-    },
+    sendMessage: (channel, text) => Promise.resolve(text),
   };
   var fakeDb = {};
   var commands = new Commands(fakeClient, fakeDb);

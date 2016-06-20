@@ -66,11 +66,7 @@ test('helpers.loadSession', t => {
 });
 
 test('helpers.sortBy', t => {
-  var cmp = helpers.sortBy(
-    {name: 'index', reverse: true},
-    {name: 'first', primer: function(s) { return s.toLowerCase(); }},
-    'year'
-  );
+  var cmp = helpers.sortBy({name: 'index', reverse: true}, {name: 'first', primer: s => s.toLowerCase()}, 'year');
   var a = {index: 0, first: 'Joe', year: 1991};
   var b = {index: 0, first: 'JOE', year: 1991};
 

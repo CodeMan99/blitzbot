@@ -5,9 +5,7 @@ var fakeCommandsInstance = {
     user: {
       username: 'testbot',
     },
-    reply: function(message, text) {
-      return Promise.resolve(`@${message.author}, ${text}`);
-    },
+    reply: (message, text) => Promise.resolve(`@${message.author}, ${text}`),
   },
 };
 var callHi = greet.hi.fn.bind(fakeCommandsInstance);

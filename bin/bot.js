@@ -12,7 +12,7 @@ process.env.APPLICATION_ID = auth.wotblitz.key;
 var Commands = require('../lib/command').Commands;
 var helpers = require('../lib/helpers.js');
 
-(function() { // Add commands scope, no need to pollute module scope.
+(() => { // Add commands scope, no need to pollute module scope.
   var add = require('../lib/command/add.js');
   var createHelp = require('../lib/command').createHelp;
   var devel = require('../lib/command/development.js');
@@ -81,8 +81,8 @@ client.on('message', message => {
   var textArgs = text.slice(end).trim();
 
   async.auto({
-    record: function(cb) { db.findOne({_id: userId}, cb); },
-    runCmd: ['record', function(cb, d) {
+    record: cb => db.findOne({_id: userId}, cb),
+    runCmd: ['record', (cb, d) => {
       console.log(userId + ' -- running command: "' + command + '"');
 
       var args = [message];
@@ -118,7 +118,7 @@ client.on('message', message => {
         cb(null, result.updateFields);
       }, cb);
     }],
-    update: ['runCmd', function(cb, d) {
+    update: ['runCmd', (cb, d) => {
       if (!d.runCmd) return cb(null);
 
       console.log(userId + ' -- update document');
@@ -144,8 +144,8 @@ client.on('message', message => {
 });
 
 async.auto({
-  loadDb: function(cb) { db.loadDatabase(cb); },
-  discordLogin: function(cb) { client.loginWithToken(auth.user.token, null, null, cb); },
+  loadDb: cb => db.loadDatabase(cb),
+  discordLogin: cb => client.loginWithToken(auth.user.token, null, null, cb),
 }, err => {
   if (err) return console.error(helpers.getFieldByPath(err, 'response.error.text') || err.stack || err);
 });
