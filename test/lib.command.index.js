@@ -4,11 +4,11 @@ var Commands = cmdModule.Commands;
 var Command = cmdModule.Command;
 var createHelp = cmdModule.createHelp;
 
-test('Command', (t) => {
+test('Command', t => {
   t.throws(() => new Command(), Error, 'constructor throws without arguments.');
   t.throws(() => new Command(() => {}), Error, 'constructor throws without a name.');
   t.doesNotThrow(() => new Command(() => {}, null, 'name'), 'constructor does not throw with a string name.');
-  t.doesNotThrow(() => new Command(function name() { }), 'constructor does not throw with a function name.');
+  t.doesNotThrow(() => new Command(function name() { }), 'constructor does not throw with a function name.'); // eslint-disable-line max-len, prefer-arrow-callback
   t.ok(new Command(() => {}, null, 'instance'), 'constructor creates an instance.');
   t.deepEqual(new Command(() => {}, null, 'name').fn.options, {
     argCount: 0,
@@ -25,7 +25,7 @@ test('Command', (t) => {
   t.end();
 });
 
-test('Commands', (t) => {
+test('Commands', t => {
   t.ok(new Commands(), 'constructor creates an instance without arguments.');
   t.deepEqual(Object.keys(Commands.prototype), [], 'contains no commands by default.');
   t.notOk(Commands.has('setup'), 'can detect that a command has yet to be added.');
@@ -40,7 +40,7 @@ test('Commands', (t) => {
   t.end();
 });
 
-test('createHelp', (t) => {
+test('createHelp', t => {
   t.doesNotThrow(createHelp, 'function does not throw.');
 
   var help = createHelp();
@@ -69,7 +69,7 @@ test('createHelp', (t) => {
     },
   });
 
-  t.test('call help command without collection', (st) => {
+  t.test('call help command without collection', st => {
     st.equal(Commands.has('help'), false, 'verify help is not part of the collection');
 
     callHelp({/* message */}).then(result => {
@@ -87,7 +87,7 @@ test('createHelp', (t) => {
   t.end();
 });
 
-test('Commands and help together.', (t) => {
+test('Commands and help together.', t => {
   Commands.add(new Command(function echo(msg) {
     return this.client.sendMessage({/* channel */}, msg).then(sent => {
       return {sentMsg: sent};
@@ -112,7 +112,7 @@ test('Commands and help together.', (t) => {
   t.ok(commands.echo, 'has the echo command as a method');
   t.ok(commands.help, 'has the help command as a method');
 
-  t.test('help, all commands', (st) => {
+  t.test('help, all commands', st => {
     commands.help({/* message */}).then(result => {
       st.deepEqual(result, {
         sentMsg: [
@@ -126,7 +126,7 @@ test('Commands and help together.', (t) => {
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('help, the "echo" command', (st) => {
+  t.test('help, the "echo" command', st => {
     commands.help({/* message */}, 'echo').then(result => {
       st.deepEqual(result, {
         sentMsg: [
@@ -138,7 +138,7 @@ test('Commands and help together.', (t) => {
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('help, non-existant command', (st) => {
+  t.test('help, non-existant command', st => {
     st.equal(Commands.has('non-existant'), false, 'verify command does not exist');
 
     commands.help({/* message */}, 'non-existant').then(result => {
@@ -150,7 +150,7 @@ test('Commands and help together.', (t) => {
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('call the "echo" command', (st) => {
+  t.test('call the "echo" command', st => {
     commands.echo('repeat after me').then(result => {
       st.deepEqual(result, {sentMsg: 'repeat after me'}, 'successful call to echo');
       st.end();

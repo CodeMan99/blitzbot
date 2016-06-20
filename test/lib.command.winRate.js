@@ -12,7 +12,7 @@ var fakeCommandsInstance = {
 var callTankWinRate = wr.tankWinRate.fn.bind(fakeCommandsInstance);
 var callWinRate = wr.winRate.fn.bind(fakeCommandsInstance);
 
-test('command.winRate.tankWinRate', (t) => {
+test('command.winRate.tankWinRate', t => {
   t.deepEqual(wr.tankWinRate.fn.options, {
     argCount: 1,
     argSplit: null,
@@ -23,7 +23,7 @@ test('command.winRate.tankWinRate', (t) => {
 
   t.equal(wr.tankWinRate.name, 'tank-win-rate', 'verify Commands method name');
 
-  t.test('provided no argument', (st) => {
+  t.test('provided no argument', st => {
     callTankWinRate({author: 'dumb43 [CL]'}, {/* record */}).then(result => {
       st.deepEqual(result, {
         sentMsg: '@dumb43 [CL], Must specify a vehicle for "tank-win-rate".',
@@ -58,7 +58,7 @@ test('command.winRate.tankWinRate', (t) => {
           '545': {tier: 1, name: 'T1 Cunningham', nation: 'usa'},
           '609': {tier: 1, name: 'Renault Otsu', nation: 'japan'},
           '769': {tier: 3, name: 'BT-7', nation: 'ussr'},
-          '785': {tier: 2, name: 'Pz.Kpfw. 35 (t)', nation: 'germany'},
+          '785': {tier: 2, name: 'Pz.Kpfw. 35 t', nation: 'germany'},
           '801': {tier: 6, name: 'M6', nation: 'usa'},
           '849': {tier: 4, name: 'Matilda', nation: 'uk'},
           '865': {tier: 2, name: 'Type 95 Ha-Go', nation: 'japan'},
@@ -97,7 +97,7 @@ test('command.winRate.tankWinRate', (t) => {
           '3105': {tier: 4, name: 'M3 Lee', nation: 'usa'},
           '3153': {tier: 7, name: 'Black Prince', nation: 'uk'},
           '3329': {tier: 1, name: 'MS-1', nation: 'ussr'},
-          '3345': {tier: 3, name: 'Pz.Kpfw. 38 (t)', nation: 'germany'},
+          '3345': {tier: 3, name: 'Pz.Kpfw. 38 t', nation: 'germany'},
           '3361': {tier: 5, name: 'T1 Heavy Tank', nation: 'usa'},
           '3425': {tier: 9, name: 'Type 61', nation: 'japan'},
           '3585': {tier: 6, name: 'SU-100', nation: 'ussr'},
@@ -152,7 +152,7 @@ test('command.winRate.tankWinRate', (t) => {
           '7953': {tier: 9, name: 'Jagdtiger', nation: 'germany'},
           '8017': {tier: 3, name: 'Valentine AT', nation: 'uk'},
           '8193': {tier: 9, name: 'Object 704', nation: 'ussr'},
-          '8209': {tier: 4, name: 'Pz.Kpfw. 38 (t) n.A.', nation: 'germany'},
+          '8209': {tier: 4, name: 'Pz.Kpfw. 38 t n.A.', nation: 'germany'},
           '8225': {tier: 8, name: 'T28', nation: 'usa'},
           '8273': {tier: 2, name: 'Universal Carrier 2-pdr', nation: 'uk'},
           '8465': {tier: 8, name: 'Panther II', nation: 'germany'},
@@ -273,7 +273,7 @@ test('command.winRate.tankWinRate', (t) => {
       });
   };
 
-  t.test('no tank name matches argument', (st) => {
+  t.test('no tank name matches argument', st => {
     var tankopediaVehicles = encyclopediaRequestMock();
 
     callTankWinRate({author: 'jake81 [CL]'}, {account_id: 100996734}, 'no tank matches').then(result => {
@@ -283,7 +283,7 @@ test('command.winRate.tankWinRate', (t) => {
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('argument is a valid tank, but has no record', (st) => {
+  t.test('argument is a valid tank, but has no record', st => {
     var tankopediaVehicles = encyclopediaRequestMock();
     var tankStats = nock('https://api.wotblitz.com')
       .post('/wotb/tanks/stats/')
@@ -315,7 +315,7 @@ test('command.winRate.tankWinRate', (t) => {
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('argument returns one tank', (st) => {
+  t.test('argument returns one tank', st => {
     var tankopediaVehicles = encyclopediaRequestMock();
     var tankStats = nock('https://api.wotblitz.com')
       .post('/wotb/tanks/stats/')
@@ -355,7 +355,7 @@ test('command.winRate.tankWinRate', (t) => {
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('argument returns two tanks', (st) => {
+  t.test('argument returns two tanks', st => {
     var tankopediaVehicles = encyclopediaRequestMock();
     var tankStats = nock('https://api.wotblitz.com')
       .post('/wotb/tanks/stats/')
@@ -405,7 +405,7 @@ test('command.winRate.tankWinRate', (t) => {
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('argument matches more than 100 limit of tankopedia endpoint', (st) => {
+  t.test('argument matches more than 100 limit of tankopedia endpoint', st => {
     var tankopediaVehicles = encyclopediaRequestMock();
 
     callTankWinRate({author: 'noshootingheretonight'}, {account_id: 100998146}, 't').then(result => {
@@ -418,7 +418,7 @@ test('command.winRate.tankWinRate', (t) => {
   t.end();
 });
 
-test('command.winRate.winRate', (t) => {
+test('command.winRate.winRate', t => {
   t.deepEqual(wr.winRate.fn.options, {
     argCount: 0,
     argSplit: ' ',
@@ -456,7 +456,7 @@ test('command.winRate.winRate', (t) => {
       });
   };
 
-  t.test('initial call', (st) => {
+  t.test('initial call', st => {
     var accountInfo = requestMock(100994563, 8691, 14280);
 
     callWinRate({author: 'bigguy20 [CL]'}, {account_id: 100994563}).then(result => {
@@ -473,7 +473,7 @@ test('command.winRate.winRate', (t) => {
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('follow up call, no additional battles', (st) => {
+  t.test('follow up call, no additional battles', st => {
     var accountInfo = requestMock(100994564, 7682, 18290);
 
     callWinRate({author: 'littleguy21 [CL]'}, {account_id: 100994564, wins: 7682, battles: 18290}).then(result => {
@@ -490,7 +490,7 @@ test('command.winRate.winRate', (t) => {
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('follow up call, one additional battle', (st) => {
+  t.test('follow up call, one additional battle', st => {
     var accountInfo = requestMock(100994565, 9260, 13933);
 
     callWinRate({author: 'biggirl22 [CL]'}, {account_id: 100994565, wins: 9259, battles: 13932}).then(result => {
@@ -511,7 +511,7 @@ test('command.winRate.winRate', (t) => {
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('follow up call, several additional battles', (st) => {
+  t.test('follow up call, several additional battles', st => {
     var accountInfo = requestMock(100994566, 5003, 11502);
 
     callWinRate({author: 'littlegirl23 [CL]'}, {account_id: 100994566, wins: 4992, battles: 11483}).then(result => {

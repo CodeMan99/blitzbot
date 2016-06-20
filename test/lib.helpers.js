@@ -1,9 +1,7 @@
 var test = require('tape');
 var helpers = require('../lib/helpers.js');
 
-test('helpers.getFieldByPath', function(t) {
-  'use strict';
-
+test('helpers.getFieldByPath', t => {
   var complexObj = {
     name: {
       first: 'Big',
@@ -28,8 +26,8 @@ test('helpers.getFieldByPath', function(t) {
   };
 
   t.doesNotThrow(helpers.getFieldByPath, 'does not throw without arguments');
-  t.doesNotThrow(function() { return helpers.getFieldByPath(null, 'foo'); }, 'does not throw without an object');
-  t.doesNotThrow(function() { return helpers.getFieldByPath(complexObj); }, 'does not throw without a path');
+  t.doesNotThrow(() => helpers.getFieldByPath(null, 'foo'), 'does not throw without an object');
+  t.doesNotThrow(() => helpers.getFieldByPath(complexObj), 'does not throw without a path');
 
   t.deepEqual(helpers.getFieldByPath(complexObj), complexObj, 'no path returns the original object');
   t.deepEqual(helpers.getFieldByPath(complexObj, ''), complexObj, 'empty path returns the original object');
@@ -57,21 +55,17 @@ test('helpers.getFieldByPath', function(t) {
   t.end();
 });
 
-test('helpers.loadSession', function(t) {
-  'use strict';
+test('helpers.loadSession', t => {
+  var sess = helpers.loadSession(cb => cb(null, true));
 
-  var sess = helpers.loadSession(function(cb) { cb(null, true); });
-
-  sess.save(function(err, value) {
+  sess.save((err, value) => {
     t.error(err, 'called modified save method');
     t.ok(value, 'modified save method returned a value');
     t.end();
   });
 });
 
-test('helpers.sortBy', function(t) {
-  'use strict';
-
+test('helpers.sortBy', t => {
   var cmp = helpers.sortBy(
     {name: 'index', reverse: true},
     {name: 'first', primer: function(s) { return s.toLowerCase(); }},

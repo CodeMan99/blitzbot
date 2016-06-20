@@ -46,12 +46,12 @@ var commands = new Commands(client, db);
 
 client.userAgent = {url: pkg.homepage, version: pkg.version};
 
-client.on('ready', function() {
+client.on('ready', () => {
   console.log('blitzbot ready!');
   console.log('===============');
 });
 
-client.on('message', function(message) {
+client.on('message', message => {
   // Bot will only respond in a DM or when mentioned.
   if (!message.channel.isPrivate && !message.isMentioned(client.user)) return;
   if (message.author.id === client.user.id) return;
@@ -94,12 +94,12 @@ client.on('message', function(message) {
         } else {
           var send = 'I don\'t know who you are! Do `' + mention + 'add <screen-name>` first.';
 
-          return client.reply(message, send, {}, function(aErr, sent) {
-            if (aErr) return cb(aErr);
-
+          client.reply(message, send).then(sent => {
             console.log('sent msg: ' + sent);
             cb(null);
-          });
+          }, cb);
+
+          return;
         }
       }
 
@@ -131,8 +131,13 @@ client.on('message', function(message) {
 
       db.update({_id: userId}, {$set: updateFields}, {upsert: true}, cb);
     }],
-  }, function(err) {
-    if (err) return console.error(helpers.getFieldByPath(err, 'response.error.text') || err.stack || err);
+  }, err => {
+    if (err) {
+      console.error(userId + ' -- ' + command);
+      console.error(helpers.getFieldByPath(err, 'response.error.text') || err.stack || err);
+
+      return;
+    }
 
     console.log(userId + ' -- done');
   });
@@ -141,6 +146,6 @@ client.on('message', function(message) {
 async.auto({
   loadDb: function(cb) { db.loadDatabase(cb); },
   discordLogin: function(cb) { client.loginWithToken(auth.user.token, null, null, cb); },
-}, function(err) {
+}, err => {
   if (err) return console.error(helpers.getFieldByPath(err, 'response.error.text') || err.stack || err);
 });

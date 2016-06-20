@@ -8,7 +8,7 @@ var callMasteryList = masteryList.fn.bind({
   },
 });
 
-test('command.masteryList', (t) => {
+test('command.masteryList', t => {
   t.deepEqual(masteryList.fn.options, {
     argCount: 1,
     argSplit: null,
@@ -19,7 +19,7 @@ test('command.masteryList', (t) => {
 
   t.equal(masteryList.name, 'mastery-list', 'verify Commands method name');
 
-  t.test('no argument default', (st) => {
+  t.test('no argument default', st => {
     nock('https://api.wotblitz.com')
       .post('/wotb/tanks/stats/')
       .query({
@@ -78,7 +78,7 @@ test('command.masteryList', (t) => {
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('list "none"', (st) => {
+  t.test('list "none"', st => {
     nock('https://api.wotblitz.com')
       .post('/wotb/tanks/stats/')
       .query({
@@ -140,7 +140,7 @@ test('command.masteryList', (t) => {
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('list "3rd class"', (st) => {
+  t.test('list "3rd class"', st => {
     nock('https://api.wotblitz.com')
       .post('/wotb/tanks/stats/')
       .query({
@@ -205,7 +205,7 @@ test('command.masteryList', (t) => {
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('list "2nd class"', (st) => {
+  t.test('list "2nd class"', st => {
     nock('https://api.wotblitz.com')
       .post('/wotb/tanks/stats/')
       .query({
@@ -253,7 +253,7 @@ test('command.masteryList', (t) => {
           '8': {name: 'Pz.Kpfw. II Ausf. G', tier: 3, nation: 'germany'},
           '11': {name: 'Vickers Medium Mk. II', tier: 2, nation: 'uk'},
           '12': {name: 'M2 Medium Tank', tier: 3, nation: 'usa'},
-          '13': {name: 'Pz.Kpfw. 38 (t)', tier: 3, nation: 'germany'},
+          '13': {name: 'Pz.Kpfw. 38 t', tier: 3, nation: 'germany'},
         },
       });
 
@@ -264,7 +264,7 @@ test('command.masteryList', (t) => {
           'Pz.Kpfw. II Ausf. G (germany, 3)',
           'Vickers Medium Mk. II (uk, 2)',
           'M2 Medium Tank (usa, 3)',
-          'Pz.Kpfw. 38 (t) (germany, 3)',
+          'Pz.Kpfw. 38 t (germany, 3)',
           'You have 5 tanks at 2nd class, 38.46% of your 13 total tanks.',
         ].join('\n'),
       }, 'responds with the "2nd class" list');
@@ -273,7 +273,7 @@ test('command.masteryList', (t) => {
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('list "1st class"', (st) => {
+  t.test('list "1st class"', st => {
     nock('https://api.wotblitz.com')
       .post('/wotb/tanks/stats/')
       .query({
@@ -337,7 +337,7 @@ test('command.masteryList', (t) => {
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('list "m"', (st) => {
+  t.test('list "m"', st => {
     nock('https://api.wotblitz.com')
       .post('/wotb/tanks/stats/')
       .query({
@@ -403,14 +403,14 @@ test('command.masteryList', (t) => {
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('invalid level argument', (st) => {
+  t.test('invalid level argument', st => {
     callMasteryList({author: 'jake48 [TC]'}, {nickname: 'jake48', account_id: 100991246}, 'third class').then(result => {
       st.notOk(result, 'resolved without a response');
       st.end();
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('empty list', (st) => {
+  t.test('empty list', st => {
     nock('https://api.wotblitz.com')
       .post('/wotb/tanks/stats/')
       .query({
@@ -456,7 +456,7 @@ test('command.masteryList', (t) => {
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('long list (higher than 100 limit of tankopedia endpoint)', (st) => {
+  t.test('long list (higher than 100 limit of tankopedia endpoint)', st => {
     var count = Math.floor(Math.random() * 99) + 101; // [101,200)
     var tankStats = nock('https://api.wotblitz.com')
       .post('/wotb/tanks/stats/')

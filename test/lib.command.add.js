@@ -7,7 +7,7 @@ var callAdd = add.fn.bind({
   },
 });
 
-test('command.add', (t) => {
+test('command.add', t => {
   t.deepEqual(add.fn.options, {
     argCount: 1,
     argSplit: ' ',
@@ -18,7 +18,7 @@ test('command.add', (t) => {
 
   t.equal(add.name, 'add', 'verify Commands method name');
 
-  t.test('no arguments response', (st) => {
+  t.test('no arguments response', st => {
     callAdd({author: 'Jim [CLN12]'}).then(result => {
       st.deepEqual(result, {
         sentMsg: '@Jim [CLN12], You must specify your Blitz username. Do *not* include the clan tag.',
@@ -28,7 +28,7 @@ test('command.add', (t) => {
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('valid username argument', (st) => {
+  t.test('valid username argument', st => {
     nock('https://api.wotblitz.com')
       .post('/wotb/account/list/')
       .query({search: 'joe234', application_id: process.env.APPLICATION_ID})
@@ -54,7 +54,7 @@ test('command.add', (t) => {
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('invalid username argument', (st) => {
+  t.test('invalid username argument', st => {
     nock('https://api.wotblitz.com')
       .post('/wotb/account/list/')
       .query({search: 'tankkiller', application_id: process.env.APPLICATION_ID})

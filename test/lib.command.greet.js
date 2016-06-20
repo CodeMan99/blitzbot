@@ -13,7 +13,7 @@ var fakeCommandsInstance = {
 var callHi = greet.hi.fn.bind(fakeCommandsInstance);
 var callHello = greet.hello.fn.bind(fakeCommandsInstance);
 
-test('greet.hi', (t) => {
+test('greet.hi', t => {
   t.deepEqual(greet.hi.fn.options, {
     argCount: 0,
     argSplit: ' ',
@@ -24,7 +24,7 @@ test('greet.hi', (t) => {
 
   t.equal(greet.hi.name, 'hi', 'verify Commands method name');
 
-  t.test('valid call', (st) => {
+  t.test('valid call', st => {
     callHi({author: 'bob1'}).then(result => {
       st.deepEqual(result, {sentMsg: '@bob1, Hello! Try saying `@testbot help` to learn about me'}, 'valid response');
       st.end();
@@ -34,7 +34,7 @@ test('greet.hi', (t) => {
   t.end();
 });
 
-test('greet.hello', (t) => {
+test('greet.hello', t => {
   t.deepEqual(greet.hello.fn.options, {
     argCount: 0,
     argSplit: ' ',
@@ -45,7 +45,7 @@ test('greet.hello', (t) => {
 
   t.equal(greet.hello.name, 'hello', 'verify Commands method name');
 
-  t.test('greet.hello call', (st) => {
+  t.test('greet.hello call', st => {
     callHello({author: 'zack32'}).then(result => {
       st.deepEqual(result, {sentMsg: '@zack32, Hello! Try saying `@testbot help` to learn about me'}, 'valid response');
       st.end();

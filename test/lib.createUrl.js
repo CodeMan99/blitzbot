@@ -23,9 +23,7 @@ function parse(url) {
   return qs.parse(right).permissions;
 }
 
-test('createUrl', function t1(t) {
-  'use strict';
-
+test('createUrl', t => {
   t.equal(parse(createUrl(5)), '5', 'single number argument');
   t.equal(parse(createUrl(1, 2)), '3', 'multiple number arguments');
   t.equal(parse(createUrl([2, 4])), '6', 'single array argument');

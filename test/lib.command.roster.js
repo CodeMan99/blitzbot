@@ -7,7 +7,7 @@ var callRoster = roster.fn.bind({
   },
 });
 
-test('command.roster', (t) => {
+test('command.roster', t => {
   t.deepEqual(roster.fn.options, {
     argCount: 1,
     argSplit: ' ',
@@ -18,7 +18,7 @@ test('command.roster', (t) => {
 
   t.equal(roster.name, 'roster', 'verify Commands method name');
 
-  t.test('no argument, clan_id *not* in database', (st) => {
+  t.test('no argument, clan_id *not* in database', st => {
     var accountInfo = nock('https://api.wotblitz.com')
       .post('/wotb/clans/accountinfo/')
       .query({
@@ -98,7 +98,7 @@ test('command.roster', (t) => {
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('no argument, clan_id in database', (st) => {
+  t.test('no argument, clan_id in database', st => {
     var clanInfo = nock('https://api.wotblitz.com')
       .post('/wotb/clans/info/')
       .query({
@@ -146,7 +146,7 @@ test('command.roster', (t) => {
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('valid tag argument', (st) => {
+  t.test('valid tag argument', st => {
     var clanList = nock('https://api.wotblitz.com')
       .post('/wotb/clans/list/')
       .query({
@@ -252,14 +252,14 @@ test('command.roster', (t) => {
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('invalid tag format argument', (st) => {
+  t.test('invalid tag format argument', st => {
     callRoster({author: 'jake3 [NOAME]'}, {account_id: 10996725}, 'NO@ME').then(result => {
       st.notOk(result, 'resolved without a response');
       st.end();
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('valid tag argument, but empty result', (st) => {
+  t.test('valid tag argument, but empty result', st => {
     var clanList = nock('https://api.wotblitz.com')
       .post('/wotb/clans/list/')
       .query({
@@ -278,7 +278,7 @@ test('command.roster', (t) => {
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('valid tag argument, but no clan found', (st) => {
+  t.test('valid tag argument, but no clan found', st => {
     var clanList = nock('https://api.wotblitz.com')
       .post('/wotb/clans/list/')
       .query({

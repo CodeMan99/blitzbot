@@ -21,7 +21,7 @@ var callDonate = donate.fn.bind({
   },
 });
 
-test('donate', (t) => {
+test('donate', t => {
   t.deepEqual(donate.fn.options, {
     argCount: 0,
     argSplit: ' ',
@@ -32,7 +32,7 @@ test('donate', (t) => {
 
   t.equal(donate.name, 'donate', 'verify Commands method name');
 
-  t.test('command', (st) => {
+  t.test('command', st => {
     callDonate({author: 'NiceDude [CL]'}).then(result => {
       var link = result.sentMsg.split(' ').slice(-1)[0];
 

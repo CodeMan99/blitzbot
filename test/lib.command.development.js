@@ -32,7 +32,7 @@ var fakeCommandsInstance = {
 var callChanges = dev.changes.fn.bind(fakeCommandsInstance);
 var callVersion = dev.version.fn.bind(fakeCommandsInstance);
 
-test('development.changes', (t) => {
+test('development.changes', t => {
   t.deepEqual(dev.changes.fn.options, {
     argCount: 1,
     argSplit: ' ',
@@ -43,7 +43,7 @@ test('development.changes', (t) => {
 
   t.equal(dev.changes.name, 'changes', 'verify Commands method name');
 
-  t.test('no version argument', (st) => {
+  t.test('no version argument', st => {
     callChanges({author: 'bill32'}).then(result => {
       st.deepEqual(result, {
         sentMsg: [
@@ -57,7 +57,7 @@ test('development.changes', (t) => {
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('valid version argument', (st) => {
+  t.test('valid version argument', st => {
     callChanges({author: 'greg14'}, '1.3.3').then(result => {
       st.deepEqual(result, {
         sentMsg: [
@@ -71,7 +71,7 @@ test('development.changes', (t) => {
     }, error => { st.fail(error); st.end(); });
   });
 
-  t.test('invalid version argument', (st) => {
+  t.test('invalid version argument', st => {
     callChanges({author: 'jack81'}, '1.3.5').then(result => {
       st.notOk(result, 'no response without error');
       st.end();
@@ -81,7 +81,7 @@ test('development.changes', (t) => {
   t.end();
 });
 
-test('development.version', (t) => {
+test('development.version', t => {
   t.deepEqual(dev.version.fn.options, {
     argCount: 0,
     argSplit: ' ',
@@ -92,7 +92,7 @@ test('development.version', (t) => {
 
   t.equal(dev.changes.name, 'changes', 'verify Commands method name');
 
-  t.test('valid call', (st) => {
+  t.test('valid call', st => {
     callVersion({author: 'joe65'}).then(result => {
       st.deepEqual(result, {
         sentMsg: '@joe65, testname version 1.3.4, written by <@86558039594774528>',
