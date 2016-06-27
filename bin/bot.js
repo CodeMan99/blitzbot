@@ -44,6 +44,7 @@ var db = new Datastore({
 });
 var commands = new Commands(client, db);
 
+process.title = pkg.name;
 client.userAgent = {url: pkg.homepage, version: pkg.version};
 
 client.on('ready', () => {
