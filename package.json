@@ -26,18 +26,21 @@
   "homepage": "https://github.com/CodeMan99/blitzbot#readme",
   "dependencies": {
     "async": "^1.5.2",
-    "discord.js": "^7.0.1",
+    "discord.js": "^8.0.0",
     "nedb": "^1.8.0",
     "wotblitz": "^0.1.3"
   },
   "devDependencies": {
-    "eslint": "^2.10.2",
+    "eslint": "^2.13.1",
     "faucet": "0.0.1",
     "mockery": "^1.7.0",
     "nock": "^8.0.0",
-    "tape": "^4.5.1"
+    "tape": "^4.6.0"
   },
   "changeLog": {
+    "unreleased": [
+      "Update discord.js dependency."
+    ],
     "2.1.0": [
       "Changed the *mastery-list* command to direct message really long lists.",
       "Added new *donate* command."
@@ -50,7 +53,7 @@
       "Added `mastery-list` \"None\" option to list tanks without any badge.",
       "Faster clan `roster` command when looking up your own clan multiple times.",
       "Added count and percentage of played tanks to `mastery-list`.",
-      "Removed order from the `mastery-list`. Seperated entries with a new line.",
+      "Removed order from the `mastery-list`. Separated entries with a new line.",
       "Added response when the `add` command does not find an account.",
       "Fixed the dash/space issue in `tank-win-rate` vehicle name searching.",
       "Created a new command structure, making the bot more modular."
