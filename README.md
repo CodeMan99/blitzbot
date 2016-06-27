@@ -24,7 +24,7 @@ The following are commands as of v2.1.0. An argument in `[braces]` is optional. 
 Installation Setup
 ------------------
 
-Running your own instance probably isn't nessary unless you are forking this project. The setup is
+Running your own instance probably isn't necessary unless you are forking this project. The setup is
 pretty easy however.
 
  1. Install [node.js](https://nodejs.org).
@@ -48,7 +48,7 @@ pretty easy however.
      }
      ```
 
-Finally, start the bot by running the command `blitzbot` in your shell. It is suggested to run the code var a process monitor
+Finally, start the bot by running the command `blitzbot` in your shell. It is suggested to run the code via a process monitor
 like [forever](https://www.npmjs.com/package/forever), so when your bot crashes it will be silent to your audience.
 
 Work in progress
