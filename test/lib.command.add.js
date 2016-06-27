@@ -1,11 +1,8 @@
 var test = require('tape');
 var nock = require('nock');
+var mocks = require('./mocks');
 var add = require('../lib/command/add.js');
-var callAdd = add.fn.bind({
-  client: {
-    reply: (message, text) => Promise.resolve(`@${message.author}, ${text}`),
-  },
-});
+var callAdd = add.fn.bind(mocks.commands);
 
 test('command.add', t => {
   t.deepEqual(add.fn.options, {

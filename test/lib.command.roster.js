@@ -1,11 +1,8 @@
 var test = require('tape');
 var nock = require('nock');
+var mocks = require('./mocks');
 var roster = require('../lib/command/roster.js');
-var callRoster = roster.fn.bind({
-  client: {
-    reply: (message, text) => Promise.resolve(`@${message.author}, ${text}`),
-  },
-});
+var callRoster = roster.fn.bind(mocks.commands);
 
 test('command.roster', t => {
   t.deepEqual(roster.fn.options, {

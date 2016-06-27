@@ -1,4 +1,5 @@
 var test = require('tape');
+var mocks = require('./mocks');
 var cmdModule = require('../lib/command/index.js');
 var Commands = cmdModule.Commands;
 var Command = cmdModule.Command;
@@ -58,14 +59,7 @@ test('createHelp', t => {
     ],
   }, 'created commands options are specified.');
 
-  var callHelp = help.fn.bind({
-    client: {
-      user: {
-        username: 'testbot',
-      },
-      sendMessage: (channel, text) => Promise.resolve(text),
-    },
-  });
+  var callHelp = help.fn.bind(mocks.commands);
 
   t.test('call help command without collection', st => {
     st.equal(Commands.has('help'), false, 'verify help is not part of the collection');
@@ -96,12 +90,11 @@ test('Commands and help together.', t => {
   }));
   Commands.add(createHelp());
 
-  var fakeClient = {
+  var fakeClient = Object.assign({}, mocks.commands.client, {
     user: {
       username: 'testbot1',
     },
-    sendMessage: (channel, text) => Promise.resolve(text),
-  };
+  });
   var fakeDb = {};
   var commands = new Commands(fakeClient, fakeDb);
 

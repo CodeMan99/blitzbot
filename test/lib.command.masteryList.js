@@ -1,12 +1,8 @@
 var test = require('tape');
 var nock = require('nock');
+var mocks = require('./mocks');
 var masteryList = require('../lib/command/masteryList.js');
-var callMasteryList = masteryList.fn.bind({
-  client: {
-    reply: (message, text) => Promise.resolve(`@${message.author}, ${text}`),
-    sendMessage: (channel, text) => Promise.resolve(text),
-  },
-});
+var callMasteryList = masteryList.fn.bind(mocks.commands);
 
 test('command.masteryList', t => {
   t.deepEqual(masteryList.fn.options, {

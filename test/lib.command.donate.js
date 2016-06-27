@@ -1,5 +1,6 @@
 var test = require('tape');
 var mockery = require('mockery');
+var mocks = require('./mocks');
 
 mockery.registerAllowable('./index.js');
 mockery.registerAllowable('../lib/command/donate.js');
@@ -15,11 +16,7 @@ var donate = require('../lib/command/donate.js');
 mockery.disable();
 mockery.deregisterAll();
 
-var callDonate = donate.fn.bind({
-  client: {
-    reply: (message, text) => Promise.resolve(`@${message.author}, ${text}`),
-  },
-});
+var callDonate = donate.fn.bind(mocks.commands);
 
 test('donate', t => {
   t.deepEqual(donate.fn.options, {

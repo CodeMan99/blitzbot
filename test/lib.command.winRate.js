@@ -1,16 +1,9 @@
 var test = require('tape');
 var nock = require('nock');
+var mocks = require('./mocks');
 var wr = require('../lib/command/winRate.js');
-var fakeCommandsInstance = {
-  client: {
-    user: {
-      username: 'testbot',
-    },
-    reply: (message, text) => Promise.resolve(`@${message.author}, ${text}`),
-  },
-};
-var callTankWinRate = wr.tankWinRate.fn.bind(fakeCommandsInstance);
-var callWinRate = wr.winRate.fn.bind(fakeCommandsInstance);
+var callTankWinRate = wr.tankWinRate.fn.bind(mocks.commands);
+var callWinRate = wr.winRate.fn.bind(mocks.commands);
 
 test('command.winRate.tankWinRate', t => {
   t.deepEqual(wr.tankWinRate.fn.options, {

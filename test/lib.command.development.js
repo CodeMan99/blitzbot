@@ -1,5 +1,6 @@
 var test = require('tape');
 var mockery = require('mockery');
+var mocks = require('./mocks');
 
 mockery.registerAllowable('./index.js');
 mockery.registerAllowable('../lib/command/development.js');
@@ -24,13 +25,8 @@ var dev = require('../lib/command/development.js');
 mockery.disable();
 mockery.deregisterAll();
 
-var fakeCommandsInstance = {
-  client: {
-    reply: (message, text) => Promise.resolve(`@${message.author}, ${text}`),
-  },
-};
-var callChanges = dev.changes.fn.bind(fakeCommandsInstance);
-var callVersion = dev.version.fn.bind(fakeCommandsInstance);
+var callChanges = dev.changes.fn.bind(mocks.commands);
+var callVersion = dev.version.fn.bind(mocks.commands);
 
 test('development.changes', t => {
   t.deepEqual(dev.changes.fn.options, {

@@ -1,15 +1,8 @@
 var test = require('tape');
+var mocks = require('./mocks');
 var greet = require('../lib/command/greet.js');
-var fakeCommandsInstance = {
-  client: {
-    user: {
-      username: 'testbot',
-    },
-    reply: (message, text) => Promise.resolve(`@${message.author}, ${text}`),
-  },
-};
-var callHi = greet.hi.fn.bind(fakeCommandsInstance);
-var callHello = greet.hello.fn.bind(fakeCommandsInstance);
+var callHi = greet.hi.fn.bind(mocks.commands);
+var callHello = greet.hello.fn.bind(mocks.commands);
 
 test('greet.hi', t => {
   t.deepEqual(greet.hi.fn.options, {
