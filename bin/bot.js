@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
+var Commands = require('../lib/command').Commands;
 var Datastore = require('nedb');
 var Discord = require('discord.js');
 var async = require('async');
 var auth = require('../blitzbot.json');
 var pkg = require('../package.json');
 
-// set WarGaming API key, so require does not return an init function
+// set WarGaming API key, so `require('wotblitz')` does not return an init function
 process.env.APPLICATION_ID = auth.wotblitz.key;
 
-var Commands = require('../lib/command').Commands;
 var helpers = require('../lib/helpers.js');
 
 (() => { // Add commands scope, no need to pollute module scope.
