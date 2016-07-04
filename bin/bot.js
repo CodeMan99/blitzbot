@@ -6,6 +6,7 @@ var Discord = require('discord.js');
 var async = require('async');
 var auth = require('../blitzbot.json');
 var pkg = require('../package.json');
+var serveReferences = require('../lib/serveReferences.js');
 
 // set WarGaming API key, so `require('wotblitz')` does not return an init function
 process.env.APPLICATION_ID = auth.wotblitz.key;
@@ -149,4 +150,14 @@ async.auto({
   discordLogin: cb => client.loginWithToken(auth.user.token, null, null, cb),
 }, err => {
   if (err) return console.error(helpers.getFieldByPath(err, 'response.error.text') || err.stack || err);
+
+  // outside of the "async.auto" stack because the callback may be called more than once, breaking a key concept
+  serveReferences({
+    async: async,
+    bot: client,
+    commands: commands,
+    db: db,
+  }, 8008, serverErr => {
+    if (serverErr) return console.error(serverErr.stack || serverErr);
+  });
 });

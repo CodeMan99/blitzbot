@@ -39,6 +39,7 @@
   },
   "changeLog": {
     "unreleased": [
+      "Add admin REPL server to allow changes while the bot is live.",
       "Update discord.js dependency."
     ],
     "2.1.0": [
