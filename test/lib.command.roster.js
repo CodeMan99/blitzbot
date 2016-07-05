@@ -304,5 +304,31 @@ test('command.roster', t => {
     }, error => { st.fail(error); st.end(); });
   });
 
+  t.test('no argument, but not in a clan', st => {
+    var accountInfo = nock('https://api.wotblitz.com')
+      .post('/wotb/clans/accountinfo/')
+      .query({
+        account_id: '10996727',
+        extra: null,
+        fields: 'clan_id',
+        application_id: process.env.APPLICATION_ID,
+      })
+      .reply(200, {
+        status: 'ok',
+        meta: {
+          count: 1,
+        },
+        data: {
+          '10996727': null,
+        },
+      });
+
+    callRoster({author: 'frogger8 [MYTH]'}, {account_id: 10996727}).then(result => {
+      st.notOk(result, 'resolved without a response');
+      st.ok(accountInfo.isDone(), 'made wotblitz api call');
+      st.end();
+    }, error => { st.fail(error); st.end(); });
+  });
+
   t.end();
 });

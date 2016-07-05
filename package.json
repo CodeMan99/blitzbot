@@ -39,6 +39,7 @@
   },
   "changeLog": {
     "unreleased": [
+      "Fixed *roster* bug when the message author is not in a clan.",
       "Add admin REPL server to allow changes while the bot is live.",
       "Update discord.js dependency."
     ],
