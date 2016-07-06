@@ -1,8 +1,10 @@
 var test = require('tape');
+var Datastore = require('nedb');
 var nock = require('nock');
 var mocks = require('./mocks');
 var wr = require('../lib/command/winRate.js');
-var callTankWinRate = wr.tankWinRate.fn.bind(mocks.commands);
+var dbInstance = new Datastore({inMemoryOnly: true, timestampData: true, autoload: true});
+var callTankWinRate = wr.tankWinRate.fn.bind(Object.assign(mocks.commands, {db: dbInstance}));
 var callWinRate = wr.winRate.fn.bind(mocks.commands);
 
 test('command.winRate.tankWinRate', t => {
@@ -298,7 +300,7 @@ test('command.winRate.tankWinRate', t => {
         },
       });
 
-    callTankWinRate({author: 'meganthetanker [CL]'}, {account_id: 100998143}, 'T7 Combat Car').then(result => {
+    callTankWinRate({author: 'meganthetanker [CL]', mentions: []}, {account_id: 100998143}, 'T7 Combat Car').then(result => {
       st.deepEqual(result, {
         sentMsg: '@meganthetanker [CL], I found no stats related to your search.',
       }, 'verify response explains that the tank has yet to be played');
@@ -338,7 +340,7 @@ test('command.winRate.tankWinRate', t => {
         },
       });
 
-    callTankWinRate({author: 'hulkhogan [CL]'}, {account_id: 100998144}, 'Löwe').then(result => {
+    callTankWinRate({author: 'hulkhogan [CL]', mentions: []}, {account_id: 100998144}, 'Löwe').then(result => {
       st.deepEqual(result, {
         sentMsg: '@hulkhogan [CL], Löwe (germany, 8): 56.18% after 283 battles.',
       }, 'verify response');
@@ -385,7 +387,7 @@ test('command.winRate.tankWinRate', t => {
         },
       });
 
-    callTankWinRate({author: 'jessie5 [CL]'}, {account_id: 100998145}, 'Pershing').then(result => {
+    callTankWinRate({author: 'jessie5 [CL]', mentions: []}, {account_id: 100998145}, 'Pershing').then(result => {
       st.deepEqual(result, {
         sentMsg: [
           '@jessie5 [CL], M26 Pershing (usa, 8): 71.72% after 534 battles.',
@@ -406,6 +408,84 @@ test('command.winRate.tankWinRate', t => {
       st.ok(tankopediaVehicles.isDone(), 'make one api call');
       st.end();
     }, error => { st.fail(error); st.end(); });
+  });
+
+  t.test('mention another user that does not exist in the database', st => {
+    // TODO: This request should be done in parallel with the database query
+    var tankopediaVehicles = encyclopediaRequestMock();
+    var mentions = [{
+      id: 'fakediscordid0',
+      username: 'buddy5 [CL]',
+      mention: function() { return `<@${this.id}>`; },
+      bot: false,
+    }, {
+      id: '0101',
+      username: 'testbot',
+      mention: function() { return `<@${this.id}>`; },
+      bot: true,
+    }];
+
+    callTankWinRate({author: 'bigtanker5 [CL]', mentions: mentions}, {account_id: 100998147}, 'Pershing').then(result => {
+      st.deepEqual(result, {
+        sentMsg: '@bigtanker5 [CL], I do not know who <@fakediscordid0> is. Sorry about that.',
+      }, 'verify response');
+      st.ok(tankopediaVehicles.isDone(), 'make one api call'); // technically wrong (see TODO above)
+      st.end();
+    }, error => { st.fail(error); st.end(); });
+  });
+
+  t.test('mention another user to get their stats', st => {
+    // TODO: This request should be done in parallel with the database query
+    var tankopediaVehicles = encyclopediaRequestMock();
+    var tankStats = nock('https://api.wotblitz.com')
+      .post('/wotb/tanks/stats/')
+      .query({
+        account_id: 100998149,
+        tank_id: '529,5137',
+        in_garage: null,
+        fields: 'tank_id,all.battles,all.wins',
+        access_token: null,
+        application_id: process.env.APPLICATION_ID,
+      })
+      .reply(200, {
+        status: 'ok',
+        meta: {
+          count: 1,
+        },
+        data: {
+          '100998149': [{
+            all: {
+              battles: 227,
+              wins: 121,
+            },
+            tank_id: 529,
+          }],
+        },
+      });
+    var mentions = [{
+      id: 'fakediscordid1',
+      username: 'girly7 [CL]',
+      mention: function() { return `<@${this.id}>`; },
+      bot: false,
+    }, {
+      id: '0101',
+      username: 'testbot',
+      mention: function() { return `<@${this.id}>`; },
+      bot: true,
+    }];
+
+    dbInstance.insert({_id: 'fakediscordid1', account_id: 100998149}, insertErr => {
+      if (insertErr) {
+        st.fail(insertErr);
+        st.end();
+      }
+
+      callTankWinRate({author: 'iambesttanker [CL]', mentions: mentions}, {account_id: 100998148}, 'Tiger I').then(result => {
+        st.deepEqual(result, {sentMsg: '@iambesttanker [CL], Tiger I (germany, 7): 53.30% after 227 battles.'}, 'verify response');
+        st.ok(tankopediaVehicles.isDone() && tankStats.isDone(), 'make two api calls');
+        st.end();
+      }, error => { st.fail(error); st.end(); });
+    });
   });
 
   t.end();

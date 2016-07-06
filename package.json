@@ -1,6 +1,6 @@
 {
   "name": "blitzbot",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "WOT Blitz stat bot for Discord.",
   "bin": "bin/bot.js",
   "scripts": {
@@ -38,7 +38,8 @@
     "tape": "^4.6.0"
   },
   "changeLog": {
-    "unreleased": [
+    "2.2.0": [
+      "Add lookup by mention to *tank-win-rate*. Feature in testing!",
       "Fixed *roster* bug when the message author is not in a clan.",
       "Add admin REPL server to allow changes while the bot is live.",
       "Update discord.js dependency."
