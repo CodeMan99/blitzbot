@@ -60,7 +60,7 @@ client.on('message', message => {
 
   var userId = message.author.id;
   var text = message.cleanContent;
-  var mention = `@${client.user.username} `;
+  var mention = `@${client.user.username}#${client.user.discriminator} `;
   var start = 0;
 
   if (!message.channel.isPrivate) {
