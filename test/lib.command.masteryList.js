@@ -534,5 +534,55 @@ test('command.masteryList', t => {
     }, error => { st.fail(error); st.end(); });
   });
 
+  t.test('Missing tank_id', st => {
+    var tankStats = nock('https://api.wotblitz.com')
+      .post('/wotb/tanks/stats/')
+      .query({
+        account_id: 100991249,
+        tank_id: null,
+        in_garage: null,
+        fields: 'mark_of_mastery,tank_id',
+        access_token: null,
+        application_id: process.env.APPLICATION_ID,
+      })
+      .reply(200, {
+        status: 'ok',
+        meta: {count: 1},
+        data: {
+          '100991249': [{
+            mark_of_mastery: 4,
+            tank_id: 32786,
+          }],
+        },
+      });
+    var tankopedia = nock('https://api.wotblitz.com')
+      .post('/wotb/encyclopedia/vehicles/')
+      .query({
+        tank_id: '32786',
+        fields: 'name,tier,nation',
+        application_id: process.env.APPLICATION_ID,
+      })
+      .reply(200, {
+        status: 'ok',
+        meta: {count: 1},
+        data: {
+          '32786': null,
+        },
+      });
+
+    callMasteryList({author: 'youbounced [TC]'}, {nickname: 'youbounced', account_id: 100991249}, 'm').then(result => {
+      st.deepEqual(result, {
+        sentMsg: [
+          '@youbounced [TC], Vehicle not in tankopedia, 32786.',
+          'You have 1 tanks at Mastery, 100.00% of your 1 total tanks.',
+        ].join('\n'),
+      }, 'responds with the "Mastery" list');
+
+      st.ok(tankStats.isDone() && tankopedia.isDone(), 'two requests were made');
+
+      st.end();
+    }, error => { st.fail(error); st.end(); });
+  });
+
   t.end();
 });
