@@ -36,8 +36,8 @@ test('helpers.getFieldByPath', t => {
 	t.equal(helpers.getFieldByPath(complexObj, 'foo.bar'), null, 'invalid long path returns null');
 
 	t.deepEqual(
-    helpers.getFieldByPath(complexObj, 'name'), {first: 'Big', last: 'Guy'}, 'valid path short returns the inner object'
-  );
+		helpers.getFieldByPath(complexObj, 'name'), {first: 'Big', last: 'Guy'}, 'valid path short returns the inner object'
+	);
 	t.equal(helpers.getFieldByPath(complexObj, 'name.first'), 'Big', 'valid long path returns the string value');
 	t.equal(helpers.getFieldByPath(complexObj, 'location.state.full'), 'Washington', 'valid long path returns the string value');
 
@@ -53,16 +53,6 @@ test('helpers.getFieldByPath', t => {
 	t.equal(helpers.getFieldByPath(complexObj, 'status.spouse'), null, 'able to return null');
 
 	t.end();
-});
-
-test('helpers.loadSession', t => {
-	var sess = helpers.loadSession(cb => cb(null, true));
-
-	sess.save((err, value) => {
-		t.error(err, 'called modified save method');
-		t.ok(value, 'modified save method returned a value');
-		t.end();
-	});
 });
 
 test('helpers.sortBy', t => {
