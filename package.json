@@ -26,7 +26,7 @@
   "homepage": "https://github.com/CodeMan99/blitzbot#readme",
   "dependencies": {
     "async": "^2.1.2",
-    "discord.js": "^10.0.0",
+    "discord.js": "^10.0.1",
     "nedb": "^1.8.0",
     "wotblitz": "^1.0.0"
   },
