@@ -8,6 +8,8 @@ exports.commands = {
 };
 
 exports.createMessage = function(content, author, mentions) {
+	if (mentions && !('size' in mentions)) mentions.size = mentions.length || Object.keys(mentions).length;
+
 	return {
 		'author': {
 			sendMessage: text => Promise.resolve(text),
@@ -17,7 +19,9 @@ exports.createMessage = function(content, author, mentions) {
 			sendMessage: text => Promise.resolve(text)
 		},
 		'content': content,
-		'mentions': mentions,
+		'mentions': {
+			users: mentions
+		},
 		reply: text => Promise.resolve(`@${author}, ${text}`)
 	};
 };
