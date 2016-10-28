@@ -3,7 +3,6 @@
 var Commands = require('../lib/command').Commands;
 var Datastore = require('nedb');
 var Discord = require('discord.js');
-var auto = require('async/auto');
 var auth = require('../blitzbot.json');
 var helpers = require('../lib/helpers.js');
 var pkg = require('../package.json');
@@ -33,9 +32,7 @@ var wotblitz = require('wotblitz');
 	Commands.add(createHelp());
 })();
 
-var client = new Discord.Client({
-	autoReconnect: true
-});
+var client = new Discord.Client();
 var db = new Datastore({
 	filename: './blitzbot.db',
 	timestampData: true
@@ -57,6 +54,7 @@ client.on('message', message => {
 	if (message.author.id === client.user.id) return;
 
 	var userId = message.author.id;
+	var id = message.id + ', ' + userId;
 	var text = message.cleanContent;
 	var mention = `@${client.user.username}#${client.user.discriminator} `;
 	var start = 0;
@@ -79,77 +77,81 @@ client.on('message', message => {
 
 	var options = commands[command].options;
 	var textArgs = text.slice(end).trim();
+	var chain;
 
-	auto({
-		record: cb => db.findOne({_id: userId}, cb),
-		runCmd: ['record', (d, cb) => {
-			console.log(userId + ' -- running command: "' + command + '"');
+	console.log(id + ' -- running command: "' + command + '"');
 
-			var args = [message];
+	if (options.passRecord) {
+		chain = new Promise((resolve, reject) => {
+			db.findOne({_id: userId}, (error, record) => {
+				if (error) return reject(error);
+				resolve(record);
+			});
+		}).then(record => {
+			// commands require a saved 'account_id'.
+			if (record && record.account_id) {
+				return [message, record];
+			} else {
+				return message.reply('I don\'t know who you are! Do `' + mention + 'add <screen-name>` first.').then(sent => {
+					console.log(id + ' -- sent msg: ' + sent);
 
-			if (options.passRecord) {
-				// commands require a saved 'account_id'.
-				if (d.record && d.record.account_id) {
-					args.push(d.record);
-				} else {
-					var send = 'I don\'t know who you are! Do `' + mention + 'add <screen-name>` first.';
-
-					message.reply(send).then(sent => {
-						console.log('sent msg: ' + sent);
-						cb(null);
-					}, cb);
-
-					return;
-				}
+					return Promise.reject(null);
+				});
 			}
+		});
+	}
 
-			if (textArgs && options.argCount > 0) {
-				Array.prototype.push.apply(args, textArgs.split(options.argSplit).slice(0, options.argCount));
-			}
-
-			Commands.prototype[command].apply(commands, args).then(result => {
-				if (!result) return cb(null);
-				if (result.sentMsg) {
-					if (Array.isArray(result.sentMsg)) result.sentMsg = result.sentMsg.join('\n');
-
-					console.log('sent msg: ' + result.sentMsg);
-				}
-
-				cb(null, result.updateFields);
-			}, cb);
-		}],
-		update: ['runCmd', (d, cb) => {
-			if (!d.runCmd) return cb(null);
-
-			console.log(userId + ' -- update document');
-
-			var updateFields = d.runCmd;
-
-			// add '_id' and remove 'updatedAt' so that upserting works every time, safely.
-			updateFields._id = userId;
-			delete updateFields.updatedAt;
-
-			db.update({_id: userId}, {$set: updateFields}, {upsert: true}, cb);
-		}]
-	}, err => {
-		if (err) {
-			console.error(userId + ' -- ' + command);
-			console.error(helpers.getFieldByPath(err, 'response.error.text') || err.stack || err);
-
-			return;
+	(chain || Promise.resolve([message])).then(args => {
+		if (textArgs && options.argCount > 0) {
+			Array.prototype.push.apply(args, textArgs.split(options.argSplit).slice(0, options.argCount));
 		}
 
-		console.log(userId + ' -- done');
+		return Commands.prototype[command].apply(commands, args).then(result => {
+			if (!result) return null;
+			if (result.sentMsg) {
+				if (Array.isArray(result.sentMsg)) result.sentMsg = result.sentMsg.join('\n');
+
+				console.log(id + ' -- sent msg: ' + result.sentMsg);
+			}
+
+			return result.updateFields;
+		});
+	}).then(update => {
+		if (!update) return null;
+
+		console.log(id + ' -- updating record');
+
+		// add '_id' and remove 'updatedAt' so that upserting works every time, safely.
+		update._id = userId;
+		delete update.updatedAt;
+
+		return new Promise((resolve, reject) => {
+			db.update({_id: userId}, {$set: update}, {upsert: true}, error => {
+				if (error) return reject(error);
+				resolve();
+			});
+		});
+	}).then(() => {
+		console.log(id + ' -- done: ' + command);
+	}).catch(error => {
+		// some promises reject without an error
+		if (!error) return console.log(id + ' -- done: ' + command);
+
+		console.error(id + ' -- error: ' + command);
+		console.error(helpers.getFieldByPath(error, 'response.error.text') || error.stack || error);
 	});
 });
 
-auto({
-	loadDb: cb => db.loadDatabase(cb),
-	discordLogin: cb => client.login(auth.user.token).then(() => cb(null), cb)
-}, err => {
-	if (err) return console.error(helpers.getFieldByPath(err, 'response.error.text') || err.stack || err);
-
-	// outside of the "async.auto" stack because the callback may be called more than once, breaking a key concept
+Promise.all([
+	new Promise((resolve, reject) => {
+		db.loadDatabase(error => {
+			if (error) return reject(error);
+			resolve();
+		});
+	}),
+	client.login(auth.user.token)
+]).then(() => {
+	// not using a promise because this server is event based, not assuming any event occurs only once
 	serveReferences({
 		bot: client,
 		commands: commands,
@@ -157,4 +159,6 @@ auto({
 	}, 8008, serverErr => {
 		if (serverErr) return console.error(serverErr.stack || serverErr);
 	});
+}, error => {
+	console.error(helpers.getFieldByPath(error, 'response.error.text') || error.stack || error);
 });
