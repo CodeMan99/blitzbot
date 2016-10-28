@@ -3,15 +3,12 @@
 var Commands = require('../lib/command').Commands;
 var Datastore = require('nedb');
 var Discord = require('discord.js');
-var async = require('async');
+var auto = require('async/auto');
 var auth = require('../blitzbot.json');
+var helpers = require('../lib/helpers.js');
 var pkg = require('../package.json');
 var serveReferences = require('../lib/serveReferences.js');
-
-// set WarGaming API key, so `require('wotblitz')` does not return an init function
-process.env.APPLICATION_ID = auth.wotblitz.key;
-
-var helpers = require('../lib/helpers.js');
+var wotblitz = require('wotblitz');
 
 (() => { // Add commands scope, no need to pollute module scope.
 	var add = require('../lib/command/add.js');
@@ -46,7 +43,8 @@ var db = new Datastore({
 var commands = new Commands(client, db);
 
 process.title = pkg.name;
-client.userAgent = {url: pkg.homepage, version: pkg.version};
+client.rest.userAgentManager.set({url: pkg.homepage, version: pkg.version});
+wotblitz.application_id = auth.wotblitz.key;
 
 client.on('ready', () => {
 	console.log('blitzbot ready!');
@@ -54,8 +52,8 @@ client.on('ready', () => {
 });
 
 client.on('message', message => {
-  // Bot will only respond in a DM or when mentioned.
-	if (!message.channel.isPrivate && !message.isMentioned(client.user)) return;
+	// Bot will only respond in a DM or when mentioned.
+	if (message.channel.type !== 'dm' && !message.isMentioned(client.user)) return;
 	if (message.author.id === client.user.id) return;
 
 	var userId = message.author.id;
@@ -63,7 +61,7 @@ client.on('message', message => {
 	var mention = `@${client.user.username}#${client.user.discriminator} `;
 	var start = 0;
 
-	if (!message.channel.isPrivate) {
+	if (message.channel.type !== 'dm') {
 		start = text.indexOf(mention);
 
 		if (start < 0) return;
@@ -82,21 +80,21 @@ client.on('message', message => {
 	var options = commands[command].options;
 	var textArgs = text.slice(end).trim();
 
-	async.auto({
+	auto({
 		record: cb => db.findOne({_id: userId}, cb),
-		runCmd: ['record', (cb, d) => {
+		runCmd: ['record', (d, cb) => {
 			console.log(userId + ' -- running command: "' + command + '"');
 
 			var args = [message];
 
 			if (options.passRecord) {
-        // commands require a saved 'account_id'.
+				// commands require a saved 'account_id'.
 				if (d.record && d.record.account_id) {
 					args.push(d.record);
 				} else {
 					var send = 'I don\'t know who you are! Do `' + mention + 'add <screen-name>` first.';
 
-					client.reply(message, send).then(sent => {
+					message.reply(send).then(sent => {
 						console.log('sent msg: ' + sent);
 						cb(null);
 					}, cb);
@@ -120,14 +118,14 @@ client.on('message', message => {
 				cb(null, result.updateFields);
 			}, cb);
 		}],
-		update: ['runCmd', (cb, d) => {
+		update: ['runCmd', (d, cb) => {
 			if (!d.runCmd) return cb(null);
 
 			console.log(userId + ' -- update document');
 
 			var updateFields = d.runCmd;
 
-      // add '_id' and remove 'updatedAt' so that upserting works every time, safely.
+			// add '_id' and remove 'updatedAt' so that upserting works every time, safely.
 			updateFields._id = userId;
 			delete updateFields.updatedAt;
 
@@ -145,15 +143,14 @@ client.on('message', message => {
 	});
 });
 
-async.auto({
+auto({
 	loadDb: cb => db.loadDatabase(cb),
-	discordLogin: cb => client.loginWithToken(auth.user.token, null, null, cb)
+	discordLogin: cb => client.login(auth.user.token).then(() => cb(null), cb)
 }, err => {
 	if (err) return console.error(helpers.getFieldByPath(err, 'response.error.text') || err.stack || err);
 
-  // outside of the "async.auto" stack because the callback may be called more than once, breaking a key concept
+	// outside of the "async.auto" stack because the callback may be called more than once, breaking a key concept
 	serveReferences({
-		async: async,
 		bot: client,
 		commands: commands,
 		db: db
