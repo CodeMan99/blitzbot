@@ -17,12 +17,12 @@ test('command.roster', t => {
 
 	t.test('no argument, clan_id *not* in database', st => {
 		var accountInfo = nock('https://api.wotblitz.com')
-			.post('/wotb/clans/accountinfo/')
-			.query({
+			.post('/wotb/clans/accountinfo/', {
 				account_id: '10996722',
-				extra: null,
+				extra: '',
 				fields: 'clan_id',
-				application_id: process.env.APPLICATION_ID
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -37,12 +37,12 @@ test('command.roster', t => {
 			});
 
 		var clanInfo = nock('https://api.wotblitz.com')
-			.post('/wotb/clans/info/')
-			.query({
-				clan_id: 82,
+			.post('/wotb/clans/info/', {
+				clan_id: '82',
 				extra: 'members',
 				fields: 'clan_id,name,members',
-				application_id: process.env.APPLICATION_ID
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -103,12 +103,12 @@ test('command.roster', t => {
 
 	t.test('no argument, clan_id in database', st => {
 		var clanInfo = nock('https://api.wotblitz.com')
-			.post('/wotb/clans/info/')
-			.query({
-				clan_id: 3,
+			.post('/wotb/clans/info/', {
+				clan_id: '3',
 				extra: 'members',
 				fields: 'clan_id,name,members',
-				application_id: process.env.APPLICATION_ID
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -158,13 +158,13 @@ test('command.roster', t => {
 
 	t.test('valid tag argument', st => {
 		var clanList = nock('https://api.wotblitz.com')
-			.post('/wotb/clans/list/')
-			.query({
+			.post('/wotb/clans/list/', {
 				search: 'DNFX',
-				limit: null,
-				page_no: 1,
+				limit: '',
+				page_no: '',
 				fields: 'clan_id,tag',
-				application_id: process.env.APPLICATION_ID
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -184,12 +184,12 @@ test('command.roster', t => {
 			});
 
 		var clanInfo = nock('https://api.wotblitz.com')
-			.post('/wotb/clans/info/')
-			.query({
-				clan_id: 725,
+			.post('/wotb/clans/info/', {
+				clan_id: '725',
 				extra: 'members',
 				fields: 'clan_id,name,members',
-				application_id: process.env.APPLICATION_ID
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -287,13 +287,13 @@ test('command.roster', t => {
 
 	t.test('valid tag argument, but empty result', st => {
 		var clanList = nock('https://api.wotblitz.com')
-			.post('/wotb/clans/list/')
-			.query({
+			.post('/wotb/clans/list/', {
 				search: 'NOT23',
-				limit: null,
-				page_no: 1,
+				limit: '',
+				page_no: '',
 				fields: 'clan_id,tag',
-				application_id: process.env.APPLICATION_ID
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -317,13 +317,13 @@ test('command.roster', t => {
 
 	t.test('valid tag argument, but no clan found', st => {
 		var clanList = nock('https://api.wotblitz.com')
-			.post('/wotb/clans/list/')
-			.query({
-				search: 'NOT2',
-				limit: null,
-				page_no: 1,
+			.post('/wotb/clans/list/', {
+				search: 'NOT21',
+				limit: '',
+				page_no: '',
 				fields: 'clan_id,tag',
-				application_id: process.env.APPLICATION_ID
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -356,12 +356,12 @@ test('command.roster', t => {
 
 	t.test('no argument, but not in a clan', st => {
 		var accountInfo = nock('https://api.wotblitz.com')
-			.post('/wotb/clans/accountinfo/')
-			.query({
+			.post('/wotb/clans/accountinfo/', {
 				account_id: '10996727',
-				extra: null,
+				extra: '',
 				fields: 'clan_id',
-				application_id: process.env.APPLICATION_ID
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',

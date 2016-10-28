@@ -36,7 +36,7 @@ test('command.winRate.tankWinRate', t => {
 		});
 	});
 
-	var encyclopediaRequestMock = () => {
+	var encyclopediaVehiclesMock = () => {
 		return nock('https://api.wotblitz.com')
 			.post('/wotb/encyclopedia/vehicles/', {
 				tank_id: '',
@@ -55,7 +55,7 @@ test('command.winRate.tankWinRate', t => {
 	};
 
 	t.test('no tank name matches argument', st => {
-		var tankopediaVehicles = encyclopediaRequestMock();
+		var tankopediaVehicles = encyclopediaVehiclesMock();
 
 		callTankWinRate(mocks.createMessage(null, 'jake81 [CL]'), {
 			account_id: 100996734
@@ -70,16 +70,16 @@ test('command.winRate.tankWinRate', t => {
 	});
 
 	t.test('argument is a valid tank, but has no record', st => {
-		var tankopediaVehicles = encyclopediaRequestMock();
+		var tankopediaVehicles = encyclopediaVehiclesMock();
 		var tankStats = nock('https://api.wotblitz.com')
-			.post('/wotb/tanks/stats/')
-			.query({
-				account_id: 100998143,
-				tank_id: 55073,
-				in_garage: null,
+			.post('/wotb/tanks/stats/', {
+				account_id: '100998143',
+				access_token: '',
+				tank_id: '55073',
+				in_garage: '',
 				fields: 'tank_id,all.battles,all.wins',
-				access_token: null,
-				application_id: process.env.APPLICATION_ID
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -106,16 +106,16 @@ test('command.winRate.tankWinRate', t => {
 	});
 
 	t.test('argument returns one tank', st => {
-		var tankopediaVehicles = encyclopediaRequestMock();
+		var tankopediaVehicles = encyclopediaVehiclesMock();
 		var tankStats = nock('https://api.wotblitz.com')
-			.post('/wotb/tanks/stats/')
-			.query({
-				account_id: 100998144,
-				tank_id: 54289,
-				in_garage: null,
+			.post('/wotb/tanks/stats/', {
+				account_id: '100998144',
+				access_token: '',
+				tank_id: '54289',
+				in_garage: '',
 				fields: 'tank_id,all.battles,all.wins',
-				access_token: null,
-				application_id: process.env.APPLICATION_ID
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -147,16 +147,16 @@ test('command.winRate.tankWinRate', t => {
 	});
 
 	t.test('argument returns two tanks', st => {
-		var tankopediaVehicles = encyclopediaRequestMock();
+		var tankopediaVehicles = encyclopediaVehiclesMock();
 		var tankStats = nock('https://api.wotblitz.com')
-			.post('/wotb/tanks/stats/')
-			.query({
-				account_id: 100998145,
+			.post('/wotb/tanks/stats/', {
+				account_id: '100998145',
 				tank_id: '5921,13345',
-				in_garage: null,
+				in_garage: '',
 				fields: 'tank_id,all.battles,all.wins',
-				access_token: null,
-				application_id: process.env.APPLICATION_ID
+				access_token: '',
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -197,7 +197,7 @@ test('command.winRate.tankWinRate', t => {
 	});
 
 	t.test('argument matches more than 100 limit of tankopedia endpoint', st => {
-		var tankopediaVehicles = encyclopediaRequestMock();
+		var tankopediaVehicles = encyclopediaVehiclesMock();
 
 		callTankWinRate(mocks.createMessage(null, 'noshootingheretonight'), {account_id: 100998146}, 't').then(result => {
 			st.deepEqual(result, {
@@ -213,7 +213,7 @@ test('command.winRate.tankWinRate', t => {
 
 	t.test('mention another user that does not exist in the database', st => {
 		// TODO: This request should be done in parallel with the database query
-		var tankopediaVehicles = encyclopediaRequestMock();
+		var tankopediaVehicles = encyclopediaVehiclesMock();
 		var mentions = [{
 			id: 'fakediscordid0',
 			username: 'buddy5 [CL]',
@@ -244,16 +244,16 @@ test('command.winRate.tankWinRate', t => {
 
 	t.test('mention another user to get their stats', st => {
 		// TODO: This request should be done in parallel with the database query
-		var tankopediaVehicles = encyclopediaRequestMock();
+		var tankopediaVehicles = encyclopediaVehiclesMock();
 		var tankStats = nock('https://api.wotblitz.com')
-			.post('/wotb/tanks/stats/')
-			.query({
-				account_id: 100998149,
+			.post('/wotb/tanks/stats/', {
+				account_id: '100998149',
 				tank_id: '529,5137',
-				in_garage: null,
+				in_garage: '',
 				fields: 'tank_id,all.battles,all.wins',
-				access_token: null,
-				application_id: process.env.APPLICATION_ID
+				access_token: '',
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -323,14 +323,14 @@ test('command.winRate.winRate', t => {
 
 	t.equal(wr.winRate.name, 'win-rate', 'verify Commands method name');
 
-	var requestMock = (accountId, wins, battles) => {
+	var accountInfoMock = (accountId, wins, battles) => {
 		return nock('https://api.wotblitz.com')
-			.post('/wotb/account/info/')
-			.query({
-				account_id: accountId,
-				extra: null,
+			.post('/wotb/account/info/', {
+				account_id: accountId.toString(),
+				extra: '',
 				fields: 'statistics.all.battles,statistics.all.wins',
-				application_id: process.env.APPLICATION_ID
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -351,7 +351,7 @@ test('command.winRate.winRate', t => {
 	};
 
 	t.test('initial call', st => {
-		var accountInfo = requestMock(100994563, 8691, 14280);
+		var accountInfo = accountInfoMock(100994563, 8691, 14280);
 
 		callWinRate(mocks.createMessage(null, 'bigguy20 [CL]'), {
 			account_id: 100994563
@@ -373,7 +373,7 @@ test('command.winRate.winRate', t => {
 	});
 
 	t.test('follow up call, no additional battles', st => {
-		var accountInfo = requestMock(100994564, 7682, 18290);
+		var accountInfo = accountInfoMock(100994564, 7682, 18290);
 
 		callWinRate(mocks.createMessage(null, 'littleguy21 [CL]'), {
 			account_id: 100994564,
@@ -397,7 +397,7 @@ test('command.winRate.winRate', t => {
 	});
 
 	t.test('follow up call, one additional battle', st => {
-		var accountInfo = requestMock(100994565, 9260, 13933);
+		var accountInfo = accountInfoMock(100994565, 9260, 13933);
 
 		callWinRate(mocks.createMessage(null, 'biggirl22 [CL]'), {
 			account_id: 100994565,
@@ -425,7 +425,7 @@ test('command.winRate.winRate', t => {
 	});
 
 	t.test('follow up call, several additional battles', st => {
-		var accountInfo = requestMock(100994566, 5003, 11502);
+		var accountInfo = accountInfoMock(100994566, 5003, 11502);
 
 		callWinRate(mocks.createMessage(null, 'littlegirl23 [CL]'), {
 			account_id: 100994566,

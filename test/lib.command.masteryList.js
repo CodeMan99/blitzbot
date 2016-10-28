@@ -17,14 +17,14 @@ test('command.masteryList', t => {
 
 	t.test('no argument default', st => {
 		nock('https://api.wotblitz.com')
-			.post('/wotb/tanks/stats/')
-			.query({
-				account_id: 100991240,
-				tank_id: null,
-				in_garage: null,
+			.post('/wotb/tanks/stats/', {
+				account_id: '100991240',
+				tank_id: '',
+				in_garage: '',
 				fields: 'mark_of_mastery,tank_id',
-				access_token: null,
-				application_id: process.env.APPLICATION_ID
+				access_token: '',
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -67,11 +67,11 @@ test('command.masteryList', t => {
 			});
 
 		nock('https://api.wotblitz.com')
-			.post('/wotb/encyclopedia/vehicles/')
-			.query({
+			.post('/wotb/encyclopedia/vehicles/', {
 				tank_id: '5,10',
 				fields: 'name,tier,nation',
-				application_id: process.env.APPLICATION_ID
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -113,14 +113,14 @@ test('command.masteryList', t => {
 
 	t.test('list "none"', st => {
 		nock('https://api.wotblitz.com')
-			.post('/wotb/tanks/stats/')
-			.query({
-				account_id: 100991241,
-				tank_id: null,
-				in_garage: null,
+			.post('/wotb/tanks/stats/', {
+				account_id: '100991241',
+				tank_id: '',
+				in_garage: '',
 				fields: 'mark_of_mastery,tank_id',
-				access_token: null,
-				application_id: process.env.APPLICATION_ID
+				access_token: '',
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -166,16 +166,16 @@ test('command.masteryList', t => {
 			});
 
 		nock('https://api.wotblitz.com')
-			.post('/wotb/encyclopedia/vehicles/')
-			.query({
+			.post('/wotb/encyclopedia/vehicles/', {
 				tank_id: '1,6,11',
 				fields: 'name,tier,nation',
-				application_id: process.env.APPLICATION_ID
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
 				meta: {
-					count: 2
+					count: 3
 				},
 				data: {
 					'1': {
@@ -218,14 +218,14 @@ test('command.masteryList', t => {
 
 	t.test('list "3rd class"', st => {
 		nock('https://api.wotblitz.com')
-			.post('/wotb/tanks/stats/')
-			.query({
-				account_id: 100991242,
-				tank_id: null,
-				in_garage: null,
+			.post('/wotb/tanks/stats/', {
+				account_id: '100991242',
+				tank_id: '',
+				in_garage: '',
 				fields: 'mark_of_mastery,tank_id',
-				access_token: null,
-				application_id: process.env.APPLICATION_ID
+				access_token: '',
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -280,11 +280,11 @@ test('command.masteryList', t => {
 			});
 
 		nock('https://api.wotblitz.com')
-			.post('/wotb/encyclopedia/vehicles/')
-			.query({
+			.post('/wotb/encyclopedia/vehicles/', {
 				tank_id: '2,7,12',
 				fields: 'name,tier,nation',
-				application_id: process.env.APPLICATION_ID
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -332,14 +332,14 @@ test('command.masteryList', t => {
 
 	t.test('list "2nd class"', st => {
 		nock('https://api.wotblitz.com')
-			.post('/wotb/tanks/stats/')
-			.query({
-				account_id: 100991243,
-				tank_id: null,
-				in_garage: null,
+			.post('/wotb/tanks/stats/', {
+				account_id: '100991243',
+				tank_id: '',
+				in_garage: '',
 				fields: 'mark_of_mastery,tank_id',
-				access_token: null,
-				application_id: process.env.APPLICATION_ID
+				access_token: '',
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -391,11 +391,11 @@ test('command.masteryList', t => {
 			});
 
 		nock('https://api.wotblitz.com')
-			.post('/wotb/encyclopedia/vehicles/')
-			.query({
+			.post('/wotb/encyclopedia/vehicles/', {
 				tank_id: '3,8,11,12,13',
 				fields: 'name,tier,nation',
-				application_id: process.env.APPLICATION_ID
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -455,14 +455,14 @@ test('command.masteryList', t => {
 
 	t.test('list "1st class"', st => {
 		nock('https://api.wotblitz.com')
-			.post('/wotb/tanks/stats/')
-			.query({
-				account_id: 100991244,
-				tank_id: null,
-				in_garage: null,
+			.post('/wotb/tanks/stats/', {
+				account_id: '100991244',
+				tank_id: '',
+				in_garage: '',
 				fields: 'mark_of_mastery,tank_id',
-				access_token: null,
-				application_id: process.env.APPLICATION_ID
+				access_token: '',
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -514,11 +514,11 @@ test('command.masteryList', t => {
 			});
 
 		nock('https://api.wotblitz.com')
-			.post('/wotb/encyclopedia/vehicles/')
-			.query({
+			.post('/wotb/encyclopedia/vehicles/', {
 				tank_id: '4,9,11',
 				fields: 'name,tier,nation',
-				application_id: process.env.APPLICATION_ID
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -566,14 +566,14 @@ test('command.masteryList', t => {
 
 	t.test('list "m"', st => {
 		nock('https://api.wotblitz.com')
-			.post('/wotb/tanks/stats/')
-			.query({
-				account_id: 100991245,
-				tank_id: null,
-				in_garage: null,
+			.post('/wotb/tanks/stats/', {
+				account_id: '100991245',
+				tank_id: '',
+				in_garage: '',
 				fields: 'mark_of_mastery,tank_id',
-				access_token: null,
-				application_id: process.env.APPLICATION_ID
+				access_token: '',
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -637,11 +637,11 @@ test('command.masteryList', t => {
 			});
 
 		nock('https://api.wotblitz.com')
-			.post('/wotb/encyclopedia/vehicles/')
-			.query({
+			.post('/wotb/encyclopedia/vehicles/', {
 				tank_id: '5,10',
 				fields: 'name,tier,nation',
-				application_id: process.env.APPLICATION_ID
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -696,14 +696,14 @@ test('command.masteryList', t => {
 
 	t.test('empty list', st => {
 		nock('https://api.wotblitz.com')
-			.post('/wotb/tanks/stats/')
-			.query({
-				account_id: 100991247,
-				tank_id: null,
-				in_garage: null,
+			.post('/wotb/tanks/stats/', {
+				account_id: '100991247',
+				tank_id: '',
+				in_garage: '',
 				fields: 'mark_of_mastery,tank_id',
-				access_token: null,
-				application_id: process.env.APPLICATION_ID
+				access_token: '',
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -784,14 +784,14 @@ test('command.masteryList', t => {
 	t.test('long list (higher than 100 limit of tankopedia endpoint)', st => {
 		var count = Math.floor(Math.random() * 99) + 101; // [101,200)
 		var tankStats = nock('https://api.wotblitz.com')
-			.post('/wotb/tanks/stats/')
-			.query({
-				account_id: 100991248,
-				tank_id: null,
-				in_garage: null,
+			.post('/wotb/tanks/stats/', {
+				account_id: '100991248',
+				tank_id: '',
+				in_garage: '',
 				fields: 'mark_of_mastery,tank_id',
-				access_token: null,
-				application_id: process.env.APPLICATION_ID
+				access_token: '',
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -802,19 +802,15 @@ test('command.masteryList', t => {
 					'100991248': new Array(count).fill({
 						mark_of_mastery: 3,
 						tank_id: 0
-					}).map((entry, index) => {
-						entry.tank_id = index + 1;
-
-						return entry;
-					})
+					}).map((entry, index) => Object.assign({}, entry, {tank_id: index + 1}))
 				}
 			});
 		var tankopedia1 = nock('https://api.wotblitz.com')
-			.post('/wotb/encyclopedia/vehicles/')
-			.query({
+			.post('/wotb/encyclopedia/vehicles/', {
 				tank_id: new Array(100).fill(0).map((_, index) => index + 1).join(','),
 				fields: 'name,tier,nation',
-				application_id: process.env.APPLICATION_ID
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -832,11 +828,11 @@ test('command.masteryList', t => {
 				}, {})
 			});
 		var tankopedia2 = nock('https://api.wotblitz.com')
-			.post('/wotb/encyclopedia/vehicles/')
-			.query({
+			.post('/wotb/encyclopedia/vehicles/', {
 				tank_id: new Array(count - 100).fill(0).map((_, index) => index + 101).join(','),
 				fields: 'name,tier,nation',
-				application_id: process.env.APPLICATION_ID
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -880,14 +876,14 @@ test('command.masteryList', t => {
 
 	t.test('Missing tank_id', st => {
 		var tankStats = nock('https://api.wotblitz.com')
-			.post('/wotb/tanks/stats/')
-			.query({
-				account_id: 100991249,
-				tank_id: null,
-				in_garage: null,
+			.post('/wotb/tanks/stats/', {
+				account_id: '100991249',
+				tank_id: '',
+				in_garage: '',
 				fields: 'mark_of_mastery,tank_id',
-				access_token: null,
-				application_id: process.env.APPLICATION_ID
+				access_token: '',
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -902,11 +898,11 @@ test('command.masteryList', t => {
 				}
 			});
 		var tankopedia = nock('https://api.wotblitz.com')
-			.post('/wotb/encyclopedia/vehicles/')
-			.query({
+			.post('/wotb/encyclopedia/vehicles/', {
 				tank_id: '32786',
 				fields: 'name,tier,nation',
-				application_id: process.env.APPLICATION_ID
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
 			})
 			.reply(200, {
 				status: 'ok',
