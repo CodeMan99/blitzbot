@@ -119,7 +119,7 @@ client.on('message', message => {
 	}).then(update => {
 		if (!update) return null;
 
-		console.log(id + ' -- updating record');
+		console.log(id + ' -- update document');
 
 		// add '_id' and remove 'updatedAt' so that upserting works every time, safely.
 		update._id = userId;
