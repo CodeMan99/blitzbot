@@ -1,6 +1,6 @@
 {
   "name": "blitzbot",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "description": "WOT Blitz stat bot for Discord.",
   "bin": "bin/bot.js",
   "scripts": {
@@ -37,9 +37,14 @@
     "tape": "^4.6.2"
   },
   "changeLog": {
+    "2.3.0": [
+      "Remove async dependency.",
+      "Upgrade to wotblitz v1.0.0.",
+      "Upgrade to discord.js v10.0.1."
+    ],
     "2.2.2": [
       "Fixed *mastery-list* to include missing tanks instead of crashing.",
-      "Upgrate to discord.js v8.1.0."
+      "Upgrade to discord.js v8.1.0."
     ],
     "2.2.1": [
       "Revert discord.js update."
