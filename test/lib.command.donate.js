@@ -30,7 +30,7 @@ test('donate', t => {
 	t.equal(donate.name, 'donate', 'verify Commands method name');
 
 	t.test('command', st => {
-		callDonate({author: 'NiceDude [CL]'}).then(result => {
+		callDonate(mocks.createMessage(null, 'NiceDude [CL]')).then(result => {
 			var link = result.sentMsg.split(' ').slice(-1)[0];
 
 			st.equal(link, 'https://paypal.me/CodeMan99', 'link is at the end of reply');

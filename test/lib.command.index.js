@@ -19,10 +19,10 @@ test('Command', t => {
 		signatures: []
 	}, 'default command options.');
 	t.equal(
-    new Command(() => {}, {argSplit: null}, 'name').fn.options.argSplit,
-    null,
-    'able to explicitly nullify argSplit option.'
-  );
+		new Command(() => {}, {argSplit: null}, 'name').fn.options.argSplit,
+		null,
+		'able to explicitly nullify argSplit option.'
+	);
 	t.end();
 });
 
@@ -35,7 +35,7 @@ test('Commands', t => {
 
 	t.ok(Commands.has('setup'), 'can detect that a command was added.');
 
-  // teardown
+	// teardown
 	delete Commands.prototype.setup;
 
 	t.end();
@@ -64,7 +64,7 @@ test('createHelp', t => {
 	t.test('call help command without collection', st => {
 		st.equal(Commands.has('help'), false, 'verify help is not part of the collection');
 
-		callHelp({/* message */}).then(result => {
+		callHelp(mocks.createMessage()).then(result => {
 			st.deepEqual(result, {
 				sentMsg: [
 					'`@testbot help [command]` -- List of all known commands or get help for a particular command.',
@@ -80,8 +80,8 @@ test('createHelp', t => {
 });
 
 test('Commands and help together.', t => {
-	Commands.add(new Command(function echo(msg) {
-		return this.client.sendMessage({/* channel */}, msg).then(sent => {
+	Commands.add(new Command(function echo(msg) { // eslint-disable-line prefer-arrow-callback
+		return msg.channel.sendMessage(msg.content).then(sent => {
 			return {sentMsg: sent};
 		});
 	}, {
@@ -102,7 +102,7 @@ test('Commands and help together.', t => {
 	t.ok(commands.help, 'has the help command as a method');
 
 	t.test('help, all commands', st => {
-		commands.help({/* message */}).then(result => {
+		commands.help(mocks.createMessage()).then(result => {
 			st.deepEqual(result, {
 				sentMsg: [
 					'`@testbot1 echo` -- Echo whatever you say to me.',
@@ -116,7 +116,7 @@ test('Commands and help together.', t => {
 	});
 
 	t.test('help, the "echo" command', st => {
-		commands.help({/* message */}, 'echo').then(result => {
+		commands.help(mocks.createMessage(), 'echo').then(result => {
 			st.deepEqual(result, {
 				sentMsg: [
 					'`@testbot1 echo` -- Echo whatever you say to me.'
@@ -130,7 +130,7 @@ test('Commands and help together.', t => {
 	t.test('help, non-existant command', st => {
 		st.equal(Commands.has('non-existant'), false, 'verify command does not exist');
 
-		commands.help({/* message */}, 'non-existant').then(result => {
+		commands.help(mocks.createMessage(), 'non-existant').then(result => {
 			st.deepEqual(result, {
 				sentMsg: ['Unknown command: non-existant']
 			}, 'response regardless of command');
@@ -140,7 +140,7 @@ test('Commands and help together.', t => {
 	});
 
 	t.test('call the "echo" command', st => {
-		commands.echo('repeat after me').then(result => {
+		commands.echo(mocks.createMessage('repeat after me')).then(result => {
 			st.deepEqual(result, {sentMsg: 'repeat after me'}, 'successful call to echo');
 			st.end();
 		}, error => { st.fail(error); st.end(); });

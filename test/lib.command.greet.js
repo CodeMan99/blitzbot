@@ -16,7 +16,7 @@ test('greet.hi', t => {
 	t.equal(greet.hi.name, 'hi', 'verify Commands method name');
 
 	t.test('valid call', st => {
-		callHi({author: 'bob1'}).then(result => {
+		callHi(mocks.createMessage(null, 'bob1')).then(result => {
 			st.deepEqual(result, {sentMsg: '@bob1, Hello! Try saying `@testbot help` to learn about me'}, 'valid response');
 			st.end();
 		}, error => { st.fail(error); st.end(); });
@@ -37,7 +37,7 @@ test('greet.hello', t => {
 	t.equal(greet.hello.name, 'hello', 'verify Commands method name');
 
 	t.test('greet.hello call', st => {
-		callHello({author: 'zack32'}).then(result => {
+		callHello(mocks.createMessage(null, 'zack32')).then(result => {
 			st.deepEqual(result, {sentMsg: '@zack32, Hello! Try saying `@testbot help` to learn about me'}, 'valid response');
 			st.end();
 		}, error => { st.fail(error); st.end(); });

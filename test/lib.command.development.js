@@ -40,7 +40,7 @@ test('development.changes', t => {
 	t.equal(dev.changes.name, 'changes', 'verify Commands method name');
 
 	t.test('no version argument', st => {
-		callChanges({author: 'bill32'}).then(result => {
+		callChanges(mocks.createMessage(null, 'bill32')).then(result => {
 			st.deepEqual(result, {
 				sentMsg: [
 					'@bill32, Change Log for `testname`, version **1.3.4**.',
@@ -54,7 +54,7 @@ test('development.changes', t => {
 	});
 
 	t.test('valid version argument', st => {
-		callChanges({author: 'greg14'}, '1.3.3').then(result => {
+		callChanges(mocks.createMessage(null, 'greg14'), '1.3.3').then(result => {
 			st.deepEqual(result, {
 				sentMsg: [
 					'@greg14, Change Log for `testname`, version **1.3.3**.',
@@ -68,7 +68,7 @@ test('development.changes', t => {
 	});
 
 	t.test('invalid version argument', st => {
-		callChanges({author: 'jack81'}, '1.3.5').then(result => {
+		callChanges(mocks.createMessage(null, 'jack81'), '1.3.5').then(result => {
 			st.notOk(result, 'no response without error');
 			st.end();
 		}, error => { st.fail(error); st.end(); });
@@ -89,7 +89,7 @@ test('development.version', t => {
 	t.equal(dev.changes.name, 'changes', 'verify Commands method name');
 
 	t.test('valid call', st => {
-		callVersion({author: 'joe65'}).then(result => {
+		callVersion(mocks.createMessage(null, 'joe65')).then(result => {
 			st.deepEqual(result, {
 				sentMsg: '@joe65, testname version 1.3.4, written by <@86558039594774528>'
 			}, 'valid response.');
