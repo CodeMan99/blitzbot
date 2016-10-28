@@ -1,6 +1,6 @@
 {
   "name": "blitzbot",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "WOT Blitz stat bot for Discord.",
   "bin": "bin/bot.js",
   "scripts": {
@@ -37,6 +37,11 @@
     "tape": "^4.6.2"
   },
   "changeLog": {
+    "2.3.2": [
+      "Fixed testing code.",
+      "Fixed *tank-win-rate* lookup by mention.",
+      "Fixed typo in *mastery-list*."
+    ],
     "2.3.1": [
       "Fix bug with message parsing in text channels."
     ],
