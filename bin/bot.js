@@ -55,8 +55,8 @@ client.on('message', message => {
 
 	var userId = message.author.id;
 	var id = message.id + ', ' + userId;
-	var text = message.cleanContent;
-	var mention = `@${client.user.username}#${client.user.discriminator} `;
+	var text = message.content;
+	var mention = client.user.toString() + ' ';
 	var start = 0;
 
 	if (message.channel.type !== 'dm') {
