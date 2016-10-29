@@ -30,10 +30,10 @@
     "wotblitz": "^1.0.0"
   },
   "devDependencies": {
-    "eslint": "^3.8.1",
+    "eslint": "^3.9.0",
     "faucet": "0.0.1",
     "mockery": "^2.0.0",
-    "nock": "^9.0.0",
+    "nock": "^9.0.2",
     "tape": "^4.6.2"
   },
   "changeLog": {
