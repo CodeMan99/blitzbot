@@ -33,5 +33,5 @@ Feature Requests
 All feature request discussions belong on your discord server. If a suggestion is made often enough,
 or if it just sounds really awesome the author will eventually implement it!
 
-Alternatively, you may join the [blitzbot-test](https://discord.gg/0yWBq3ILDxT9ZPZB) discord server
-for discussions.
+Alternatively, you may join the [blitzbot-hangout](https://discord.gg/e3vyeaG) discord server for
+discussions.
