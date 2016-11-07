@@ -37,6 +37,9 @@
     "tape": "^4.6.2"
   },
   "changeLog": {
+    "unreleased": [
+      "Fixed bug in *tank-win-rate* with long messages."
+    ],
     "2.3.2": [
       "Fixed testing code.",
       "Fixed *tank-win-rate* lookup by mention.",
