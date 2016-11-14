@@ -46,6 +46,8 @@ wotblitz.application_id = auth.wotblitz.key;
 client.on('ready', () => {
 	console.log('blitzbot ready!');
 	console.log('===============');
+	console.error('blitzbot ready!');
+	console.error('===============');
 });
 
 client.on('message', message => {
