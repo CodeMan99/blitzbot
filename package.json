@@ -1,6 +1,6 @@
 {
   "name": "blitzbot",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "description": "WOT Blitz stat bot for Discord.",
   "bin": "bin/bot.js",
   "scripts": {
@@ -37,7 +37,8 @@
     "tape": "^4.6.2"
   },
   "changeLog": {
-    "unreleased": [
+    "2.3.3": [
+      "Added new *max-xp* command.",
       "Fixed bug in *tank-win-rate* with long messages."
     ],
     "2.3.2": [
