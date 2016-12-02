@@ -6,7 +6,7 @@ Statistics chat bot for World of Tanks Blitz on Discord.
 Commands
 --------
 
-The following are commands as of v2.1.0. An argument in `[braces]` is optional. An argument in `<arrows>` is required.
+The following are commands as of v2.3.3. An argument in `[braces]` is optional. An argument in `<arrows>` is required.
 
  * `@blitzbot help [command]` -- List all known commands or get help for a particular command.
  * `(direct message): help [command]` -- List all known commands or get help for a particular command.
@@ -19,6 +19,7 @@ The following are commands as of v2.1.0. An argument in `[braces]` is optional. 
  * `@blitzbot tank-win-rate <tank-name>` -- Get your win rate on the given tank (replace spaces with dashes).
  * `@blitzbot mastery-list [level]` -- List tanks at the given mastery level, sorted by battle count (default: "Mastery").
  * `@blitzbot roster [clan-tag]` -- List a clan roster. Defaults to your clan if none specified.
+ * `@blitzbot max-xp` -- Get your top 10 *max-xp* values.
  * `@blitzbot donate` -- Get a link to generously donate via paypal.
 
 Installation Setup
@@ -31,8 +32,9 @@ pretty easy however.
  2. Get a WarGaming [application id](https://na.wargaming.net/developers/applications/).
  3. Create a Discord [api application](https://discordapp.com/developers/applications/me).
  4. Create a Discord user. Use a unique name, not "blitzbot" please.
- 5. Install the bot globally: `npm install -g blitzbot`. Alternatively, create your own package with `npm pack` and install that.
- 6. Create a file called "blitzbot.json" in the root of the install, in it store the values from steps 2-4.
+ 5. Create a package that you can install by running `npm pack` in the repo root.
+ 6. Install the resulting package globally: `npm install -g blitzbot-2.3.3.tgz`.
+ 7. Create a file called "blitzbot.json" in the root of the install, in it store the values from steps 2-4.
 
      ```json
      {
