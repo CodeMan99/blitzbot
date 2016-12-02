@@ -159,7 +159,8 @@ Promise.all([
 	serveReferences({
 		bot: client,
 		commands: commands,
-		db: db
+		db: db,
+		wotblitz: wotblitz
 	}, 8008, serverErr => {
 		if (serverErr) return console.error(serverErr.stack || serverErr);
 	});
