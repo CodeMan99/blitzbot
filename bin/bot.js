@@ -62,7 +62,9 @@ client.on('message', message => {
 	var text = message.content;
 	var mention = client.user.toString() + ' ';
 	var start = 0;
+	var perms = message.channel.permissionsFor(client.user);
 
+	if (!perms) return;
 	if (message.channel.type !== 'dm') {
 		start = text.indexOf(mention);
 
@@ -77,6 +79,8 @@ client.on('message', message => {
 
 	var command = text.slice(start, end);
 
+	// if the command is anything other than "help", the bot is expected to reply in this channel
+	if (command !== 'help' && !perms.hasPermission('SEND_MESSAGES')) return;
 	if (!Commands.has(command)) return;
 
 	var options = commands[command].options;
