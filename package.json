@@ -1,6 +1,6 @@
 {
   "name": "blitzbot",
-  "version": "2.3.5",
+  "version": "2.3.6",
   "description": "WOT Blitz stat bot for Discord.",
   "bin": "bin/bot.js",
   "scripts": {
@@ -25,18 +25,22 @@
   },
   "homepage": "https://github.com/CodeMan99/blitzbot#readme",
   "dependencies": {
-    "discord.js": "^10.0.1",
+    "discord.js": "^11.0.0",
     "nedb": "^1.8.0",
     "wotblitz": "^1.0.0"
   },
   "devDependencies": {
-    "eslint": "^3.11.1",
+    "eslint": "^3.12.2",
     "faucet": "0.0.1",
     "mockery": "^2.0.0",
     "nock": "^9.0.2",
     "tape": "^4.6.3"
   },
   "changeLog": {
+    "2.3.6": [
+      "Upgrade discord.js to 11.0.0.",
+      "Upgrade eslint to 3.12.2."
+    ],
     "2.3.5": [
       "Fixed attempt to get permissions for a direct message."
     ],
