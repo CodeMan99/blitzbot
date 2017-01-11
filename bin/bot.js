@@ -44,6 +44,7 @@ var commands = new Commands(client, db);
 process.title = pkg.name;
 client.rest.userAgentManager.set({url: pkg.homepage, version: pkg.version});
 wotblitz.application_id = auth.wotblitz.key;
+wotblitz.region = wotblitz.REGION_EU;
 
 client.on('ready', () => {
 	console.log('blitzbot ready!');
