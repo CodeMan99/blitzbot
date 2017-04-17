@@ -1,10 +1,14 @@
+// not actually mocking wotblitz; providing a single instance, mimicking the bot code
+var wotblitz = require('wotblitz')();
+
 exports.commands = {
 	client: {
 		user: {
 			id: '0101',
 			username: 'testbot'
 		}
-	}
+	},
+	wotblitz: wotblitz
 };
 
 exports.createMessage = function(content, author, mentions) {

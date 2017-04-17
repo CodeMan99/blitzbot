@@ -7,7 +7,7 @@ var auth = require('../blitzbot.json');
 var helpers = require('../lib/helpers.js');
 var pkg = require('../package.json');
 var serveReferences = require('../lib/serveReferences.js');
-var wotblitz = require('wotblitz');
+var wotblitz = require('wotblitz')(auth.wotblitz.key);
 
 (() => { // Add commands scope, no need to pollute module scope.
 	var add = require('../lib/command/add.js');
@@ -39,11 +39,10 @@ var db = new Datastore({
 	filename: './blitzbot.db',
 	timestampData: true
 });
-var commands = new Commands(client, db);
+var commands = new Commands(client, db, wotblitz);
 
 process.title = pkg.name;
 client.rest.userAgentManager.set({url: pkg.homepage, version: pkg.version});
-wotblitz.application_id = auth.wotblitz.key;
 
 client.on('ready', () => {
 	console.log('blitzbot ready!');

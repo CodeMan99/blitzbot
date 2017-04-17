@@ -1,6 +1,6 @@
 {
   "name": "blitzbot",
-  "version": "2.3.6",
+  "version": "2.3.7",
   "description": "WOT Blitz stat bot for Discord.",
   "bin": "bin/bot.js",
   "scripts": {
@@ -27,7 +27,7 @@
   "dependencies": {
     "discord.js": "^11.0.0",
     "nedb": "^1.8.0",
-    "wotblitz": "^1.0.0"
+    "wotblitz": "^1.1.0"
   },
   "devDependencies": {
     "eslint": "^3.12.2",
@@ -37,6 +37,9 @@
     "tape": "^4.6.3"
   },
   "changeLog": {
+    "2.3.7": [
+      "Upgrade wotblitz to 1.1.0. Preparing for multi-region support."
+    ],
     "2.3.6": [
       "Upgrade discord.js to 11.0.0.",
       "Upgrade eslint to 3.12.2."
