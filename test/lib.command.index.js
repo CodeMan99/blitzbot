@@ -118,9 +118,7 @@ test('Commands and help together.', t => {
 	t.test('help, the "echo" command', st => {
 		commands.help(mocks.createMessage(), 'echo').then(result => {
 			st.deepEqual(result, {
-				sentMsg: [
-					'`@testbot1 echo` -- Echo whatever you say to me.'
-				]
+				sentMsg: ['`@testbot1 echo` -- Echo whatever you say to me.']
 			}, 'help can tell about a specific command.');
 
 			st.end();

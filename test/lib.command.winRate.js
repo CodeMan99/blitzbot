@@ -92,17 +92,17 @@ test('command.winRate.tankWinRate', t => {
 			});
 
 		callTankWinRate(mocks.createMessage(null, 'meganthetanker [CL]', []), {account_id: 100998143}, 'T7 Combat Car')
-		.then(result => {
-			st.deepEqual(result, {
-				sentMsg: '@meganthetanker [CL], I found no stats related to your search.'
-			}, 'verify response explains that the tank has yet to be played');
+			.then(result => {
+				st.deepEqual(result, {
+					sentMsg: '@meganthetanker [CL], I found no stats related to your search.'
+				}, 'verify response explains that the tank has yet to be played');
 
-			st.ok(tankopediaVehicles.isDone() && tankStats.isDone(), 'make two api calls');
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
+				st.ok(tankopediaVehicles.isDone() && tankStats.isDone(), 'make two api calls');
+				st.end();
+			}, error => {
+				st.fail(error);
+				st.end();
+			});
 	});
 
 	t.test('argument returns one tank', st => {
@@ -296,16 +296,16 @@ test('command.winRate.tankWinRate', t => {
 			}
 
 			callTankWinRate(mocks.createMessage(null, 'iambesttanker [CL]', mentions), {account_id: 100998148}, 'Tiger I')
-			.then(result => {
-				st.deepEqual(result, {
-					sentMsg: '@iambesttanker [CL], Tiger I (germany, 7): 53.30% after 227 battles.'
-				}, 'verify response');
-				st.ok(tankopediaVehicles.isDone() && tankStats.isDone(), 'make two api calls');
-				st.end();
-			}, error => {
-				st.fail(error);
-				st.end();
-			});
+				.then(result => {
+					st.deepEqual(result, {
+						sentMsg: '@iambesttanker [CL], Tiger I (germany, 7): 53.30% after 227 battles.'
+					}, 'verify response');
+					st.ok(tankopediaVehicles.isDone() && tankStats.isDone(), 'make two api calls');
+					st.end();
+				}, error => {
+					st.fail(error);
+					st.end();
+				});
 		});
 	});
 

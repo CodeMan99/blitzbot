@@ -35,7 +35,6 @@ test('command.roster', t => {
 					}
 				}
 			});
-
 		var clanInfo = nock('https://api.wotblitz.com')
 			.post('/wotb/clans/info/', {
 				clan_id: '82',
@@ -182,7 +181,6 @@ test('command.roster', t => {
 					tag: 'DNFX2'
 				}]
 			});
-
 		var clanInfo = nock('https://api.wotblitz.com')
 			.post('/wotb/clans/info/', {
 				clan_id: '725',

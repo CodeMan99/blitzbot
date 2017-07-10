@@ -1,6 +1,6 @@
 {
   "name": "blitzbot",
-  "version": "2.3.7",
+  "version": "2.3.8",
   "description": "WOT Blitz stat bot for Discord.",
   "bin": "bin/bot.js",
   "scripts": {
@@ -30,18 +30,19 @@
     "wotblitz": "^1.1.0"
   },
   "devDependencies": {
-    "eslint": "^3.12.2",
+    "eslint": "^4.2.0",
     "faucet": "0.0.1",
     "mockery": "^2.1.0",
     "nock": "^9.0.2",
     "tape": "^4.7.0"
   },
   "changeLog": {
-    "unreleased": [
+    "2.3.8": [
       "Fixed parsing of message with multiple spaces between mention and command",
       "Upgrade discord.js to 11.1.0",
       "Upgrade mockery to 2.1.0",
-      "Upgrade tape to 4.7.0"
+      "Upgrade tape to 4.7.0",
+      "Upgrade eslint to 4.2.0"
     ],
     "2.3.7": [
       "Upgrade wotblitz to 1.1.0. Preparing for multi-region support."
