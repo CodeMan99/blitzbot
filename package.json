@@ -25,20 +25,23 @@
   },
   "homepage": "https://github.com/CodeMan99/blitzbot#readme",
   "dependencies": {
-    "discord.js": "^11.0.0",
+    "discord.js": "^11.1.0",
     "nedb": "^1.8.0",
     "wotblitz": "^1.1.0"
   },
   "devDependencies": {
     "eslint": "^3.12.2",
     "faucet": "0.0.1",
-    "mockery": "^2.0.0",
+    "mockery": "^2.1.0",
     "nock": "^9.0.2",
-    "tape": "^4.6.3"
+    "tape": "^4.7.0"
   },
   "changeLog": {
     "unreleased": [
-      "Fixed parsing of message with multiple spaces between mention and command"
+      "Fixed parsing of message with multiple spaces between mention and command",
+      "Upgrade discord.js to 11.1.0",
+      "Upgrade mockery to 2.1.0",
+      "Upgrade tape to 4.7.0"
     ],
     "2.3.7": [
       "Upgrade wotblitz to 1.1.0. Preparing for multi-region support."
