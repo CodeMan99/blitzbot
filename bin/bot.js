@@ -58,7 +58,7 @@ client.on('message', message => {
 
 	var userId = message.author.id;
 	var id = message.id + ', ' + userId;
-	var text = message.content;
+	var text = message.content.replace(/\s{2,}/g, ' ');
 	var mention = client.user.toString() + ' ';
 	var start = 0;
 	var perms = message.channel.type === 'text' ? message.channel.permissionsFor(client.user) : true;
@@ -75,6 +75,7 @@ client.on('message', message => {
 	var end = text.indexOf(' ', start);
 
 	if (end < 0) end = text.length;
+	if (end <= start) return; // no command at all
 
 	var command = text.slice(start, end);
 

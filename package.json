@@ -37,6 +37,9 @@
     "tape": "^4.6.3"
   },
   "changeLog": {
+    "unreleased": [
+      "Fixed parsing of message with multiple spaces between mention and command"
+    ],
     "2.3.7": [
       "Upgrade wotblitz to 1.1.0. Preparing for multi-region support."
     ],
