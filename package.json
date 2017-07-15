@@ -1,6 +1,6 @@
 {
   "name": "blitzbot",
-  "version": "2.3.8",
+  "version": "3.0.0",
   "description": "WOT Blitz stat bot for Discord.",
   "bin": "bin/bot.js",
   "scripts": {
@@ -37,6 +37,9 @@
     "tape": "^4.7.0"
   },
   "changeLog": {
+    "3.0.0": [
+      "Added multi-region support."
+    ],
     "2.3.8": [
       "Fixed parsing of message with multiple spaces between mention and command",
       "Upgrade discord.js to 11.1.0",

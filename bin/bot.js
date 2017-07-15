@@ -7,7 +7,7 @@ var auth = require('../blitzbot.json');
 var helpers = require('../lib/helpers.js');
 var pkg = require('../package.json');
 var serveReferences = require('../lib/serveReferences.js');
-var wotblitz = require('wotblitz')(auth.wotblitz.key);
+var wotblitz = require('wotblitz');
 
 (() => { // Add commands scope, no need to pollute module scope.
 	var add = require('../lib/command/add.js');
@@ -35,11 +35,30 @@ var wotblitz = require('wotblitz')(auth.wotblitz.key);
 })();
 
 var client = new Discord.Client();
-var db = new Datastore({
-	filename: './blitzbot.db',
-	timestampData: true
-});
-var commands = new Commands(client, db, wotblitz);
+var regions = {
+	na: new Commands(client, new Datastore({
+		filename: './blitzbot.db',
+		timestampData: true
+	}), wotblitz(auth.wotblitz.key, wotblitz.REGION_NA)),
+	eu: new Commands(client, new Datastore({
+		filename: './blitzbot-eu.db',
+		timestampData: true
+	}), wotblitz(auth.wotblitz.key, wotblitz.REGION_EU)),
+	ru: new Commands(client, new Datastore({
+		filename: './blitzbot-ru.db',
+		timestampData: true
+	}), wotblitz(auth.wotblitz.key, wotblitz.REGION_RU /* , wotblitz.LANGUAGES['Русский'] */)),
+	asia: new Commands(client, new Datastore({
+		filename: './blitzbot-asia.db',
+		timestampData: true
+	}), wotblitz(auth.wotblitz.key, wotblitz.REGION_ASIA))
+};
+var regionLetter = {
+	n: 'na',
+	e: 'eu',
+	r: 'ru',
+	a: 'asia'
+};
 
 process.title = pkg.name;
 client.rest.userAgentManager.set({url: pkg.homepage, version: pkg.version});
@@ -56,9 +75,23 @@ client.on('message', message => {
 	if (message.channel.type !== 'dm' && !message.isMentioned(client.user)) return;
 	if (message.author.id === client.user.id) return;
 
+	var text = message.content.replace(/\s{2,}/g, ' ');
+	var region;
+
+	try {
+		region = text.match(/\b(n|na|e|eu|r|ru|a|asia)\b/i)[1].toLowerCase();
+
+		if (region in regionLetter) {
+			region = regionLetter[region];
+		}
+	} catch (e) {
+		region = 'na';
+	}
+
+	var commands = regions[region];
+	var db = commands.db;
 	var userId = message.author.id;
 	var id = message.id + ', ' + userId;
-	var text = message.content.replace(/\s{2,}/g, ' ');
 	var mention = client.user.toString() + ' ';
 	var start = 0;
 	var perms = message.channel.type === 'text' ? message.channel.permissionsFor(client.user) : true;
@@ -150,22 +183,24 @@ client.on('message', message => {
 	});
 });
 
-Promise.all([
-	new Promise((resolve, reject) => {
-		db.loadDatabase(error => {
+function loadDatabase(cmds) {
+	return new Promise((resolve, reject) => {
+		cmds.db.loadDatabase(error => {
 			if (error) return reject(error);
 			resolve();
 		});
-	}),
+	});
+}
+
+Promise.all([
+	loadDatabase(regions.na),
+	loadDatabase(regions.eu),
+	loadDatabase(regions.ru),
+	loadDatabase(regions.asia),
 	client.login(auth.user.token)
 ]).then(() => {
 	// not using a promise because this server is event based, not assuming any event occurs only once
-	serveReferences({
-		bot: client,
-		commands: commands,
-		db: db,
-		wotblitz: wotblitz
-	}, 8008, serverErr => {
+	serveReferences(regions, 8008, serverErr => {
 		if (serverErr) return console.error(serverErr.stack || serverErr);
 	});
 }, error => {
