@@ -35,23 +35,12 @@ var wotblitz = require('wotblitz');
 })();
 
 var client = new Discord.Client();
+var createDatabase = name => new Datastore({filename: name, timestampData: true});
 var regions = {
-	na: new Commands(client, new Datastore({
-		filename: './blitzbot.db',
-		timestampData: true
-	}), wotblitz(auth.wotblitz.key, wotblitz.REGION_NA)),
-	eu: new Commands(client, new Datastore({
-		filename: './blitzbot-eu.db',
-		timestampData: true
-	}), wotblitz(auth.wotblitz.key, wotblitz.REGION_EU)),
-	ru: new Commands(client, new Datastore({
-		filename: './blitzbot-ru.db',
-		timestampData: true
-	}), wotblitz(auth.wotblitz.key, wotblitz.REGION_RU /* , wotblitz.LANGUAGES['Русский'] */)),
-	asia: new Commands(client, new Datastore({
-		filename: './blitzbot-asia.db',
-		timestampData: true
-	}), wotblitz(auth.wotblitz.key, wotblitz.REGION_ASIA))
+	na: new Commands(client, createDatabase('./blitzbot.db'), wotblitz(auth.wotblitz.key, wotblitz.REGION_NA)),
+	eu: new Commands(client, createDatabase('./blitzbot-eu.db'), wotblitz(auth.wotblitz.key, wotblitz.REGION_EU)),
+	ru: new Commands(client, createDatabase('./blitzbot-ru.db'), wotblitz(auth.wotblitz.key, wotblitz.REGION_RU)),
+	asia: new Commands(client, createDatabase('./blitzbot-asia.db'), wotblitz(auth.wotblitz.key, wotblitz.REGION_ASIA))
 };
 var regionLetter = {
 	n: 'na',
@@ -181,9 +170,9 @@ client.on('message', message => {
 	});
 });
 
-function loadDatabase(cmds) {
+function loadDatabase(commands) {
 	return new Promise((resolve, reject) => {
-		cmds.db.loadDatabase(error => {
+		commands.db.loadDatabase(error => {
 			if (error) return reject(error);
 			resolve();
 		});
