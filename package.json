@@ -33,12 +33,13 @@
     "eslint": "^4.2.0",
     "faucet": "0.0.1",
     "mockery": "^2.1.0",
-    "nock": "^9.0.2",
+    "nock": "^9.0.14",
     "tape": "^4.7.0"
   },
   "changeLog": {
     "unreleased": [
-      "Fixed multi-region support for direct messages."
+      "Fixed multi-region support for direct messages.",
+      "Upgrade nock to 9.0.14."
     ],
     "3.0.0": [
       "Added multi-region support."
