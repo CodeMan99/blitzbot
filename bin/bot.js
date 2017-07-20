@@ -198,7 +198,7 @@ Promise.all([
 	client.login(auth.user.token)
 ]).then(() => {
 	// not using a promise because this server is event based, not assuming any event occurs only once
-	serveReferences(regions, 8008, serverErr => {
+	serveReferences(Object.assign({bot: client}, regions), 8008, serverErr => {
 		if (serverErr) return console.error(serverErr.stack || serverErr);
 	});
 }, error => {
