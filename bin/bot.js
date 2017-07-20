@@ -150,11 +150,8 @@ client.on('message', message => {
 
 		return Commands.prototype[command].apply(commands, args).then(result => {
 			if (!result) return null;
-			if (result.sentMsg) {
-				if (Array.isArray(result.sentMsg)) result.sentMsg = result.sentMsg.join('\n');
 
-				console.log(id + ' -- sent msg: ' + result.sentMsg);
-			}
+			console.log(id + ' -- sent msg: ' + helpers.messageToString(result.sentMsg));
 
 			return result.updateFields;
 		});
