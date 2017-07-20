@@ -75,28 +75,25 @@ client.on('message', message => {
 	if (message.channel.type !== 'dm' && !message.isMentioned(client.user)) return;
 	if (message.author.id === client.user.id) return;
 
-	var text = message.content.replace(/\s{2,}/g, ' ');
-	var region;
+	var perms = message.channel.type === 'text' ? message.channel.permissionsFor(client.user) : true;
 
-	try {
-		region = text.match(/\b(n|na|e|eu|r|ru|a|asia)\b/i)[1].toLowerCase();
+	if (!perms) return;
+
+	var mention = client.user.toString() + ' ';
+	var region = 'na';
+	var start = 0;
+	var text = message.content.replace(/\s{2,}/g, ' ');
+	var m = text.match(/\b(n|na|e|eu|r|ru|a|asia)\b/i);
+
+	if (m) {
+		start = m.index + m[1].length + 1;
+		region = m[1].toLowerCase();
 
 		if (region in regionLetter) {
 			region = regionLetter[region];
 		}
-	} catch (e) {
-		region = 'na';
 	}
 
-	var commands = regions[region];
-	var db = commands.db;
-	var userId = message.author.id;
-	var id = message.id + ', ' + userId;
-	var mention = client.user.toString() + ' ';
-	var start = 0;
-	var perms = message.channel.type === 'text' ? message.channel.permissionsFor(client.user) : true;
-
-	if (!perms) return;
 	if (message.channel.type !== 'dm') {
 		start = text.indexOf(mention);
 
@@ -116,6 +113,10 @@ client.on('message', message => {
 	if (command !== 'help' && perms !== true && !perms.hasPermission('SEND_MESSAGES')) return;
 	if (!Commands.has(command)) return;
 
+	var userId = message.author.id;
+	var id = message.id + ', ' + userId;
+	var commands = regions[region];
+	var db = commands.db;
 	var options = commands[command].options;
 	var textArgs = text.slice(end).trim();
 	var chain;
