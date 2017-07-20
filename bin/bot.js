@@ -80,7 +80,7 @@ client.on('message', message => {
 	if (!perms) return;
 
 	var mention = client.user.toString() + ' ';
-	var region = 'na';
+	var region = auth.wotblitz.default_region || 'na';
 	var start = 0;
 	var text = message.content.replace(/\s{2,}/g, ' ');
 	var m = text.match(/\b(n|na|e|eu|r|ru|a|asia)\b/i);

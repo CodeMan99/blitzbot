@@ -25,16 +25,16 @@ The following are commands as of v2.3.3. An argument in `[braces]` is optional. 
 Installation Setup
 ------------------
 
-Running your own instance probably isn't necessary unless you are forking this project. The setup is
-pretty easy however.
+Running your own instance probably isn't necessary unless you are forking this project. Follow these steps to get started.
 
- 1. Install [node.js](https://nodejs.org).
+ 1. Install [node.js](https://nodejs.org), v6.x or newer.
  2. Get a WarGaming [application id](https://na.wargaming.net/developers/applications/).
  3. Create a Discord [api application](https://discordapp.com/developers/applications/me).
  4. Create a Discord user. Use a unique name, not "blitzbot" please.
- 5. Create a package that you can install by running `npm pack` in the repo root.
- 6. Install the resulting package globally: `npm install -g blitzbot-2.3.3.tgz`.
- 7. Create a file called "blitzbot.json" in the root of the install, in it store the values from steps 2-4.
+ 5. Decide which region is your default. One of "na", "eu", "ru", or "asia".
+ 6. Create a package that you can install by running `npm pack` in the repo root.
+ 7. Install the resulting package globally: `npm install -g blitzbot-3.0.0.tgz`.
+ 8. Create a file called "blitzbot.json" in the root of the install, in it store the values from steps 2-5.
 
      ```json
      {
@@ -45,6 +45,7 @@ pretty easy however.
          "token": "-- discord user token here --"
        },
        "wotblitz": {
+         "default_region": "na",
          "key": "-- WarGaming application id here --"
        }
      }

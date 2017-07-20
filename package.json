@@ -40,7 +40,8 @@
     "unreleased": [
       "Fixed multi-region support for direct messages.",
       "Upgrade nock to 9.0.14.",
-      "Added helper for logging sent messages."
+      "Added helper for logging sent messages.",
+      "Added conveince configuration to select default region."
     ],
     "3.0.0": [
       "Added multi-region support."
