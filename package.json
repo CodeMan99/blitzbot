@@ -30,11 +30,11 @@
     "wotblitz": "^1.1.0"
   },
   "devDependencies": {
-    "eslint": "^4.3.0",
+    "eslint": "^4.4.1",
     "faucet": "0.0.1",
     "mockery": "^2.1.0",
     "nock": "^9.0.14",
-    "tape": "^4.7.0"
+    "tape": "^4.8.0"
   },
   "changeLog": {
     "unreleased": [
@@ -42,7 +42,8 @@
       "Upgrade nock to 9.0.14.",
       "Added helper for logging sent messages.",
       "Added conveince configuration to select default region.",
-      "Upgrade eslint to 4.3.0"
+      "Upgrade eslint to 4.4.0",
+      "Upgrade tape to 4.8.0"
     ],
     "3.0.0": [
       "Added multi-region support."
