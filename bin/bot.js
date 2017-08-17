@@ -99,7 +99,7 @@ client.on('message', message => {
 	var command = text.slice(start, end);
 
 	// when the command is not "help" and this is a text channel, check for write privledges
-	if (command !== 'help' && perms !== true && !perms.hasPermission('SEND_MESSAGES')) return;
+	if (command !== 'help' && perms !== true && !perms.has('SEND_MESSAGES')) return;
 	if (!Commands.has(command)) return;
 
 	var userId = message.author.id;

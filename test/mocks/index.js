@@ -16,11 +16,11 @@ exports.createMessage = function(content, author, mentions) {
 
 	return {
 		'author': {
-			sendMessage: text => Promise.resolve(text),
+			send: text => Promise.resolve(text),
 			username: author
 		},
 		channel: {
-			sendMessage: text => Promise.resolve(text)
+			send: text => Promise.resolve(text)
 		},
 		'content': content,
 		'mentions': {

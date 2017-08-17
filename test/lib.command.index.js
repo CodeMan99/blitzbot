@@ -81,7 +81,7 @@ test('createHelp', t => {
 
 test('Commands and help together.', t => {
 	Commands.add(new Command(function echo(msg) { // eslint-disable-line prefer-arrow-callback
-		return msg.channel.sendMessage(msg.content).then(sent => {
+		return msg.channel.send(msg.content).then(sent => {
 			return {sentMsg: sent};
 		});
 	}, {
