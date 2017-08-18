@@ -1,6 +1,6 @@
 {
   "name": "blitzbot",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "WOT Blitz stat bot for Discord.",
   "bin": "bin/bot.js",
   "scripts": {
@@ -18,7 +18,7 @@
     "bot",
     "discord"
   ],
-  "author": "Cody A. Taylor",
+  "author": "Cody A. Taylor <codemister99@yahoo.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/CodeMan99/blitzbot/issues"
@@ -37,7 +37,7 @@
     "tape": "^4.8.0"
   },
   "changeLog": {
-    "unreleased": [
+    "3.1.0": [
       "Fixed multi-region support for direct messages.",
       "Upgrade nock to 9.0.14.",
       "Added helper for logging sent messages.",
