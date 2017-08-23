@@ -108,12 +108,12 @@ client.on('message', message => {
 	var db = commands.db;
 	var options = commands[command].options;
 	var textArgs = text.slice(end).trim();
-	var chain;
+	var chain = [message];
 
 	console.log(id + ' -- running command: "' + command + '"');
 
 	if (options.passRecord) {
-		chain = new Promise((resolve, reject) => {
+		chain.push(new Promise((resolve, reject) => {
 			db.findOne({_id: userId}, (error, record) => {
 				if (error) return reject(error);
 				resolve(record);
@@ -121,7 +121,7 @@ client.on('message', message => {
 		}).then(record => {
 			// commands require a saved 'account_id'.
 			if (record && record.account_id) {
-				return [message, record];
+				return record;
 			} else {
 				return message.reply('I don\'t know who you are! Do `' + mention + 'add <screen-name>` first.').then(sent => {
 					console.log(id + ' -- sent msg: ' + sent);
@@ -129,23 +129,23 @@ client.on('message', message => {
 					return Promise.reject(null);
 				});
 			}
-		});
+		}));
 	}
 
-	(chain || Promise.resolve([message])).then(args => {
+	Promise.all(chain).then(args => {
 		if (textArgs && options.argCount > 0) {
 			Array.prototype.push.apply(args, textArgs.split(options.argSplit).slice(0, options.argCount));
 		}
 
-		return Commands.prototype[command].apply(commands, args).then(result => {
-			if (!result) return null;
+		return Commands.prototype[command].apply(commands, args);
+	}).then(result => {
+		if (!result) return;
 
-			console.log(id + ' -- sent msg: ' + helpers.messageToString(result.sentMsg));
+		console.log(id + ' -- sent msg: ' + helpers.messageToString(result.sentMsg));
 
-			return result.updateFields;
-		});
-	}).then(update => {
-		if (!update) return null;
+		var update = result.updateFields;
+
+		if (!update) return;
 
 		console.log(id + ' -- update document');
 
