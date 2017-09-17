@@ -40,6 +40,7 @@
   },
   "changeLog": {
     "3.1.1": [
+      "Fixed message resolving pattern.",
       "Upgrade discord.js to 11.2.1",
       "Upgrade eslint to 4.7.0",
       "Added bufferutil and erlpack peer deps."
