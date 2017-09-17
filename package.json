@@ -1,6 +1,6 @@
 {
   "name": "blitzbot",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "WOT Blitz stat bot for Discord.",
   "bin": "bin/bot.js",
   "scripts": {
@@ -25,18 +25,25 @@
   },
   "homepage": "https://github.com/CodeMan99/blitzbot#readme",
   "dependencies": {
-    "discord.js": "^11.1.0",
+    "bufferutil": "^3.0.2",
+    "discord.js": "^11.2.1",
+    "erlpack": "github:hammerandchisel/erlpack",
     "nedb": "^1.8.0",
     "wotblitz": "^1.1.0"
   },
   "devDependencies": {
-    "eslint": "^4.4.1",
+    "eslint": "^4.7.0",
     "faucet": "0.0.1",
     "mockery": "^2.1.0",
     "nock": "^9.0.14",
     "tape": "^4.8.0"
   },
   "changeLog": {
+    "3.1.1": [
+      "Upgrade discord.js to 11.2.1",
+      "Upgrade eslint to 4.7.0",
+      "Added bufferutil and erlpack peer deps."
+    ],
     "3.1.0": [
       "Fixed multi-region support for direct messages.",
       "Upgrade nock to 9.0.14.",
