@@ -4,7 +4,7 @@
   "description": "WOT Blitz stat bot for Discord.",
   "bin": "bin/bot.js",
   "scripts": {
-    "test": "APPLICATION_ID=test-app-id-invalid faucet test/*.js",
+    "test": "cross-env APPLICATION_ID=test-app-id-invalid faucet test/*.js",
     "lint": "eslint --format tap bin/*.js lib/*.js lib/command/*.js test/*.js test/mocks/*.js | faucet"
   },
   "repository": {
@@ -32,6 +32,7 @@
     "wotblitz": "^1.1.0"
   },
   "devDependencies": {
+    "cross-env": "^5.0.5",
     "eslint": "^4.7.0",
     "faucet": "0.0.1",
     "mockery": "^2.1.0",
@@ -39,6 +40,9 @@
     "tape": "^4.8.0"
   },
   "changeLog": {
+    "unreleased": [
+      "Added cross-env for development."
+    ],
     "3.1.1": [
       "Fixed message resolving pattern.",
       "Upgrade discord.js to 11.2.1",
