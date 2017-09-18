@@ -35,12 +35,12 @@ var wotblitz = require('wotblitz');
 })();
 
 var client = new Discord.Client();
-var createDatabase = name => new Datastore({filename: name, timestampData: true});
+var createDatabase = name => new Datastore({filename: './blitzbot' + name + '.db', timestampData: true});
 var regions = {
-	na: new Commands(client, createDatabase('./blitzbot.db'), wotblitz(auth.wotblitz.key, wotblitz.REGION_NA)),
-	eu: new Commands(client, createDatabase('./blitzbot-eu.db'), wotblitz(auth.wotblitz.key, wotblitz.REGION_EU)),
-	ru: new Commands(client, createDatabase('./blitzbot-ru.db'), wotblitz(auth.wotblitz.key, wotblitz.REGION_RU)),
-	asia: new Commands(client, createDatabase('./blitzbot-asia.db'), wotblitz(auth.wotblitz.key, wotblitz.REGION_ASIA))
+	na: new Commands(client, createDatabase(''), wotblitz(auth.wotblitz.key, wotblitz.REGION_NA)),
+	eu: new Commands(client, createDatabase('-eu'), wotblitz(auth.wotblitz.key, wotblitz.REGION_EU)),
+	ru: new Commands(client, createDatabase('-ru'), wotblitz(auth.wotblitz.key, wotblitz.REGION_RU)),
+	asia: new Commands(client, createDatabase('-asia'), wotblitz(auth.wotblitz.key, wotblitz.REGION_ASIA))
 };
 var regionLetter = {
 	n: 'na',
