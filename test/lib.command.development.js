@@ -6,17 +6,17 @@ mockery.registerAllowable('./index.js');
 mockery.registerAllowable('../lib/command/development.js');
 mockery.registerMock('../../package.json', {
 	name: 'testname',
-	version: '1.3.4',
-	changeLog: {
-		'1.3.4': [
-			'change 2',
-			'change 1'
-		],
-		'1.3.3': [
-			'fix 2',
-			'fix 1'
-		]
-	}
+	version: '1.3.4'
+});
+mockery.registerMock('../../change-log.json', {
+	'1.3.4': [
+		'change 2',
+		'change 1'
+	],
+	'1.3.3': [
+		'fix 2',
+		'fix 1'
+	]
 });
 mockery.enable();
 

@@ -1,0 +1,99 @@
+{
+  "unreleased": [
+    "Added new file for storing changelog.",
+    "Added cross-env for development."
+  ],
+  "3.1.1": [
+    "Fixed message resolving pattern.",
+    "Upgrade discord.js to 11.2.1",
+    "Upgrade eslint to 4.7.0",
+    "Added bufferutil and erlpack peer deps."
+  ],
+  "3.1.0": [
+    "Fixed multi-region support for direct messages.",
+    "Upgrade nock to 9.0.14.",
+    "Added helper for logging sent messages.",
+    "Added conveince configuration to select default region.",
+    "Upgrade eslint to 4.4.0",
+    "Upgrade tape to 4.8.0",
+    "Fixed usage of deprecated discord.js methods."
+  ],
+  "3.0.0": [
+    "Added multi-region support."
+  ],
+  "2.3.8": [
+    "Fixed parsing of message with multiple spaces between mention and command",
+    "Upgrade discord.js to 11.1.0",
+    "Upgrade mockery to 2.1.0",
+    "Upgrade tape to 4.7.0",
+    "Upgrade eslint to 4.2.0"
+  ],
+  "2.3.7": [
+    "Upgrade wotblitz to 1.1.0. Preparing for multi-region support."
+  ],
+  "2.3.6": [
+    "Upgrade discord.js to 11.0.0.",
+    "Upgrade eslint to 3.12.2."
+  ],
+  "2.3.5": [
+    "Fixed attempt to get permissions for a direct message."
+  ],
+  "2.3.4": [
+    "Fixed incorrect sending of messages without permission."
+  ],
+  "2.3.3": [
+    "Added new *max-xp* command.",
+    "Fixed bug in *tank-win-rate* with long messages."
+  ],
+  "2.3.2": [
+    "Fixed testing code.",
+    "Fixed *tank-win-rate* lookup by mention.",
+    "Fixed typo in *mastery-list*."
+  ],
+  "2.3.1": [
+    "Fix bug with message parsing in text channels."
+  ],
+  "2.3.0": [
+    "Remove async dependency.",
+    "Upgrade to wotblitz v1.0.0.",
+    "Upgrade to discord.js v10.0.1."
+  ],
+  "2.2.2": [
+    "Fixed *mastery-list* to include missing tanks instead of crashing.",
+    "Upgrade to discord.js v8.1.0."
+  ],
+  "2.2.1": [
+    "Revert discord.js update."
+  ],
+  "2.2.0": [
+    "Add lookup by mention to *tank-win-rate*. Feature in testing!",
+    "Fixed *roster* bug when the message author is not in a clan.",
+    "Add admin REPL server to allow changes while the bot is live.",
+    "Update discord.js dependency."
+  ],
+  "2.1.0": [
+    "Changed the *mastery-list* command to direct message really long lists.",
+    "Added new *donate* command."
+  ],
+  "2.0.1": [
+    "Fixed updating existing records."
+  ],
+  "2.0.0": [
+    "Added very basic history to the `win-rate` command.",
+    "Added `mastery-list` \"None\" option to list tanks without any badge.",
+    "Faster clan `roster` command when looking up your own clan multiple times.",
+    "Added count and percentage of played tanks to `mastery-list`.",
+    "Removed order from the `mastery-list`. Separated entries with a new line.",
+    "Added response when the `add` command does not find an account.",
+    "Fixed the dash/space issue in `tank-win-rate` vehicle name searching.",
+    "Created a new command structure, making the bot more modular."
+  ],
+  "1.2.6": [
+    "Added a valid user-agent string so discord tracking knows about blitzbot.",
+    "Fixed bug in *tank-win-rate* when looking up a tank that has never been played."
+  ],
+  "1.2.5": [
+    "Added new *changes* command.",
+    "The *tank-win-rate* command now includes battle count."
+  ]
+}
