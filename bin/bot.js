@@ -116,19 +116,17 @@ client.on('message', message => {
 		chain.push(new Promise((resolve, reject) => {
 			db.findOne({_id: userId}, (error, record) => {
 				if (error) return reject(error);
-				resolve(record);
-			});
-		}).then(record => {
-			// commands require a saved 'account_id'.
-			if (record && record.account_id) {
-				return record;
-			} else {
-				return message.reply('I don\'t know who you are! Do `' + mention + 'add <screen-name>` first.').then(sent => {
-					console.log(id + ' -- sent msg: ' + sent);
 
-					return Promise.reject(null);
-				});
-			}
+				// commands require a saved 'account_id'.
+				if (record && record.account_id) {
+					resolve(record);
+				} else {
+					resolve(message.reply('I don\'t know who you are! Do `' + mention + 'add <screen-name>` first.').then(sent => {
+						console.log(id + ' -- sent msg: ' + sent);
+						throw null;
+					}));
+				}
+			});
 		}));
 	}
 
