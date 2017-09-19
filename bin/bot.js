@@ -18,6 +18,7 @@ var wotblitz = require('wotblitz');
 	var masteryList = require('../lib/command/masteryList.js');
 	var maxXp = require('../lib/command/maxXp.js');
 	var roster = require('../lib/command/roster.js');
+	var whoami = require('../lib/command/whoami.js');
 	var wr = require('../lib/command/winRate.js');
 
 	Commands.add(add);
@@ -29,6 +30,7 @@ var wotblitz = require('wotblitz');
 	Commands.add(masteryList);
 	Commands.add(maxXp);
 	Commands.add(roster);
+	Commands.add(whoami);
 	Commands.add(wr.winRate);
 	Commands.add(wr.tankWinRate);
 	Commands.add(createHelp());

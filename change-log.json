@@ -1,5 +1,8 @@
 {
   "unreleased": [
+  ],
+  "3.2.0": [
+    "Added *whoami* command. Allows users who account switch to understand their own state.",
     "Added new file for storing changelog.",
     "Added cross-env for development."
   ],
