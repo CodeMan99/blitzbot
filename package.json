@@ -29,6 +29,7 @@
     "discord.js": "^11.2.1",
     "erlpack": "github:hammerandchisel/erlpack",
     "nedb": "^1.8.0",
+    "remove-accents": "^0.4.1",
     "wotblitz": "^1.1.0"
   },
   "devDependencies": {

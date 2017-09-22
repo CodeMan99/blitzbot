@@ -196,6 +196,44 @@ test('command.winRate.tankWinRate', t => {
 		});
 	});
 
+	t.test('matches tank names with accents', st => {
+		var tankopediaVehicles = encyclopediaVehiclesMock();
+		var tankStats = nock('https://api.wotblitz.com')
+			.post('/wotb/tanks/stats/', {
+				account_id: '100996799',
+				tank_id: '54289',
+				in_garage: '',
+				fields: 'tank_id,all.battles,all.wins',
+				access_token: '',
+				application_id: process.env.APPLICATION_ID,
+				language: 'en'
+			})
+			.reply(200, {
+				status: 'ok',
+				meta: {
+					count: 1
+				},
+				data: {
+					'100996799': [{
+						all: {
+							battles: 112,
+							wins: 64
+						},
+						tank_id: 54289
+					}]
+				}
+			});
+
+		callTankWinRate(mocks.createMessage(null, 'statdude [STAT]', []), {account_id: 100996799}, 'Lowe').then(result => {
+			st.deepEqual(result, {sentMsg: '@statdude [STAT], Löwe (germany, 8): 57.14% after 112 battles.'}, 'verify response');
+			st.ok(tankopediaVehicles.isDone() && tankStats.isDone(), 'made two api calls');
+			st.end();
+		}, error => {
+			st.fail(error);
+			st.end();
+		});
+	});
+
 	t.test('argument matches more than 100 limit of tankopedia endpoint', st => {
 		var tankopediaVehicles = encyclopediaVehiclesMock();
 
