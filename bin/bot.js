@@ -64,7 +64,7 @@ client.on('ready', () => {
 client.on('message', message => {
 	// Bot will only respond in a DM or when mentioned.
 	if (message.channel.type !== 'dm' && !message.isMentioned(client.user)) return;
-	if (message.author.id === client.user.id) return;
+	if (message.author.id === client.user.id || message.author.bot) return;
 
 	var perms = message.channel.type === 'text' ? message.channel.permissionsFor(client.user) : true;
 

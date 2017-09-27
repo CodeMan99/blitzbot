@@ -1,5 +1,6 @@
 {
   "unreleased": [
+    "Fixed internal message processing flaw.",
     "Fixed *tank-win-rate* when search for a name with accents. \"Lowe\" now matches \"Löwe\"."
   ],
   "3.2.0": [
