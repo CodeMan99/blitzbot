@@ -123,10 +123,11 @@ client.on('message', message => {
 				if (record && record.account_id) {
 					resolve(record);
 				} else {
-					resolve(message.reply('I don\'t know who you are! Do `' + mention + 'add <screen-name>` first.').then(sent => {
-						console.log(id + ' -- sent msg: ' + sent);
-						throw null;
-					}));
+					resolve(message.reply('I don\'t know who you are! Do `@' + client.user.username + ' add <screen-name>` first.')
+						.then(sent => {
+							console.log(id + ' -- sent msg: ' + sent);
+							throw null;
+						}));
 				}
 			});
 		}));

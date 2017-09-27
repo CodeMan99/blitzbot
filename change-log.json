@@ -1,5 +1,6 @@
 {
   "unreleased": [
+    "Fixed mention example bug when the bot suggests using the *add* command.",
     "Upgrade nock to 9.0.21",
     "Upgrade eslint to 4.7.2",
     "Fixed internal message processing flaw.",
