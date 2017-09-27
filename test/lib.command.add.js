@@ -31,9 +31,12 @@ test('command.add', t => {
 	t.test('valid username argument', st => {
 		nock('https://api.wotblitz.com')
 			.post('/wotb/account/list/', {
-				search: 'joe234',
 				application_id: process.env.APPLICATION_ID,
-				language: 'en'
+				fields: '',
+				language: 'en',
+				limit: '',
+				search: 'joe234',
+				type: ''
 			})
 			.reply(200, {
 				status: 'ok',
@@ -71,9 +74,12 @@ test('command.add', t => {
 	t.test('invalid username argument', st => {
 		nock('https://api.wotblitz.com')
 			.post('/wotb/account/list/', {
-				search: 'tankkiller',
 				application_id: process.env.APPLICATION_ID,
-				language: 'en'
+				fields: '',
+				language: 'en',
+				limit: '',
+				search: 'tankkiller',
+				type: ''
 			})
 			.reply(200, {
 				status: 'ok',

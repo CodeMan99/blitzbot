@@ -17,13 +17,13 @@ test('command.maxXp', t => {
 	t.test('call', st => {
 		var stats = nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
-				account_id: '1009634067',
 				access_token: '',
-				tank_id: '',
-				in_garage: '',
-				fields: 'tank_id,all.max_xp',
+				account_id: '1009634067',
 				application_id: process.env.APPLICATION_ID,
-				language: 'en'
+				fields: 'tank_id,all.max_xp',
+				in_garage: '',
+				language: 'en',
+				tank_id: ''
 			})
 			.reply(200, {
 				status: 'ok',
@@ -92,11 +92,11 @@ test('command.maxXp', t => {
 			});
 		var vehicles = nock('https://api.wotblitz.com')
 			.post('/wotb/encyclopedia/vehicles/', {
-				tank_id: '109,43,21,65,98,87,76,54,32,10',
-				nation: '',
-				fields: 'name,tier,nation',
 				application_id: process.env.APPLICATION_ID,
-				language: 'en'
+				fields: 'name,tier,nation',
+				language: 'en',
+				nation: '',
+				tank_id: '109,43,21,65,98,87,76,54,32,10'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -184,13 +184,13 @@ test('command.maxXp', t => {
 	t.test('vehicle not in tankopedia, only 3 vehicles', st => {
 		var stats = nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
-				account_id: '1009823019',
 				access_token: '',
-				tank_id: '',
-				in_garage: '',
-				fields: 'tank_id,all.max_xp',
+				account_id: '1009823019',
 				application_id: process.env.APPLICATION_ID,
-				language: 'en'
+				fields: 'tank_id,all.max_xp',
+				in_garage: '',
+				language: 'en',
+				tank_id: ''
 			})
 			.reply(200, {
 				status: 'ok',
@@ -218,11 +218,11 @@ test('command.maxXp', t => {
 			});
 		var vehicles = nock('https://api.wotblitz.com')
 			.post('/wotb/encyclopedia/vehicles/', {
-				tank_id: '203,200,202',
-				nation: '',
-				fields: 'name,tier,nation',
 				application_id: process.env.APPLICATION_ID,
-				language: 'en'
+				fields: 'name,tier,nation',
+				language: 'en',
+				nation: '',
+				tank_id: '203,200,202'
 			})
 			.reply(200, {
 				status: 'ok',

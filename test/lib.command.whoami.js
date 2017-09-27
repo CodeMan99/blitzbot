@@ -16,7 +16,9 @@ test('command.whoami', t => {
 	t.test('nickname has not changed', st => {
 		var accountInfo = nock('https://api.wotblitz.com')
 			.post('/wotb/account/info/', {
+				access_token: '',
 				account_id: '1008921043',
+				extra: '',
 				fields: 'nickname',
 				application_id: process.env.APPLICATION_ID,
 				language: 'en'
@@ -46,7 +48,9 @@ test('command.whoami', t => {
 	t.test('nickname changed', st => {
 		var accountInfo = nock('https://api.wotblitz.com')
 			.post('/wotb/account/info/', {
+				access_token: '',
 				account_id: '1008921054',
+				extra: '',
 				fields: 'nickname',
 				application_id: process.env.APPLICATION_ID,
 				language: 'en'

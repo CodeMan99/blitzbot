@@ -39,11 +39,11 @@ test('command.winRate.tankWinRate', t => {
 	var encyclopediaVehiclesMock = () => {
 		return nock('https://api.wotblitz.com')
 			.post('/wotb/encyclopedia/vehicles/', {
-				tank_id: '',
-				nation: '',
-				fields: 'name,nation,tier',
 				application_id: process.env.APPLICATION_ID,
-				language: 'en'
+				fields: 'name,nation,tier',
+				language: 'en',
+				nation: '',
+				tank_id: ''
 			})
 			.reply(200, {
 				status: 'ok',
@@ -73,13 +73,13 @@ test('command.winRate.tankWinRate', t => {
 		var tankopediaVehicles = encyclopediaVehiclesMock();
 		var tankStats = nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
-				account_id: '100998143',
 				access_token: '',
-				tank_id: '55073',
-				in_garage: '',
-				fields: 'tank_id,all.battles,all.wins',
+				account_id: '100998143',
 				application_id: process.env.APPLICATION_ID,
-				language: 'en'
+				fields: 'tank_id,all.battles,all.wins',
+				in_garage: '',
+				language: 'en',
+				tank_id: '55073'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -109,13 +109,13 @@ test('command.winRate.tankWinRate', t => {
 		var tankopediaVehicles = encyclopediaVehiclesMock();
 		var tankStats = nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
-				account_id: '100998144',
 				access_token: '',
-				tank_id: '54289',
+				account_id: '100998144',
+				application_id: process.env.APPLICATION_ID,
 				in_garage: '',
 				fields: 'tank_id,all.battles,all.wins',
-				application_id: process.env.APPLICATION_ID,
-				language: 'en'
+				language: 'en',
+				tank_id: '54289'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -150,13 +150,13 @@ test('command.winRate.tankWinRate', t => {
 		var tankopediaVehicles = encyclopediaVehiclesMock();
 		var tankStats = nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
-				account_id: '100998145',
-				tank_id: '5921,13345',
-				in_garage: '',
-				fields: 'tank_id,all.battles,all.wins',
 				access_token: '',
+				account_id: '100998145',
 				application_id: process.env.APPLICATION_ID,
-				language: 'en'
+				fields: 'tank_id,all.battles,all.wins',
+				language: 'en',
+				in_garage: '',
+				tank_id: '5921,13345'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -200,13 +200,13 @@ test('command.winRate.tankWinRate', t => {
 		var tankopediaVehicles = encyclopediaVehiclesMock();
 		var tankStats = nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
-				account_id: '100996799',
-				tank_id: '54289',
-				in_garage: '',
-				fields: 'tank_id,all.battles,all.wins',
 				access_token: '',
+				account_id: '100996799',
 				application_id: process.env.APPLICATION_ID,
-				language: 'en'
+				fields: 'tank_id,all.battles,all.wins',
+				in_garage: '',
+				language: 'en',
+				tank_id: '54289'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -285,13 +285,13 @@ test('command.winRate.tankWinRate', t => {
 		var tankopediaVehicles = encyclopediaVehiclesMock();
 		var tankStats = nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
-				account_id: '100998149',
-				tank_id: '529,5137',
-				in_garage: '',
-				fields: 'tank_id,all.battles,all.wins',
 				access_token: '',
+				account_id: '100998149',
 				application_id: process.env.APPLICATION_ID,
-				language: 'en'
+				fields: 'tank_id,all.battles,all.wins',
+				in_garage: '',
+				language: 'en',
+				tank_id: '529,5137'
 			})
 			.reply(200, {
 				status: 'ok',
@@ -364,10 +364,11 @@ test('command.winRate.winRate', t => {
 	var accountInfoMock = (accountId, wins, battles) => {
 		return nock('https://api.wotblitz.com')
 			.post('/wotb/account/info/', {
+				access_token: '',
 				account_id: accountId.toString(),
+				application_id: process.env.APPLICATION_ID,
 				extra: '',
 				fields: 'statistics.all.battles,statistics.all.wins',
-				application_id: process.env.APPLICATION_ID,
 				language: 'en'
 			})
 			.reply(200, {
