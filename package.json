@@ -34,10 +34,10 @@
   },
   "devDependencies": {
     "cross-env": "^5.0.5",
-    "eslint": "^4.7.2",
+    "eslint": "^4.8.0",
     "faucet": "0.0.1",
     "mockery": "^2.1.0",
-    "nock": "^9.0.21",
+    "nock": "^9.0.22",
     "tape": "^4.8.0"
   }
 }
