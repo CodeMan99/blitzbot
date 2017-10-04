@@ -1,11 +1,11 @@
 {
   "name": "blitzbot",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "WOT Blitz stat bot for Discord.",
   "bin": "bin/bot.js",
   "scripts": {
     "test": "cross-env APPLICATION_ID=test-app-id-invalid faucet test/*.js",
-    "lint": "eslint --format tap bin/*.js lib/*.js lib/command/*.js test/*.js test/mocks/*.js | faucet"
+    "lint": "eslint --format tap bin/*.js lib/*.js lib/command/*.js test/*.js test/mocks/*.js *.json | faucet"
   },
   "repository": {
     "type": "git",
@@ -35,6 +35,7 @@
   "devDependencies": {
     "cross-env": "^5.0.5",
     "eslint": "^4.8.0",
+    "eslint-plugin-json": "^1.2.0",
     "faucet": "0.0.1",
     "mockery": "^2.1.0",
     "nock": "^9.0.22",

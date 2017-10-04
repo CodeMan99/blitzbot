@@ -9,6 +9,9 @@
       "impliedStrict": true
     }
   },
+  "plugins": [
+    "json"
+  ],
   "rules": {
     "arrow-parens": ["error", "as-needed"],
     "block-scoped-var": "error",
