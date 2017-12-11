@@ -25,20 +25,20 @@
   },
   "homepage": "https://github.com/CodeMan99/blitzbot#readme",
   "dependencies": {
-    "bufferutil": "^3.0.2",
+    "bufferutil": "^3.0.3",
     "discord.js": "^11.2.1",
     "erlpack": "github:hammerandchisel/erlpack",
     "nedb": "^1.8.0",
-    "remove-accents": "^0.4.1",
+    "remove-accents": "^0.4.2",
     "wotblitz": "^1.1.0"
   },
   "devDependencies": {
-    "cross-env": "^5.0.5",
-    "eslint": "^4.8.0",
+    "cross-env": "^5.1.1",
+    "eslint": "^4.13.0",
     "eslint-plugin-json": "^1.2.0",
     "faucet": "0.0.1",
     "mockery": "^2.1.0",
-    "nock": "^9.0.22",
+    "nock": "^9.1.4",
     "tape": "^4.8.0"
   }
 }

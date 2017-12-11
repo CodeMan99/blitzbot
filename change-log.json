@@ -1,5 +1,10 @@
 {
   "unreleased": [
+    "Upgrade bufferutil to 3.0.3",
+    "Upgrade remove-accents to 0.4.2",
+    "Upgrade cross-env to 5.1.1",
+    "Upgrade eslint to 4.13.0",
+    "Upgrade nock to 9.1.4"
   ],
   "3.2.1": [
     "Added eslint-plugin-json to validate change-log.json.",
