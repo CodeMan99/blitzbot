@@ -110,36 +110,38 @@ client.on('message', message => {
 	var db = commands.db;
 	var options = commands[command].options;
 	var textArgs = text.slice(end).trim();
-	var chain = [message];
+	var args = [];
+	var run;
+
+	if (textArgs && options.argCount > 0) {
+		args = textArgs.split(options.argSplit).slice(0, options.argCount);
+	}
 
 	console.log(id + ' -- running command: "' + command + '"');
 
 	if (options.passRecord) {
-		chain.push(new Promise((resolve, reject) => {
+		run = new Promise((resolve, reject) => {
 			db.findOne({_id: userId}, (error, record) => {
 				if (error) return reject(error);
 
 				// commands require a saved 'account_id'.
 				if (record && record.account_id) {
-					resolve(record);
+					resolve(commands[command](message, record, ...args));
 				} else {
 					resolve(message.reply('I don\'t know who you are! Do `@' + client.user.username + ' add <screen-name>` first.')
 						.then(sent => {
 							console.log(id + ' -- sent msg: ' + sent);
-							throw null;
+
+							return null;
 						}));
 				}
 			});
-		}));
+		});
+	} else {
+		run = commands[command](message, ...args);
 	}
 
-	Promise.all(chain).then(args => {
-		if (textArgs && options.argCount > 0) {
-			Array.prototype.push.apply(args, textArgs.split(options.argSplit).slice(0, options.argCount));
-		}
-
-		return Commands.prototype[command].apply(commands, args);
-	}).then(result => {
+	run.then(result => {
 		if (!result) return;
 
 		console.log(id + ' -- sent msg: ' + helpers.messageToString(result.sentMsg));
@@ -163,10 +165,10 @@ client.on('message', message => {
 	}).then(() => {
 		console.log(id + ' -- done: ' + command);
 	}).catch(error => {
-		// some promises reject without an error
-		if (!error) return console.log(id + ' -- done: ' + command);
-
 		console.error(id + ' -- error: ' + command);
+
+		if (!error) return console.log(id + ' -- error: Unknown');
+
 		console.error(helpers.getFieldByPath(error, 'response.error.text') || error.stack || error);
 	});
 });
