@@ -1,5 +1,6 @@
 {
   "unreleased": [
+    "Fixed logic flow for *roster* command.",
     "Upgrade erlpack to github:discordapp/erlpack",
     "Upgrade discord.js to 11.3.0",
     "Upgrade bufferutil to 3.0.3",
