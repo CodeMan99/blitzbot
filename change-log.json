@@ -1,6 +1,9 @@
 {
   "unreleased": [
   ],
+  "3.2.3": [
+    "Fixed region parsing."
+  ],
   "3.2.2": [
     "Fixed message resolving pattern.",
     "Fixed logic flow for *roster* command.",

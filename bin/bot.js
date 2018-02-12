@@ -74,7 +74,7 @@ client.on('message', message => {
 	var region = auth.wotblitz.default_region || 'na';
 	var start = 0;
 	var text = message.content.replace(/\s{2,}/g, ' ');
-	var m = text.match(/\b(n|na|e|eu|r|ru|a|asia)\b/i);
+	var m = text.match(/^[\t ]*\b(n|na|e|eu|r|ru|a|asia)\b/i);
 
 	if (m) {
 		start = m.index + m[1].length + 1;
