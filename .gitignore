@@ -32,5 +32,8 @@ node_modules
 # Database files
 *.db
 
-# Configuration
+# Private Configuration
 blitzbot.json
+
+# npm Package Files
+blitzbot-*.tgz
