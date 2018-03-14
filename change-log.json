@@ -1,5 +1,11 @@
 {
   "unreleased": [
+    "Upgrade discord.js to 11.3.2",
+    "Upgrade wotblitz to 1.1.1",
+    "Upgrade cross-env to 5.1.4",
+    "Upgrade eslint to 4.18.2",
+    "Upgrade nock to 9.2.3",
+    "Upgrade tape to 4.9.0"
   ],
   "3.2.3": [
     "Fixed region parsing."
