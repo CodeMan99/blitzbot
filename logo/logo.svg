@@ -2,6 +2,9 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
     <g transform="matrix(1,0,0,1,-0.00175497,-0.00168327)">
+        <g transform="matrix(12.5548,0,0,9.25557,-442.452,-1109.91)">
+            <rect x="35.242" y="119.919" width="81.562" height="110.636" style="fill-opacity:0.7;"/>
+        </g>
         <g transform="matrix(1.35647,0,0,1.35647,-6656.33,580.869)">
             <circle cx="5284.55" cy="-50.771" r="377.449" style="fill:url(#_Radial1);"/>
         </g>
