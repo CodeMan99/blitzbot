@@ -6,11 +6,15 @@ var callMasteryList = masteryList.fn.bind(mocks.commands);
 
 test('command.masteryList', t => {
 	t.deepEqual(masteryList.fn.options, {
+		alias: 'ml',
 		argCount: 1,
 		argSplit: null,
 		description: 'List tanks at the given mastery level (defaults to "Mastery").',
 		passRecord: true,
-		signatures: ['@BOTNAME mastery-list [level]']
+		signatures: [
+			'@BOTNAME mastery-list [level]',
+			'@BOTNAME ml [level]'
+		]
 	}, 'verify options');
 
 	t.equal(masteryList.name, 'mastery-list', 'verify Commands method name');

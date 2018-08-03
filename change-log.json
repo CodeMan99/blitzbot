@@ -1,5 +1,6 @@
 {
   "unreleased": [
+    "Added short alias names for longer commands."
   ],
   "3.2.4": [
     "Upgrade bufferutil to 3.0.4",

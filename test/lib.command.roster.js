@@ -6,11 +6,15 @@ var callRoster = roster.fn.bind(mocks.commands);
 
 test('command.roster', t => {
 	t.deepEqual(roster.fn.options, {
+		alias: 'r',
 		argCount: 1,
 		argSplit: ' ',
 		description: 'List a clan roster. Defaults to your own clan if no tag specified.',
 		passRecord: true,
-		signatures: ['@BOTNAME roster [tag]']
+		signatures: [
+			'@BOTNAME roster [tag]',
+			'@BOTNAME r [tag]'
+		]
 	}, 'verify options');
 
 	t.equal(roster.name, 'roster', 'verify Commands method name');

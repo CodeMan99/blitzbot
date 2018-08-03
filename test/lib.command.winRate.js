@@ -14,11 +14,15 @@ var callWinRate = wr.winRate.fn.bind(mocks.commands);
 
 test('command.winRate.tankWinRate', t => {
 	t.deepEqual(wr.tankWinRate.fn.options, {
+		alias: 'twr',
 		argCount: 1,
 		argSplit: null,
 		description: 'Get your win rate for the given tank.',
 		passRecord: true,
-		signatures: ['@BOTNAME tank-win-rate <tank-name>']
+		signatures: [
+			'@BOTNAME tank-win-rate <tank-name>',
+			'@BOTNAME twr <tank-name>'
+		]
 	}, 'verify options');
 
 	t.equal(wr.tankWinRate.name, 'tank-win-rate', 'verify Commands method name');
@@ -352,11 +356,15 @@ test('command.winRate.tankWinRate', t => {
 
 test('command.winRate.winRate', t => {
 	t.deepEqual(wr.winRate.fn.options, {
+		alias: 'wr',
 		argCount: 0,
 		argSplit: ' ',
 		description: 'Get the win rate of your account.',
 		passRecord: true,
-		signatures: ['@BOTNAME win-rate']
+		signatures: [
+			'@BOTNAME win-rate',
+			'@BOTNAME wr'
+		]
 	}, 'verify options');
 
 	t.equal(wr.winRate.name, 'win-rate', 'verify Commands method name');

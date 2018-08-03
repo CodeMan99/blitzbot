@@ -31,9 +31,10 @@ test('Commands', t => {
 	t.deepEqual(Object.keys(Commands.prototype), [], 'contains no commands by default.');
 	t.notOk(Commands.has('setup'), 'can detect that a command has yet to be added.');
 
-	Commands.add(new Command(() => {}, null, 'setup'));
+	Commands.add(new Command(() => {}, {alias: 's'}, 'setup'));
 
 	t.ok(Commands.has('setup'), 'can detect that a command was added.');
+	t.equal(Commands.get('s'), 'setup', 'can get a command by the alias.');
 
 	// teardown
 	delete Commands.prototype.setup;
