@@ -31,7 +31,7 @@
     "Upgrade nock to 9.0.22",
     "Upgrade eslint to 4.8.0",
     "Fixed internal message processing flaw.",
-    "Fixed *tank-win-rate* when search for a name with accents. \"Lowe\" now matches \"Löwe\"."
+    "Fixed *tank-win-rate* when searching for a name with accents. \"Lowe\" now matches \"Löwe\"."
   ],
   "3.2.0": [
     "Added *whoami* command. Allows users who account switch to understand their own state.",
