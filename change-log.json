@@ -1,5 +1,11 @@
 {
   "unreleased": [
+  ],
+  "3.3.0": [
+    "Upgrade cross-env to 5.2.0",
+    "Upgrade eslint-plugin-json to 1.2.1",
+    "Upgrade nock to 9.4.4",
+    "Upgrade tape to 4.9.1",
     "Added short alias names for longer commands."
   ],
   "3.2.4": [
