@@ -1,6 +1,9 @@
 {
   "unreleased": [
   ],
+  "3.3.1": [
+    "Fixed bug with node v6.x compatibility."
+  ],
   "3.3.0": [
     "Upgrade cross-env to 5.2.0",
     "Upgrade eslint-plugin-json to 1.2.1",
