@@ -26,7 +26,6 @@ var wotblitz = require('wotblitz');
 	Commands.add(donate);
 	Commands.add(devel.version);
 	Commands.add(greet.hello);
-	Commands.add(greet.hi);
 	Commands.add(masteryList);
 	Commands.add(maxXp);
 	Commands.add(roster);
