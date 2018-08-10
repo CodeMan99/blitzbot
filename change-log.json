@@ -1,5 +1,8 @@
 {
   "unreleased": [
+    "Upgrade discord.js to 11.4.2",
+    "Upgrade eslint to 5.6.1",
+    "Upgrade nock to 10.0.1"
   ],
   "3.3.2": [
     "Fixed bot code, removing non-existant command."
