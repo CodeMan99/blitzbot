@@ -1,5 +1,6 @@
 {
   "unreleased": [
+    "Fixed minor sorting bugs.",
     "Upgrade discord.js to 11.4.2",
     "Upgrade eslint to 5.6.1",
     "Upgrade nock to 10.0.1"
