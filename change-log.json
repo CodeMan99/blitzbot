@@ -1,5 +1,6 @@
 {
   "unreleased": [
+    "Fixed add syntax concerns.",
     "Fixed roster syntax concerns.",
     "Fixed missing constant names.",
     "Fixed minor sorting bugs.",
