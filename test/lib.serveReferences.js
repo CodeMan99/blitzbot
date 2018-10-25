@@ -7,8 +7,6 @@ process.title = 'testbot';
 function SocketMock() {
 	this.bytesRead = 0;
 	this.bytesWritten = 0;
-
-	inspectHandle.socket = this;
 }
 
 SocketMock.prototype.write = function(s) {
@@ -44,8 +42,6 @@ mockery.registerMock('net', {
 		prototype.unref = function() {};
 
 		setImmediate(() => listener(new SocketMock()));
-
-		inspectHandle.net = server;
 
 		return server;
 	}
