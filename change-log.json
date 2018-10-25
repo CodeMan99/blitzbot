@@ -1,5 +1,6 @@
 {
   "unreleased": [
+    "Added new *set-region* command.",
     "Fixed add syntax concerns.",
     "Fixed roster syntax concerns.",
     "Fixed missing constant names.",

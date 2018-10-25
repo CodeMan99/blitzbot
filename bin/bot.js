@@ -37,6 +37,7 @@ var wotblitz = require('wotblitz');
 
 var client = new Discord.Client();
 var createDatabase = name => new Datastore({filename: './blitzbot' + name + '.db', timestampData: true});
+var master = createDatabase('-master');
 var regions = {
 	na: new Commands(client, createDatabase(''), wotblitz(auth.wotblitz.key, wotblitz.REGION_NA)),
 	eu: new Commands(client, createDatabase('-eu'), wotblitz(auth.wotblitz.key, wotblitz.REGION_EU)),
@@ -69,11 +70,13 @@ client.on('message', message => {
 
 	if (!perms) return;
 
+	var userId = message.author.id;
+	var id = message.id + ', ' + userId;
 	var mention = client.user.toString() + ' ';
-	var region = auth.wotblitz.default_region || 'na';
 	var start = 0;
 	var text = message.content.replace(/\s{2,}/g, ' ');
 	var m = text.match(/^[\t ]*\b(n|na|e|eu|r|ru|a|asia)\b/i);
+	var region;
 
 	if (m) {
 		start = m.index + m[1].length + 1;
@@ -82,6 +85,14 @@ client.on('message', message => {
 		if (region in regionLetter) {
 			region = regionLetter[region];
 		}
+	} else {
+		region = new Promise((resolve, reject) => {
+			master.findOne({_id: userId}, (error, record) => {
+				if (error) return reject(error);
+
+				resolve((record && record.region) || auth.wotblitz.default_region || 'na');
+			});
+		});
 	}
 
 	if (message.channel.type !== 'dm') {
@@ -103,44 +114,44 @@ client.on('message', message => {
 	// when the command is not "help" and this is a text channel, check for write privledges
 	if (command !== 'help' && perms !== true && !perms.has('SEND_MESSAGES')) return;
 
-	var userId = message.author.id;
-	var id = message.id + ', ' + userId;
-	var commands = regions[region];
-	var db = commands.db;
-	var options = commands[command].options;
-	var textArgs = text.slice(end).trim();
-	var args = [];
-	var run;
+	Promise.resolve(region).then(settledRegion => {
+		var commands = regions[settledRegion];
+		var db = commands.db;
+		var options = commands[command].options;
+		var textArgs = text.slice(end).trim();
+		var args = [];
+		var run;
 
-	if (textArgs && options.argCount > 0) {
-		args = textArgs.split(options.argSplit).slice(0, options.argCount);
-	}
+		if (textArgs && options.argCount > 0) {
+			args = textArgs.split(options.argSplit).slice(0, options.argCount);
+		}
 
-	console.log(id + ' -- running command: "' + command + '"');
+		console.log(id + ' -- running command: "' + command + '"');
 
-	if (options.passRecord) {
-		run = new Promise((resolve, reject) => {
-			db.findOne({_id: userId}, (error, record) => {
-				if (error) return reject(error);
+		if (options.passRecord) {
+			run = new Promise((resolve, reject) => {
+				db.findOne({_id: userId}, (error, record) => {
+					if (error) return reject(error);
 
-				// commands require a saved 'account_id'.
-				if (record && record.account_id) {
-					resolve(commands[command](message, record, ...args));
-				} else {
-					resolve(message.reply('I don\'t know who you are! Do `@' + client.user.username + ' add <screen-name>` first.')
-						.then(sent => {
-							console.log(id + ' -- sent msg: ' + sent);
+					// commands require a saved 'account_id'.
+					if (record && record.account_id) {
+						resolve(commands[command](message, record, ...args));
+					} else {
+						resolve(message.reply('I don\'t know who you are! Do `@' + client.user.username + ' add <screen-name>` first.')
+							.then(sent => {
+								console.log(id + ' -- sent msg: ' + sent);
 
-							return null;
-						}));
-				}
+								return null;
+							}));
+					}
+				});
 			});
-		});
-	} else {
-		run = commands[command](message, ...args);
-	}
+		} else {
+			run = commands[command](message, ...args);
+		}
 
-	run.then(result => {
+		return Promise.all([run, db]);
+	}).then(([result, db]) => {
 		if (!result) return;
 
 		console.log(id + ' -- sent msg: ' + helpers.messageToString(result.sentMsg));
@@ -148,8 +159,11 @@ client.on('message', message => {
 		var update = result.updateFields;
 
 		if (!update) return;
+		if (result.master) {
+			db = master;
+		}
 
-		console.log(id + ' -- update document');
+		console.log(id + ' -- update document ' + db.filename);
 
 		// add '_id' and remove 'updatedAt' so that upserting works every time, safely.
 		update._id = userId;
@@ -186,6 +200,7 @@ Promise.all([
 	loadDatabase(regions.eu),
 	loadDatabase(regions.ru),
 	loadDatabase(regions.asia),
+	loadDatabase({db: master}),
 	client.login(auth.user.token)
 ]).then(() => {
 	// not using a promise because this server is event based, not assuming any event occurs only once
