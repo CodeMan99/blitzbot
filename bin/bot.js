@@ -19,6 +19,7 @@ var wotblitz = require('wotblitz');
 	var maxXp = require('../lib/command/maxXp.js');
 	var roster = require('../lib/command/roster.js');
 	var whoami = require('../lib/command/whoami.js');
+	var setRegion = require('../lib/command/setRegion.js');
 	var wr = require('../lib/command/winRate.js');
 
 	Commands.add(add);
@@ -30,6 +31,7 @@ var wotblitz = require('wotblitz');
 	Commands.add(maxXp);
 	Commands.add(roster);
 	Commands.add(whoami);
+	Commands.add(setRegion);
 	Commands.add(wr.winRate);
 	Commands.add(wr.tankWinRate);
 	Commands.add(createHelp());

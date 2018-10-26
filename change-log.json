@@ -1,6 +1,9 @@
 {
   "unreleased": [
   ],
+  "3.4.1": [
+    "Fixed adding *set-region* command."
+  ],
   "3.4.0": [
     "Added new *set-region* command.",
     "Fixed add syntax concerns.",
