@@ -120,15 +120,15 @@ client.on('message', message => {
 	Promise.resolve(region).then(settledRegion => {
 		const commands = regions[settledRegion];
 		const db = commands.db;
-		const options = commands[command].options;
+		const {argCount, argSplit, passRecord} = commands[command].options;
 		const textArgs = text.slice(end).trim();
-		const args = textArgs && options.argCount > 0 ? textArgs.split(options.argSplit).slice(0, options.argCount) : [];
+		const args = textArgs && argCount > 0 ? textArgs.split(argSplit).slice(0, argCount) : [];
 
 		let run;
 
 		console.log(id + ' -- running command: "' + command + '"');
 
-		if (options.passRecord) {
+		if (passRecord) {
 			run = new Promise((resolve, reject) => {
 				db.findOne({_id: userId}, (error, record) => {
 					if (error) return reject(error);
