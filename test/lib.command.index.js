@@ -1,9 +1,9 @@
-var test = require('tape');
-var mocks = require('./mocks');
-var cmdModule = require('../lib/command/index.js');
-var Commands = cmdModule.Commands;
-var Command = cmdModule.Command;
-var createHelp = cmdModule.createHelp;
+const test = require('tape');
+const mocks = require('./mocks');
+const cmdModule = require('../lib/command/index.js');
+const Commands = cmdModule.Commands;
+const Command = cmdModule.Command;
+const createHelp = cmdModule.createHelp;
 
 test('Command', t => {
 	t.throws(() => new Command(), Error, 'constructor throws without arguments.');
@@ -45,7 +45,7 @@ test('Commands', t => {
 test('createHelp', t => {
 	t.doesNotThrow(createHelp, 'function does not throw.');
 
-	var help = createHelp();
+	const help = createHelp();
 
 	t.equal(help.name, 'help', 'created command is named "help".');
 	t.equal(typeof help.fn, 'function', 'created command has a function.');
@@ -60,7 +60,7 @@ test('createHelp', t => {
 		]
 	}, 'created commands options are specified.');
 
-	var callHelp = help.fn.bind(mocks.commands);
+	const callHelp = help.fn.bind(mocks.commands);
 
 	t.test('call help command without collection', st => {
 		st.equal(Commands.has('help'), false, 'verify help is not part of the collection');
@@ -91,13 +91,13 @@ test('Commands and help together.', t => {
 	}));
 	Commands.add(createHelp());
 
-	var fakeClient = Object.assign({}, mocks.commands.client, {
+	const fakeClient = Object.assign({}, mocks.commands.client, {
 		user: {
 			username: 'testbot1'
 		}
 	});
-	var fakeDb = {};
-	var commands = new Commands(fakeClient, fakeDb);
+	const fakeDb = {};
+	const commands = new Commands(fakeClient, fakeDb);
 
 	t.ok(commands.echo, 'has the echo command as a method');
 	t.ok(commands.help, 'has the help command as a method');

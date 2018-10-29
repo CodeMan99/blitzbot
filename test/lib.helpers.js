@@ -1,9 +1,9 @@
-var test = require('tape');
-var helpers = require('../lib/helpers.js');
+const test = require('tape');
+const helpers = require('../lib/helpers.js');
 
 test('helpers.getFieldByPath', t => {
-	var fieldByPath = helpers.getFieldByPath;
-	var complexObj = {
+	const fieldByPath = helpers.getFieldByPath;
+	const complexObj = {
 		name: {
 			first: 'Big',
 			last: 'Guy'
@@ -55,9 +55,9 @@ test('helpers.getFieldByPath', t => {
 });
 
 test('helpers.sortBy', t => {
-	var cmp = helpers.sortBy({name: 'index', reverse: true}, {name: 'first', primer: s => s.toLowerCase()}, 'year');
-	var a = {index: 0, first: 'Joe', year: 1991};
-	var b = {index: 0, first: 'JOE', year: 1991};
+	const cmp = helpers.sortBy({name: 'index', reverse: true}, {name: 'first', primer: s => s.toLowerCase()}, 'year');
+	const a = {index: 0, first: 'Joe', year: 1991};
+	const b = {index: 0, first: 'JOE', year: 1991};
 
 	t.equal(typeof cmp, 'function', 'sortBy returns a comparator function');
 	t.equal(cmp(a, b), 0, '"first" comparison is case in-sensitive');
@@ -82,14 +82,13 @@ test('helpers.sortBy', t => {
 	a.year = 1993;
 	t.equal(cmp(a, b), 1, '1993 is greater than 1992');
 
-	a = b;
-	t.equal(cmp(a, b), 0, 'a copy is the same');
+	t.equal(cmp(b, b), 0, 'copy is the same');
 
 	t.end();
 });
 
 test('helpers.messageToString', t => {
-	var mts = helpers.messageToString;
+	const mts = helpers.messageToString;
 
 	t.equal(mts(), '', 'undefined argument is empty string');
 	t.equal(mts(null), '', 'null argument is empty string');

@@ -1,16 +1,16 @@
-var test = require('tape');
-var Datastore = require('nedb');
-var nock = require('nock');
-var mocks = require('./mocks');
-var vehicleList = require('./mocks/vehicles.json');
-var wr = require('../lib/command/winRate.js');
-var dbInstance = new Datastore({
+const test = require('tape');
+const Datastore = require('nedb');
+const nock = require('nock');
+const mocks = require('./mocks');
+const vehicleList = require('./mocks/vehicles.json');
+const wr = require('../lib/command/winRate.js');
+const dbInstance = new Datastore({
 	inMemoryOnly: true,
 	timestampData: true,
 	autoload: true
 });
-var callTankWinRate = wr.tankWinRate.fn.bind(Object.assign(mocks.commands, {db: dbInstance}));
-var callWinRate = wr.winRate.fn.bind(mocks.commands);
+const callTankWinRate = wr.tankWinRate.fn.bind(Object.assign(mocks.commands, {db: dbInstance}));
+const callWinRate = wr.winRate.fn.bind(mocks.commands);
 
 test('command.winRate.tankWinRate', t => {
 	t.deepEqual(wr.tankWinRate.fn.options, {
@@ -40,7 +40,7 @@ test('command.winRate.tankWinRate', t => {
 		});
 	});
 
-	var encyclopediaVehiclesMock = () => {
+	const encyclopediaVehiclesMock = () => {
 		return nock('https://api.wotblitz.com')
 			.post('/wotb/encyclopedia/vehicles/', {
 				application_id: process.env.APPLICATION_ID,
@@ -59,7 +59,7 @@ test('command.winRate.tankWinRate', t => {
 	};
 
 	t.test('no tank name matches argument', st => {
-		var tankopediaVehicles = encyclopediaVehiclesMock();
+		const tankopediaVehicles = encyclopediaVehiclesMock();
 
 		callTankWinRate(mocks.createMessage(null, 'jake81 [CL]'), {
 			account_id: 100996734
@@ -74,8 +74,8 @@ test('command.winRate.tankWinRate', t => {
 	});
 
 	t.test('argument is a valid tank, but has no record', st => {
-		var tankopediaVehicles = encyclopediaVehiclesMock();
-		var tankStats = nock('https://api.wotblitz.com')
+		const tankopediaVehicles = encyclopediaVehiclesMock();
+		const tankStats = nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
 				account_id: '100998143',
@@ -110,8 +110,8 @@ test('command.winRate.tankWinRate', t => {
 	});
 
 	t.test('argument returns one tank', st => {
-		var tankopediaVehicles = encyclopediaVehiclesMock();
-		var tankStats = nock('https://api.wotblitz.com')
+		const tankopediaVehicles = encyclopediaVehiclesMock();
+		const tankStats = nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
 				account_id: '100998144',
@@ -151,8 +151,8 @@ test('command.winRate.tankWinRate', t => {
 	});
 
 	t.test('argument returns two tanks', st => {
-		var tankopediaVehicles = encyclopediaVehiclesMock();
-		var tankStats = nock('https://api.wotblitz.com')
+		const tankopediaVehicles = encyclopediaVehiclesMock();
+		const tankStats = nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
 				account_id: '100998145',
@@ -201,8 +201,8 @@ test('command.winRate.tankWinRate', t => {
 	});
 
 	t.test('matches tank names with accents', st => {
-		var tankopediaVehicles = encyclopediaVehiclesMock();
-		var tankStats = nock('https://api.wotblitz.com')
+		const tankopediaVehicles = encyclopediaVehiclesMock();
+		const tankStats = nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
 				account_id: '100996799',
@@ -239,7 +239,7 @@ test('command.winRate.tankWinRate', t => {
 	});
 
 	t.test('argument matches more than 100 limit of tankopedia endpoint', st => {
-		var tankopediaVehicles = encyclopediaVehiclesMock();
+		const tankopediaVehicles = encyclopediaVehiclesMock();
 
 		callTankWinRate(mocks.createMessage(null, 'noshootingheretonight'), {account_id: 100998146}, 't').then(result => {
 			st.deepEqual(result, {
@@ -255,8 +255,8 @@ test('command.winRate.tankWinRate', t => {
 
 	t.test('mention another user that does not exist in the database', st => {
 		// TODO: This request should be done in parallel with the database query
-		var tankopediaVehicles = encyclopediaVehiclesMock();
-		var mentions = [{
+		const tankopediaVehicles = encyclopediaVehiclesMock();
+		const mentions = [{
 			id: 'fakediscordid0',
 			username: 'buddy5 [CL]',
 			mention: function() {
@@ -286,8 +286,8 @@ test('command.winRate.tankWinRate', t => {
 
 	t.test('mention another user to get their stats', st => {
 		// TODO: This request should be done in parallel with the database query
-		var tankopediaVehicles = encyclopediaVehiclesMock();
-		var tankStats = nock('https://api.wotblitz.com')
+		const tankopediaVehicles = encyclopediaVehiclesMock();
+		const tankStats = nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
 				account_id: '100998149',
@@ -312,7 +312,7 @@ test('command.winRate.tankWinRate', t => {
 					}]
 				}
 			});
-		var mentions = [{
+		const mentions = [{
 			id: 'fakediscordid1',
 			username: 'girly7 [CL]',
 			mention: function() {
@@ -369,7 +369,7 @@ test('command.winRate.winRate', t => {
 
 	t.equal(wr.winRate.name, 'win-rate', 'verify Commands method name');
 
-	var accountInfoMock = (accountId, wins, battles) => {
+	const accountInfoMock = (accountId, wins, battles) => {
 		return nock('https://api.wotblitz.com')
 			.post('/wotb/account/info/', {
 				access_token: '',
@@ -398,7 +398,7 @@ test('command.winRate.winRate', t => {
 	};
 
 	t.test('initial call', st => {
-		var accountInfo = accountInfoMock(100994563, 8691, 14280);
+		const accountInfo = accountInfoMock(100994563, 8691, 14280);
 
 		callWinRate(mocks.createMessage(null, 'bigguy20 [CL]'), {
 			account_id: 100994563
@@ -420,7 +420,7 @@ test('command.winRate.winRate', t => {
 	});
 
 	t.test('follow up call, no additional battles', st => {
-		var accountInfo = accountInfoMock(100994564, 7682, 18290);
+		const accountInfo = accountInfoMock(100994564, 7682, 18290);
 
 		callWinRate(mocks.createMessage(null, 'littleguy21 [CL]'), {
 			account_id: 100994564,
@@ -444,7 +444,7 @@ test('command.winRate.winRate', t => {
 	});
 
 	t.test('follow up call, one additional battle', st => {
-		var accountInfo = accountInfoMock(100994565, 9260, 13933);
+		const accountInfo = accountInfoMock(100994565, 9260, 13933);
 
 		callWinRate(mocks.createMessage(null, 'biggirl22 [CL]'), {
 			account_id: 100994565,
@@ -472,7 +472,7 @@ test('command.winRate.winRate', t => {
 	});
 
 	t.test('follow up call, several additional battles', st => {
-		var accountInfo = accountInfoMock(100994566, 5003, 11502);
+		const accountInfo = accountInfoMock(100994566, 5003, 11502);
 
 		callWinRate(mocks.createMessage(null, 'littlegirl23 [CL]'), {
 			account_id: 100994566,

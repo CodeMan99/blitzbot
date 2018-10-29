@@ -1,8 +1,8 @@
-var test = require('tape');
-var nock = require('nock');
-var mocks = require('./mocks');
-var maxXp = require('../lib/command/maxXp');
-var callMaxXp = maxXp.fn.bind(mocks.commands);
+const test = require('tape');
+const nock = require('nock');
+const mocks = require('./mocks');
+const maxXp = require('../lib/command/maxXp');
+const callMaxXp = maxXp.fn.bind(mocks.commands);
 
 test('command.maxXp', t => {
 	t.equal(maxXp.name, 'max-xp', 'verify Commands method name');
@@ -15,7 +15,7 @@ test('command.maxXp', t => {
 	}, 'verify options');
 
 	t.test('call', st => {
-		var stats = nock('https://api.wotblitz.com')
+		const stats = nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
 				account_id: '1009634067',
@@ -90,7 +90,7 @@ test('command.maxXp', t => {
 					}]
 				}
 			});
-		var vehicles = nock('https://api.wotblitz.com')
+		const vehicles = nock('https://api.wotblitz.com')
 			.post('/wotb/encyclopedia/vehicles/', {
 				application_id: process.env.APPLICATION_ID,
 				fields: 'name,tier,nation',
@@ -156,7 +156,7 @@ test('command.maxXp', t => {
 					}
 				}
 			});
-		var expected = {
+		const expected = {
 			sentMsg: [
 				'@SillyGamer5, 1, 1844 xp: Cromwell (uk, 6)',
 				'2, 1794 xp: T-44 (ussr, 8)',
@@ -182,7 +182,7 @@ test('command.maxXp', t => {
 	});
 
 	t.test('vehicle not in tankopedia, only 3 vehicles', st => {
-		var stats = nock('https://api.wotblitz.com')
+		const stats = nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
 				account_id: '1009823019',
@@ -216,7 +216,7 @@ test('command.maxXp', t => {
 					}]
 				}
 			});
-		var vehicles = nock('https://api.wotblitz.com')
+		const vehicles = nock('https://api.wotblitz.com')
 			.post('/wotb/encyclopedia/vehicles/', {
 				application_id: process.env.APPLICATION_ID,
 				fields: 'name,tier,nation',
@@ -243,7 +243,7 @@ test('command.maxXp', t => {
 					}
 				}
 			});
-		var expected = {
+		const expected = {
 			sentMsg: [
 				'@BigTanks, 1, 901 xp: M2 Medium (us, 3)',
 				'2, 892 xp: Unknown vehicle (-, -)',

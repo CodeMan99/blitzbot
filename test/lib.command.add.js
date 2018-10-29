@@ -1,8 +1,8 @@
-var test = require('tape');
-var nock = require('nock');
-var mocks = require('./mocks');
-var add = require('../lib/command/add.js');
-var callAdd = add.fn.bind(mocks.commands);
+const test = require('tape');
+const nock = require('nock');
+const mocks = require('./mocks');
+const add = require('../lib/command/add.js');
+const callAdd = add.fn.bind(mocks.commands);
 
 test('command.add', t => {
 	t.deepEqual(add.fn.options, {

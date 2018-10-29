@@ -1,5 +1,5 @@
 // not actually mocking wotblitz; providing a single instance, mimicking the bot code
-var wotblitz = require('wotblitz')();
+const wotblitz = require('wotblitz')();
 
 exports.commands = {
 	client: {

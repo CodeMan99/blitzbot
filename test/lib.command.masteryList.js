@@ -1,8 +1,8 @@
-var test = require('tape');
-var nock = require('nock');
-var mocks = require('./mocks');
-var masteryList = require('../lib/command/masteryList.js');
-var callMasteryList = masteryList.fn.bind(mocks.commands);
+const test = require('tape');
+const nock = require('nock');
+const mocks = require('./mocks');
+const masteryList = require('../lib/command/masteryList.js');
+const callMasteryList = masteryList.fn.bind(mocks.commands);
 
 test('command.masteryList', t => {
 	t.deepEqual(masteryList.fn.options, {
@@ -792,8 +792,8 @@ test('command.masteryList', t => {
 	});
 
 	t.test('long list (higher than 100 limit of tankopedia endpoint)', st => {
-		var count = Math.floor(Math.random() * 99) + 101; // [101,200)
-		var tankStats = nock('https://api.wotblitz.com')
+		const count = Math.floor(Math.random() * 99) + 101; // [101,200)
+		const tankStats = nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
 				account_id: '100991248',
@@ -815,7 +815,7 @@ test('command.masteryList', t => {
 					}).map((entry, index) => Object.assign({}, entry, {tank_id: index + 1}))
 				}
 			});
-		var tankopedia1 = nock('https://api.wotblitz.com')
+		const tankopedia1 = nock('https://api.wotblitz.com')
 			.post('/wotb/encyclopedia/vehicles/', {
 				application_id: process.env.APPLICATION_ID,
 				fields: 'name,tier,nation',
@@ -838,7 +838,7 @@ test('command.masteryList', t => {
 					return dataObj;
 				}, {})
 			});
-		var tankopedia2 = nock('https://api.wotblitz.com')
+		const tankopedia2 = nock('https://api.wotblitz.com')
 			.post('/wotb/encyclopedia/vehicles/', {
 				application_id: process.env.APPLICATION_ID,
 				fields: 'name,tier,nation',
@@ -868,7 +868,7 @@ test('command.masteryList', t => {
 		}, '1st').then(result => {
 			st.ok(result.sentMsg.length > 1, 'sent multiple messages');
 
-			var lineCount = result.sentMsg.join('\n').split('\n').length;
+			const lineCount = result.sentMsg.join('\n').split('\n').length;
 
 			st.equal(lineCount, count + 1, 'responded with the expected number of lines');
 			st.equal(
@@ -887,7 +887,7 @@ test('command.masteryList', t => {
 	});
 
 	t.test('Missing tank_id', st => {
-		var tankStats = nock('https://api.wotblitz.com')
+		const tankStats = nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
 				account_id: '100991249',
@@ -909,7 +909,7 @@ test('command.masteryList', t => {
 					}]
 				}
 			});
-		var tankopedia = nock('https://api.wotblitz.com')
+		const tankopedia = nock('https://api.wotblitz.com')
 			.post('/wotb/encyclopedia/vehicles/', {
 				application_id: process.env.APPLICATION_ID,
 				fields: 'name,tier,nation',

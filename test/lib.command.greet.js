@@ -1,7 +1,7 @@
-var test = require('tape');
-var mocks = require('./mocks');
-var greet = require('../lib/command/greet.js');
-var callHello = greet.hello.fn.bind(mocks.commands);
+const test = require('tape');
+const mocks = require('./mocks');
+const greet = require('../lib/command/greet.js');
+const callHello = greet.hello.fn.bind(mocks.commands);
 
 test('greet.hello', t => {
 	t.deepEqual(greet.hello.fn.options, {

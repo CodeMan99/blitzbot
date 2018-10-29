@@ -1,7 +1,7 @@
-var test = require('tape');
-var mocks = require('./mocks');
-var setRegion = require('../lib/command/setRegion.js');
-var callSetRegion = (msg, region) => setRegion.fn.call(mocks.commands, msg, region);
+const test = require('tape');
+const mocks = require('./mocks');
+const setRegion = require('../lib/command/setRegion.js');
+const callSetRegion = (msg, region) => setRegion.fn.call(mocks.commands, msg, region);
 
 test('command.setRegion', t => {
 	t.deepEqual(setRegion.fn.options, {
@@ -15,8 +15,8 @@ test('command.setRegion', t => {
 	t.equal(setRegion.name, 'set-region', 'verify Commands method name');
 
 	t.test('no argument', st => {
-		var msg = mocks.createMessage(null, 'mark');
-		var expected = {
+		const msg = mocks.createMessage(null, 'mark');
+		const expected = {
 			sentMsg: '@mark, Region set to "na".',
 			master: true,
 			updateFields: {
@@ -30,8 +30,8 @@ test('command.setRegion', t => {
 	});
 
 	t.test('set "na"', st => {
-		var msg = mocks.createMessage(null, 'bill');
-		var expected = {
+		const msg = mocks.createMessage(null, 'bill');
+		const expected = {
 			sentMsg: '@bill, Region set to "na".',
 			master: true,
 			updateFields: {
@@ -45,8 +45,8 @@ test('command.setRegion', t => {
 	});
 
 	t.test('set "n"', st => {
-		var msg = mocks.createMessage(null, 'greg');
-		var expected = {
+		const msg = mocks.createMessage(null, 'greg');
+		const expected = {
 			sentMsg: '@greg, Region set to "na".',
 			master: true,
 			updateFields: {
@@ -60,8 +60,8 @@ test('command.setRegion', t => {
 	});
 
 	t.test('set "eu"', st => {
-		var msg = mocks.createMessage(null, 'wendy');
-		var expected = {
+		const msg = mocks.createMessage(null, 'wendy');
+		const expected = {
 			sentMsg: '@wendy, Region set to "eu".',
 			master: true,
 			updateFields: {
@@ -75,8 +75,8 @@ test('command.setRegion', t => {
 	});
 
 	t.test('set "e"', st => {
-		var msg = mocks.createMessage(null, 'steve');
-		var expected = {
+		const msg = mocks.createMessage(null, 'steve');
+		const expected = {
 			sentMsg: '@steve, Region set to "eu".',
 			master: true,
 			updateFields: {
@@ -90,8 +90,8 @@ test('command.setRegion', t => {
 	});
 
 	t.test('set "ru"', st => {
-		var msg = mocks.createMessage(null, 'garry');
-		var expected = {
+		const msg = mocks.createMessage(null, 'garry');
+		const expected = {
 			sentMsg: '@garry, Region set to "ru".',
 			master: true,
 			updateFields: {
@@ -105,8 +105,8 @@ test('command.setRegion', t => {
 	});
 
 	t.test('set "r"', st => {
-		var msg = mocks.createMessage(null, 'terry');
-		var expected = {
+		const msg = mocks.createMessage(null, 'terry');
+		const expected = {
 			sentMsg: '@terry, Region set to "ru".',
 			master: true,
 			updateFields: {
@@ -120,8 +120,8 @@ test('command.setRegion', t => {
 	});
 
 	t.test('set "asia"', st => {
-		var msg = mocks.createMessage(null, 'marge');
-		var expected = {
+		const msg = mocks.createMessage(null, 'marge');
+		const expected = {
 			sentMsg: '@marge, Region set to "asia".',
 			master: true,
 			updateFields: {
@@ -135,8 +135,8 @@ test('command.setRegion', t => {
 	});
 
 	t.test('set "a"', st => {
-		var msg = mocks.createMessage(null, 'jill');
-		var expected = {
+		const msg = mocks.createMessage(null, 'jill');
+		const expected = {
 			sentMsg: '@jill, Region set to "asia".',
 			master: true,
 			updateFields: {

@@ -1,8 +1,8 @@
-var test = require('tape');
-var nock = require('nock');
-var mocks = require('./mocks');
-var whoami = require('../lib/command/whoami.js');
-var callWhoami = (msg, record) => whoami.fn.call(mocks.commands, msg, record);
+const test = require('tape');
+const nock = require('nock');
+const mocks = require('./mocks');
+const whoami = require('../lib/command/whoami.js');
+const callWhoami = (msg, record) => whoami.fn.call(mocks.commands, msg, record);
 
 test('command.whoami', t => {
 	t.deepEqual(whoami.fn.options, {
@@ -14,7 +14,7 @@ test('command.whoami', t => {
 	}, 'verify options');
 
 	t.test('nickname has not changed', st => {
-		var accountInfo = nock('https://api.wotblitz.com')
+		const accountInfo = nock('https://api.wotblitz.com')
 			.post('/wotb/account/info/', {
 				access_token: '',
 				account_id: '1008921043',
@@ -46,7 +46,7 @@ test('command.whoami', t => {
 	});
 
 	t.test('nickname changed', st => {
-		var accountInfo = nock('https://api.wotblitz.com')
+		const accountInfo = nock('https://api.wotblitz.com')
 			.post('/wotb/account/info/', {
 				access_token: '',
 				account_id: '1008921054',

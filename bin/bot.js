@@ -1,26 +1,26 @@
 #!/usr/bin/env node
 
-var Commands = require('../lib/command').Commands;
-var Datastore = require('nedb');
-var Discord = require('discord.js');
-var auth = require('../blitzbot.json');
-var helpers = require('../lib/helpers.js');
-var pkg = require('../package.json');
-var serveReferences = require('../lib/serveReferences.js');
-var wotblitz = require('wotblitz');
+const Commands = require('../lib/command').Commands;
+const Datastore = require('nedb');
+const Discord = require('discord.js');
+const auth = require('../blitzbot.json');
+const helpers = require('../lib/helpers.js');
+const pkg = require('../package.json');
+const serveReferences = require('../lib/serveReferences.js');
+const wotblitz = require('wotblitz');
 
 (() => { // Add commands scope, no need to pollute module scope.
-	var add = require('../lib/command/add.js');
-	var createHelp = require('../lib/command').createHelp;
-	var devel = require('../lib/command/development.js');
-	var donate = require('../lib/command/donate.js');
-	var greet = require('../lib/command/greet.js');
-	var masteryList = require('../lib/command/masteryList.js');
-	var maxXp = require('../lib/command/maxXp.js');
-	var roster = require('../lib/command/roster.js');
-	var whoami = require('../lib/command/whoami.js');
-	var setRegion = require('../lib/command/setRegion.js');
-	var wr = require('../lib/command/winRate.js');
+	const add = require('../lib/command/add.js');
+	const createHelp = require('../lib/command').createHelp;
+	const devel = require('../lib/command/development.js');
+	const donate = require('../lib/command/donate.js');
+	const greet = require('../lib/command/greet.js');
+	const masteryList = require('../lib/command/masteryList.js');
+	const maxXp = require('../lib/command/maxXp.js');
+	const roster = require('../lib/command/roster.js');
+	const whoami = require('../lib/command/whoami.js');
+	const setRegion = require('../lib/command/setRegion.js');
+	const wr = require('../lib/command/winRate.js');
 
 	Commands.add(add);
 	Commands.add(devel.changes);
@@ -37,16 +37,16 @@ var wotblitz = require('wotblitz');
 	Commands.add(createHelp());
 })();
 
-var client = new Discord.Client();
-var createDatabase = name => new Datastore({filename: './blitzbot' + name + '.db', timestampData: true});
-var master = createDatabase('-master');
-var regions = {
+const client = new Discord.Client();
+const createDatabase = name => new Datastore({filename: './blitzbot' + name + '.db', timestampData: true});
+const master = createDatabase('-master');
+const regions = {
 	na: new Commands(client, createDatabase(''), wotblitz(auth.wotblitz.key, wotblitz.REGION_NA)),
 	eu: new Commands(client, createDatabase('-eu'), wotblitz(auth.wotblitz.key, wotblitz.REGION_EU)),
 	ru: new Commands(client, createDatabase('-ru'), wotblitz(auth.wotblitz.key, wotblitz.REGION_RU)),
 	asia: new Commands(client, createDatabase('-asia'), wotblitz(auth.wotblitz.key, wotblitz.REGION_ASIA))
 };
-var regionLetter = {
+const regionLetter = {
 	n: 'na',
 	e: 'eu',
 	r: 'ru',
@@ -68,17 +68,18 @@ client.on('message', message => {
 	if (message.channel.type !== 'dm' && !message.isMentioned(client.user)) return;
 	if (message.author.id === client.user.id || message.author.bot) return;
 
-	var perms = message.channel.type === 'text' ? message.channel.permissionsFor(client.user) : true;
+	const perms = message.channel.type === 'text' ? message.channel.permissionsFor(client.user) : true;
 
 	if (!perms) return;
 
-	var userId = message.author.id;
-	var id = message.id + ', ' + userId;
-	var mention = client.user.toString() + ' ';
-	var start = 0;
-	var text = message.content.replace(/\s{2,}/g, ' ');
-	var m = text.match(/^[\t ]*\b(n|na|e|eu|r|ru|a|asia)\b/i);
-	var region;
+	const userId = message.author.id;
+	const id = message.id + ', ' + userId;
+	const mention = client.user.toString() + ' ';
+	const text = message.content.replace(/\s{2,}/g, ' ');
+	const m = text.match(/^[\t ]*\b(n|na|e|eu|r|ru|a|asia)\b/i);
+
+	let start = 0;
+	let region;
 
 	if (m) {
 		start = m.index + m[1].length + 1;
@@ -105,28 +106,25 @@ client.on('message', message => {
 		start += mention.length;
 	}
 
-	var end = text.indexOf(' ', start);
+	let end = text.indexOf(' ', start);
 
 	if (end < 0) end = text.length;
 	if (end <= start) return; // no command at all
 
-	var command = Commands.get(text.slice(start, end));
+	const command = Commands.get(text.slice(start, end));
 
 	if (command === null) return;
 	// when the command is not "help" and this is a text channel, check for write privledges
 	if (command !== 'help' && perms !== true && !perms.has('SEND_MESSAGES')) return;
 
 	Promise.resolve(region).then(settledRegion => {
-		var commands = regions[settledRegion];
-		var db = commands.db;
-		var options = commands[command].options;
-		var textArgs = text.slice(end).trim();
-		var args = [];
-		var run;
+		const commands = regions[settledRegion];
+		const db = commands.db;
+		const options = commands[command].options;
+		const textArgs = text.slice(end).trim();
+		const args = textArgs && options.argCount > 0 ? textArgs.split(options.argSplit).slice(0, options.argCount) : [];
 
-		if (textArgs && options.argCount > 0) {
-			args = textArgs.split(options.argSplit).slice(0, options.argCount);
-		}
+		let run;
 
 		console.log(id + ' -- running command: "' + command + '"');
 
@@ -158,7 +156,7 @@ client.on('message', message => {
 
 		console.log(id + ' -- sent msg: ' + helpers.messageToString(result.sentMsg));
 
-		var update = result.updateFields;
+		const update = result.updateFields;
 
 		if (!update) return;
 		if (result.master) {

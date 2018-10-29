@@ -1,6 +1,6 @@
-var test = require('tape');
-var mockery = require('mockery');
-var mocks = require('./mocks');
+const test = require('tape');
+const mockery = require('mockery');
+const mocks = require('./mocks');
 
 mockery.registerAllowable('./index.js');
 mockery.registerAllowable('../lib/command/donate.js');
@@ -11,12 +11,12 @@ mockery.registerMock('../../blitzbot.json', {
 });
 mockery.enable();
 
-var donate = require('../lib/command/donate.js');
+const donate = require('../lib/command/donate.js');
 
 mockery.disable();
 mockery.deregisterAll();
 
-var callDonate = donate.fn.bind(mocks.commands);
+const callDonate = donate.fn.bind(mocks.commands);
 
 test('donate', t => {
 	t.deepEqual(donate.fn.options, {
@@ -31,7 +31,7 @@ test('donate', t => {
 
 	t.test('command', st => {
 		callDonate(mocks.createMessage(null, 'NiceDude [CL]')).then(result => {
-			var link = result.sentMsg.split(' ').slice(-1)[0];
+			const link = result.sentMsg.split(' ').slice(-1)[0];
 
 			st.equal(link, 'https://paypal.me/CodeMan99', 'link is at the end of reply');
 			st.end();

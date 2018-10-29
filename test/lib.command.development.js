@@ -1,6 +1,6 @@
-var test = require('tape');
-var mockery = require('mockery');
-var mocks = require('./mocks');
+const test = require('tape');
+const mockery = require('mockery');
+const mocks = require('./mocks');
 
 mockery.registerAllowable('./index.js');
 mockery.registerAllowable('../lib/command/development.js');
@@ -20,13 +20,13 @@ mockery.registerMock('../../change-log.json', {
 });
 mockery.enable();
 
-var dev = require('../lib/command/development.js');
+const dev = require('../lib/command/development.js');
 
 mockery.disable();
 mockery.deregisterAll();
 
-var callChanges = dev.changes.fn.bind(mocks.commands);
-var callVersion = dev.version.fn.bind(mocks.commands);
+const callChanges = dev.changes.fn.bind(mocks.commands);
+const callVersion = dev.version.fn.bind(mocks.commands);
 
 test('development.changes', t => {
 	t.deepEqual(dev.changes.fn.options, {

@@ -1,6 +1,6 @@
-var test = require('tape');
-var mockery = require('mockery');
-var inspectHandle = {};
+const test = require('tape');
+const mockery = require('mockery');
+const inspectHandle = {};
 
 process.title = 'testbot';
 
@@ -22,8 +22,8 @@ SocketMock.prototype.unref = function() {};
 mockery.registerAllowable('../lib/serveReferences.js');
 mockery.registerMock('net', {
 	createServer: listener => {
-		var server = {};
-		var prototype = Object.getPrototypeOf(server);
+		const server = {};
+		const prototype = Object.getPrototypeOf(server);
 
 		prototype.close = function() {};
 
@@ -48,7 +48,7 @@ mockery.registerMock('net', {
 });
 mockery.registerMock('repl', {
 	start: options => {
-		var server = {
+		const server = {
 			context: {},
 			prompt: options.prompt,
 			useColors: options.useColors,
@@ -56,7 +56,7 @@ mockery.registerMock('repl', {
 			input: options.input,
 			output: options.output
 		};
-		var prototype = Object.getPrototypeOf(server);
+		const prototype = Object.getPrototypeOf(server);
 
 		prototype.on = function(name, handle) {}; // eslint-disable-line no-unused-vars
 
@@ -67,13 +67,13 @@ mockery.registerMock('repl', {
 });
 mockery.enable();
 
-var serveReferences = require('../lib/serveReferences.js');
+const serveReferences = require('../lib/serveReferences.js');
 
 mockery.disable();
 mockery.deregisterAll();
 
 test('serveReferences', t => {
-	var refs = {
+	const refs = {
 		foo: 'bar',
 		baz: 1,
 		hello: () => console.log('Hello!'),
