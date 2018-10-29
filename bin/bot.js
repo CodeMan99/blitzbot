@@ -9,33 +9,33 @@ const pkg = require('../package.json');
 const serveReferences = require('../lib/serveReferences.js');
 const wotblitz = require('wotblitz');
 
-(() => { // Add commands scope, no need to pollute module scope.
+{ // Add commands scope, no need to pollute module scope.
 	const add = require('../lib/command/add.js');
-	const createHelp = require('../lib/command').createHelp;
-	const devel = require('../lib/command/development.js');
+	const {createHelp} = require('../lib/command');
+	const {changes, version} = require('../lib/command/development.js');
 	const donate = require('../lib/command/donate.js');
-	const greet = require('../lib/command/greet.js');
+	const {hello} = require('../lib/command/greet.js');
 	const masteryList = require('../lib/command/masteryList.js');
 	const maxXp = require('../lib/command/maxXp.js');
 	const roster = require('../lib/command/roster.js');
 	const whoami = require('../lib/command/whoami.js');
 	const setRegion = require('../lib/command/setRegion.js');
-	const wr = require('../lib/command/winRate.js');
+	const {winRate, tankWinRate} = require('../lib/command/winRate.js');
 
 	Commands.add(add);
-	Commands.add(devel.changes);
+	Commands.add(changes);
 	Commands.add(donate);
-	Commands.add(devel.version);
-	Commands.add(greet.hello);
+	Commands.add(version);
+	Commands.add(hello);
 	Commands.add(masteryList);
 	Commands.add(maxXp);
 	Commands.add(roster);
 	Commands.add(whoami);
 	Commands.add(setRegion);
-	Commands.add(wr.winRate);
-	Commands.add(wr.tankWinRate);
+	Commands.add(winRate);
+	Commands.add(tankWinRate);
 	Commands.add(createHelp());
-})();
+}
 
 const client = new Discord.Client();
 const createDatabase = name => new Datastore({filename: './blitzbot' + name + '.db', timestampData: true});
