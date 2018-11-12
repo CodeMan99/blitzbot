@@ -1,5 +1,6 @@
 {
   "unreleased": [
+    "Fixed the default region of the set-region command."
   ],
   "3.4.1": [
     "Fixed adding *set-region* command."

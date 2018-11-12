@@ -1,6 +1,21 @@
 const test = require('tape');
+const mockery = require('mockery');
 const mocks = require('./mocks');
+
+mockery.registerAllowable('./index.js');
+mockery.registerAllowable('../lib/command/setRegion.js');
+mockery.registerMock('../../blitzbot.json', {
+	wotblitz: {
+		default_region: 'na'
+	}
+});
+mockery.enable();
+
 const setRegion = require('../lib/command/setRegion.js');
+
+mockery.disable();
+mockery.deregisterAll();
+
 const callSetRegion = (msg, region) => setRegion.fn.call(mocks.commands, msg, region);
 
 test('command.setRegion', t => {
