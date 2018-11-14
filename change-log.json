@@ -1,5 +1,6 @@
 {
   "unreleased": [
+    "Fixed unnecessary database saves by win-rate command.",
     "Fixed the default region of the set-region command."
   ],
   "3.4.1": [
