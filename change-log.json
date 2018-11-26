@@ -1,5 +1,9 @@
 {
   "unreleased": [
+  ],
+  "3.4.2": [
+    "Upgrade eslint to 5.9.0",
+    "Upgrade nock to 10.0.2",
     "Fixed unnecessary database saves by win-rate command.",
     "Fixed the default region of the set-region command."
   ],

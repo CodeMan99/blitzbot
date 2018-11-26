@@ -1,6 +1,6 @@
 {
   "name": "blitzbot",
-  "version": "3.4.1",
+  "version": "3.4.2",
   "description": "WOT Blitz stat bot for Discord.",
   "bin": "bin/bot.js",
   "scripts": {
@@ -34,11 +34,11 @@
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
-    "eslint": "^5.7.0",
+    "eslint": "^5.9.0",
     "eslint-plugin-json": "^1.2.1",
     "faucet": "0.0.1",
     "mockery": "^2.1.0",
-    "nock": "^10.0.1",
+    "nock": "^10.0.2",
     "tape": "^4.9.1"
   }
 }
