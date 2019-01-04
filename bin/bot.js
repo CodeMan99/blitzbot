@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const Commands = require('../lib/command').Commands;
+const {Commands} = require('../lib/command');
 const Datastore = require('nedb');
 const Discord = require('discord.js');
 const auth = require('../blitzbot.json');
