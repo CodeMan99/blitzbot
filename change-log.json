@@ -1,5 +1,6 @@
 {
   "unreleased": [
+    "Fixed *win-rate* command for new users.",
     "Upgrade eslint to 5.11.1",
     "Upgrade eslint-plugin-json to 1.3.2",
     "Upgrade nock to 10.0.6",

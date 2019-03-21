@@ -404,7 +404,11 @@ test('command.winRate.winRate', t => {
 			account_id: 100994563
 		}).then(result => {
 			st.deepEqual(result, {
-				sentMsg: '@bigguy20 [CL], You have won 8691 of 14280 battles. That is 60.86% victory!'
+				sentMsg: '@bigguy20 [CL], You have won 8691 of 14280 battles. That is 60.86% victory!',
+				updateFields: {
+					wins: 8691,
+					battles: 14280
+				}
 			}, 'verify response and record update');
 
 			st.ok(accountInfo.isDone(), 'made one API call');
@@ -425,7 +429,7 @@ test('command.winRate.winRate', t => {
 		}).then(result => {
 			st.deepEqual(result, {
 				sentMsg: '@littleguy21 [CL], You have won 7682 of 18290 battles. That is 42.00% victory!'
-			}, 'verify response and record update');
+			}, 'verify response');
 
 			st.ok(accountInfo.isDone(), 'made one API call');
 			st.end();
