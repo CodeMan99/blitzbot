@@ -3,6 +3,7 @@
   "version": "3.4.3",
   "description": "WOT Blitz stat bot for Discord.",
   "bin": "bin/bot.js",
+  "private": true,
   "scripts": {
     "test": "cross-env APPLICATION_ID=test-app-id-invalid tape test/*.js | faucet",
     "lint": "eslint --format tap bin/*.js lib/*.js lib/command/*.js test/*.js test/mocks/*.js *.json | faucet"
