@@ -80,7 +80,7 @@ test('command.winRate.tankWinRate', t => {
 				access_token: '',
 				account_id: '100998143',
 				application_id: process.env.APPLICATION_ID,
-				fields: 'tank_id,all.battles,all.wins',
+				fields: 'tank_id,all.battles,all.wins,all.damage_dealt',
 				in_garage: '',
 				language: 'en',
 				tank_id: '55073'
@@ -117,7 +117,7 @@ test('command.winRate.tankWinRate', t => {
 				account_id: '100998144',
 				application_id: process.env.APPLICATION_ID,
 				in_garage: '',
-				fields: 'tank_id,all.battles,all.wins',
+				fields: 'tank_id,all.battles,all.wins,all.damage_dealt',
 				language: 'en',
 				tank_id: '54289'
 			})
@@ -130,7 +130,8 @@ test('command.winRate.tankWinRate', t => {
 					'100998144': [{
 						all: {
 							battles: 283,
-							wins: 159
+							wins: 159,
+							damage_dealt: 28300
 						},
 						tank_id: 54289
 					}]
@@ -139,7 +140,7 @@ test('command.winRate.tankWinRate', t => {
 
 		callTankWinRate(mocks.createMessage(null, 'hulkhogan [CL]', []), {account_id: 100998144}, 'Löwe').then(result => {
 			st.deepEqual(result, {
-				sentMsg: '@hulkhogan [CL], Löwe (germany, 8): 56.18% after 283 battles.'
+				sentMsg: '@hulkhogan [CL], Löwe (germany, 8): 56.18%, 100.00 dmg after 283 battles.'
 			}, 'verify response');
 
 			st.ok(tankopediaVehicles.isDone() && tankStats.isDone(), 'make two api calls');
@@ -157,7 +158,7 @@ test('command.winRate.tankWinRate', t => {
 				access_token: '',
 				account_id: '100998145',
 				application_id: process.env.APPLICATION_ID,
-				fields: 'tank_id,all.battles,all.wins',
+				fields: 'tank_id,all.battles,all.wins,all.damage_dealt',
 				language: 'en',
 				in_garage: '',
 				tank_id: '5921,13345'
@@ -171,13 +172,15 @@ test('command.winRate.tankWinRate', t => {
 					'100998145': [{
 						all: {
 							battles: 534,
-							wins: 383
+							wins: 383,
+							damage_dealt: 1000000
 						},
 						tank_id: 5921
 					}, {
 						all: {
 							battles: 74,
-							wins: 39
+							wins: 39,
+							damage_dealt: 100000
 						},
 						tank_id: 13345
 					}]
@@ -187,8 +190,8 @@ test('command.winRate.tankWinRate', t => {
 		callTankWinRate(mocks.createMessage(null, 'jessie5 [CL]', []), {account_id: 100998145}, 'Pershing').then(result => {
 			st.deepEqual(result, {
 				sentMsg: [
-					'@jessie5 [CL], M26 Pershing (usa, 8): 71.72% after 534 battles.',
-					'T26E4 SuperPershing (usa, 8): 52.70% after 74 battles.'
+					'@jessie5 [CL], M26 Pershing (usa, 8): 71.72%, 1872.66 dmg after 534 battles.',
+					'T26E4 SuperPershing (usa, 8): 52.70%, 1351.35 dmg after 74 battles.'
 				].join('\n')
 			}, 'verify response');
 
@@ -207,7 +210,7 @@ test('command.winRate.tankWinRate', t => {
 				access_token: '',
 				account_id: '100996799',
 				application_id: process.env.APPLICATION_ID,
-				fields: 'tank_id,all.battles,all.wins',
+				fields: 'tank_id,all.battles,all.wins,all.damage_dealt',
 				in_garage: '',
 				language: 'en',
 				tank_id: '54289'
@@ -221,7 +224,8 @@ test('command.winRate.tankWinRate', t => {
 					'100996799': [{
 						all: {
 							battles: 112,
-							wins: 64
+							wins: 64,
+							damage_dealt: 100000
 						},
 						tank_id: 54289
 					}]
@@ -229,7 +233,7 @@ test('command.winRate.tankWinRate', t => {
 			});
 
 		callTankWinRate(mocks.createMessage(null, 'statdude [STAT]', []), {account_id: 100996799}, 'Lowe').then(result => {
-			st.deepEqual(result, {sentMsg: '@statdude [STAT], Löwe (germany, 8): 57.14% after 112 battles.'}, 'verify response');
+			st.deepEqual(result, {sentMsg: '@statdude [STAT], Löwe (germany, 8): 57.14%, 892.86 dmg after 112 battles.'}, 'verify response');
 			st.ok(tankopediaVehicles.isDone() && tankStats.isDone(), 'made two api calls');
 			st.end();
 		}, error => {
@@ -292,7 +296,7 @@ test('command.winRate.tankWinRate', t => {
 				access_token: '',
 				account_id: '100998149',
 				application_id: process.env.APPLICATION_ID,
-				fields: 'tank_id,all.battles,all.wins',
+				fields: 'tank_id,all.battles,all.wins,all.damage_dealt',
 				in_garage: '',
 				language: 'en',
 				tank_id: '529,5137'
@@ -306,7 +310,8 @@ test('command.winRate.tankWinRate', t => {
 					'100998149': [{
 						all: {
 							battles: 227,
-							wins: 121
+							wins: 121,
+							damage_dealt: 300000
 						},
 						tank_id: 529
 					}]
@@ -340,7 +345,7 @@ test('command.winRate.tankWinRate', t => {
 			callTankWinRate(mocks.createMessage(null, 'iambesttanker [CL]', mentions), {account_id: 100998148}, 'Tiger I')
 				.then(result => {
 					st.deepEqual(result, {
-						sentMsg: '@iambesttanker [CL], Tiger I (germany, 7): 53.30% after 227 battles.'
+						sentMsg: '@iambesttanker [CL], Tiger I (germany, 7): 53.30%, 1321.59 dmg after 227 battles.'
 					}, 'verify response');
 					st.ok(tankopediaVehicles.isDone() && tankStats.isDone(), 'make two api calls');
 					st.end();
@@ -369,14 +374,14 @@ test('command.winRate.winRate', t => {
 
 	t.equal(wr.winRate.name, 'win-rate', 'verify Commands method name');
 
-	const accountInfoMock = (accountId, wins, battles) => {
+	const accountInfoMock = (accountId, wins, battles, damage) => {
 		return nock('https://api.wotblitz.com')
 			.post('/wotb/account/info/', {
 				access_token: '',
 				account_id: accountId.toString(),
 				application_id: process.env.APPLICATION_ID,
 				extra: '',
-				fields: 'statistics.all.battles,statistics.all.wins',
+				fields: 'statistics.all.battles,statistics.all.wins,statistics.all.damage_dealt',
 				language: 'en'
 			})
 			.reply(200, {
@@ -389,7 +394,8 @@ test('command.winRate.winRate', t => {
 						statistics: {
 							all: {
 								battles: battles,
-								wins: wins
+								wins: wins,
+								damage_dealt: damage
 							}
 						}
 					}
@@ -398,16 +404,17 @@ test('command.winRate.winRate', t => {
 	};
 
 	t.test('initial call', st => {
-		const accountInfo = accountInfoMock(100994563, 8691, 14280);
+		const accountInfo = accountInfoMock(100994563, 8691, 14280, 20320445);
 
 		callWinRate(mocks.createMessage(null, 'bigguy20 [CL]'), {
 			account_id: 100994563
 		}).then(result => {
 			st.deepEqual(result, {
-				sentMsg: '@bigguy20 [CL], You have won 8691 of 14280 battles. That is 60.86% victory!',
+				sentMsg: '@bigguy20 [CL], You have won 8691 of 14280 battles. That is 60.86% victory! Your average damage is 1423.00.',
 				updateFields: {
 					wins: 8691,
-					battles: 14280
+					battles: 14280,
+					damage: 20320445
 				}
 			}, 'verify response and record update');
 
@@ -420,7 +427,7 @@ test('command.winRate.winRate', t => {
 	});
 
 	t.test('follow up call, no additional battles', st => {
-		const accountInfo = accountInfoMock(100994564, 7682, 18290);
+		const accountInfo = accountInfoMock(100994564, 7682, 18290, 18290000);
 
 		callWinRate(mocks.createMessage(null, 'littleguy21 [CL]'), {
 			account_id: 100994564,
@@ -428,7 +435,7 @@ test('command.winRate.winRate', t => {
 			battles: 18290
 		}).then(result => {
 			st.deepEqual(result, {
-				sentMsg: '@littleguy21 [CL], You have won 7682 of 18290 battles. That is 42.00% victory!'
+				sentMsg: '@littleguy21 [CL], You have won 7682 of 18290 battles. That is 42.00% victory! Your average damage is 1000.00.'
 			}, 'verify response');
 
 			st.ok(accountInfo.isDone(), 'made one API call');
@@ -440,22 +447,24 @@ test('command.winRate.winRate', t => {
 	});
 
 	t.test('follow up call, one additional battle', st => {
-		const accountInfo = accountInfoMock(100994565, 9260, 13933);
+		const accountInfo = accountInfoMock(100994565, 9260, 13933, 13933000);
 
 		callWinRate(mocks.createMessage(null, 'biggirl22 [CL]'), {
 			account_id: 100994565,
 			wins: 9259,
-			battles: 13932
+			battles: 13932,
+			damage: 13931164
 		}).then(result => {
 			st.deepEqual(result, {
 				sentMsg: [
-					'@biggirl22 [CL], You have won 9260 of 13933 battles. That is 66.46% victory!',
-					'Last time you asked was 1 battles ago, at 66.46% victory.',
-					'Over those 1 battles, you won 100.00%!'
+					'@biggirl22 [CL], You have won 9260 of 13933 battles. That is 66.46% victory! Your average damage is 1000.00.',
+					'Last time you asked was 1 battles ago, at 66.46% victory and 999.94 average damage dealt.',
+					'Over those 1 battles, you won 100.00% with average damage of 1836.00!'
 				].join('\n'),
 				updateFields: {
 					wins: 9260,
-					battles: 13933
+					battles: 13933,
+					damage: 13933000
 				}
 			}, 'verify response and record update');
 
@@ -468,22 +477,53 @@ test('command.winRate.winRate', t => {
 	});
 
 	t.test('follow up call, several additional battles', st => {
-		const accountInfo = accountInfoMock(100994566, 5003, 11502);
+		const accountInfo = accountInfoMock(100994566, 5003, 11502, 9836625);
 
 		callWinRate(mocks.createMessage(null, 'littlegirl23 [CL]'), {
+			account_id: 100994566,
+			wins: 4992,
+			battles: 11483,
+			damage: 9822276
+		}).then(result => {
+			st.deepEqual(result, {
+				sentMsg: [
+					'@littlegirl23 [CL], You have won 5003 of 11502 battles. That is 43.50% victory! Your average damage is 855.21.',
+					'Last time you asked was 19 battles ago, at 43.47% victory and 855.38 average damage dealt.',
+					'Over those 19 battles, you won 57.89% with average damage of 755.21!'
+				].join('\n'),
+				updateFields: {
+					wins: 5003,
+					battles: 11502,
+					damage: 9836625
+				}
+			}, 'verify response and record update');
+
+			st.ok(accountInfo.isDone(), 'made one API call');
+			st.end();
+		}, error => {
+			st.fail(error);
+			st.end();
+		});
+	});
+
+	t.test('Check average damage for the first time', st => {
+		const accountInfo = accountInfoMock(100994566, 5000, 11501, 11501000);
+
+		callWinRate(mocks.createMessage(null, 'tankgrl [CL]'), {
 			account_id: 100994566,
 			wins: 4992,
 			battles: 11483
 		}).then(result => {
 			st.deepEqual(result, {
 				sentMsg: [
-					'@littlegirl23 [CL], You have won 5003 of 11502 battles. That is 43.50% victory!',
-					'Last time you asked was 19 battles ago, at 43.47% victory.',
-					'Over those 19 battles, you won 57.89%!'
+					'@tankgrl [CL], You have won 5000 of 11501 battles. That is 43.47% victory! Your average damage is 1000.00.',
+					'Last time you asked was 18 battles ago, at 43.47% victory.',
+					'Over those 18 battles, you won 44.44%!'
 				].join('\n'),
 				updateFields: {
-					wins: 5003,
-					battles: 11502
+					wins: 5000,
+					battles: 11501,
+					damage: 11501000
 				}
 			}, 'verify response and record update');
 
