@@ -175,10 +175,10 @@ test('command.topDmg', t => {
 		const expected = {
 			sentMsg: [
 				'@SillyGamer5, ',
-				'1: 1571.97 dmg - IS-3 (ussr, 8)',
-				'2: 1371.60 dmg - Caernarvon (uk, 8)',
-				'3: 1311.75 dmg - STA-1 (japan, 8)',
-				'4: 1182.76 dmg - VK 36.01 (H) (germany, 6)',
+				'1: 1,571.97 dmg - IS-3 (ussr, 8)',
+				'2: 1,371.60 dmg - Caernarvon (uk, 8)',
+				'3: 1,311.75 dmg - STA-1 (japan, 8)',
+				'4: 1,182.76 dmg - VK 36.01 (H) (germany, 6)',
 				'5: 954.79 dmg - BDR G1 B (france, 5)',
 				'6: 798.22 dmg - Hetzer Kame SP (japan, 4)',
 				'7: 758.62 dmg - AMX ELC bis (france, 5)',
