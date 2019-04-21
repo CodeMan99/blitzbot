@@ -11,15 +11,6 @@ const dbInstance = new Datastore({
 });
 const callTankWinRate = wr.tankWinRate.fn.bind(Object.assign(mocks.commands, {db: dbInstance}));
 const callWinRate = wr.winRate.fn.bind(mocks.commands);
-const callFormatNumber = wr.formatNumber;
-
-test('numberFormat', t => {
-	t.equal(callFormatNumber(1500), '1,500');
-	t.equal(callFormatNumber(26522.56723), '26,522.57');
-	t.equal(callFormatNumber(340.500), '340.5');
-	t.equal(callFormatNumber(2362244.0000000000002), '2,362,244');
-	t.end();
-});
 
 test('command.winRate.tankWinRate', t => {
 	t.deepEqual(wr.tankWinRate.fn.options, {
