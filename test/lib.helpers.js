@@ -98,3 +98,11 @@ test('helpers.messageToString', t => {
 
 	t.end();
 });
+
+test('helpers.numberFormat', t => {
+	t.equal(helpers.formatNumber(1500), '1,500');
+	t.equal(helpers.formatNumber(26522.56723), '26,522.57');
+	t.equal(helpers.formatNumber(340.500), '340.5');
+	t.equal(helpers.formatNumber(2362244.0000000000002), '2,362,244');
+	t.end();
+});

@@ -158,16 +158,17 @@ test('command.maxXp', t => {
 			});
 		const expected = {
 			sentMsg: [
-				'@SillyGamer5, 1, 1844 xp: Cromwell (uk, 6)',
-				'2, 1794 xp: T-44 (ussr, 8)',
-				'3, 1551 xp: T1 Heavy (usa, 5)',
-				'4, 1549 xp: Jagdpanther (germany, 7)',
-				'5, 1518 xp: Type 62 (china, 7)',
-				'6, 1486 xp: Type 5 Ke-Ho (japan, 4)',
-				'7, 1457 xp: Leopard (germany, 5)',
-				'8, 1422 xp: KV-13 (ussr, 7)',
-				'9, 1335 xp: M3 Lee (usa, 4)',
-				'10, 900 xp: Cruiser Mk. III (uk, 2)'
+				'@SillyGamer5, ',
+				'1: 1,844 xp - Cromwell (uk, 6)',
+				'2: 1,794 xp - T-44 (ussr, 8)',
+				'3: 1,551 xp - T1 Heavy (usa, 5)',
+				'4: 1,549 xp - Jagdpanther (germany, 7)',
+				'5: 1,518 xp - Type 62 (china, 7)',
+				'6: 1,486 xp - Type 5 Ke-Ho (japan, 4)',
+				'7: 1,457 xp - Leopard (germany, 5)',
+				'8: 1,422 xp - KV-13 (ussr, 7)',
+				'9: 1,335 xp - M3 Lee (usa, 4)',
+				'10: 900 xp - Cruiser Mk. III (uk, 2)'
 			].join('\n')
 		};
 
@@ -245,9 +246,10 @@ test('command.maxXp', t => {
 			});
 		const expected = {
 			sentMsg: [
-				'@BigTanks, 1, 901 xp: M2 Medium (us, 3)',
-				'2, 892 xp: Unknown vehicle (-, -)',
-				'3, 884 xp: T2 Medium (us, 2)'
+				'@BigTanks, ',
+				'1: 901 xp - M2 Medium (us, 3)',
+				'2: 892 xp - Unknown vehicle (-, -)',
+				'3: 884 xp - T2 Medium (us, 2)'
 			].join('\n')
 		};
 
