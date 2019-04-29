@@ -59,10 +59,10 @@ process.title = pkg.name;
 client.rest.userAgentManager.set({url: pkg.homepage, version: pkg.version});
 
 client.on('ready', () => {
-	helpers.log('blitzbot ready!');
-	helpers.log('===============');
-	helpers.error('blitzbot ready!');
-	helpers.error('===============');
+	log('blitzbot ready!');
+	log('===============');
+	error('blitzbot ready!');
+	error('===============');
 });
 
 client.on('message', message => {
@@ -75,8 +75,7 @@ client.on('message', message => {
 	if (!perms) return;
 
 	const userId = message.author.id;
-	const userName = message.author.username;
-	const id = 'msgId: ' + message.id + ', userId: ' + userId + ', userName: ' + userName;
+	const id = 'msgId: ' + message.id + ', userId: ' + userId;
 	const mention = client.user.toString() + ' ';
 	const text = message.content.replace(/\s{2,}/g, ' ');
 	const m = text.match(/^[\t ]*\b(n|na|e|eu|r|ru|a|asia)\b/i);
@@ -129,7 +128,7 @@ client.on('message', message => {
 
 		let run;
 
-		helpers.log(id + ' -- running command: "' + command + '"');
+		log(id + ' -- running command: "' + command + '"');
 
 		if (passRecord) {
 			run = new Promise((resolve, reject) => {
@@ -142,7 +141,7 @@ client.on('message', message => {
 					} else {
 						resolve(message.reply('I don\'t know who you are! Do `@' + client.user.username + ' add <screen-name>` first.')
 							.then(sent => {
-								helpers.log(id + ' -- sent msg: ' + sent);
+								log(id + ' -- sent msg: ' + sent);
 
 								return null;
 							}));
@@ -157,7 +156,7 @@ client.on('message', message => {
 	}).then(([result, db]) => {
 		if (!result) return;
 
-		helpers.log(id + ' -- sent msg: ' + helpers.messageToString(result.sentMsg));
+		log(id + ' -- sent msg: ' + helpers.messageToString(result.sentMsg));
 
 		const update = result.updateFields;
 
@@ -166,7 +165,7 @@ client.on('message', message => {
 			db = master;
 		}
 
-		helpers.log(id + ' -- update document ' + db.filename);
+		log(id + ' -- update document ' + db.filename);
 
 		// add '_id' and remove 'updatedAt' so that upserting works every time, safely.
 		update._id = userId;
@@ -179,13 +178,13 @@ client.on('message', message => {
 			});
 		});
 	}).then(() => {
-		helpers.log(id + ' -- done: ' + command);
+		log(id + ' -- done: ' + command);
 	}).catch(error => {
-		helpers.error(id + ' -- error: ' + command);
+		error(id + ' -- error: ' + command);
 
-		if (!error) return helpers.log(id + ' -- error: Unknown');
+		if (!error) return log(id + ' -- error: Unknown');
 
-		helpers.error(helpers.getFieldByPath(error, 'response.error.text') || error.stack || error);
+		error(helpers.getFieldByPath(error, 'response.error.text') || error.stack || error);
 	});
 });
 
@@ -208,8 +207,28 @@ Promise.all([
 ]).then(() => {
 	// not using a promise because this server is event based, not assuming any event occurs only once
 	serveReferences(Object.assign({bot: client}, regions), 8008, serverErr => {
-		if (serverErr) return helpers.error(serverErr.stack || serverErr);
+		if (serverErr) return error(serverErr.stack || serverErr);
 	});
 }, error => {
-	helpers.error(helpers.getFieldByPath(error, 'response.error.text') || error.stack || error);
+	error(helpers.getFieldByPath(error, 'response.error.text') || error.stack || error);
 });
+
+
+/**
+ * Logs a message to the console log with a timestamp prepended to it
+ *
+ * @param {*} message A message of any type
+ */
+function log(message) {
+	console.log(new Date().toLocaleString() + ' ' + helpers.messageToString(message));
+}
+
+
+/**
+ * Logs a message to the console error log with a timestamp prepended to it
+ *
+ * @param {*} message A message of any type
+ */
+function error(message) {
+	console.error(new Date().toLocaleString() + ' ' + helpers.messageToString(message));
+}
