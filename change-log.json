@@ -1,6 +1,14 @@
 {
   "unreleased": [
   ],
+  "3.4.4": [
+    "Upgrade bufferutil to 4.0.1",
+    "Upgrade discord.js to 11.5.1",
+    "Upgrade cross-env to 6.0.3",
+    "Upgrade eslint to 6.5.1",
+    "Upgrade nock to 11.3.1",
+    "Upgrade tape to 4.11.0"
+  ],
   "3.4.3": [
     "Upgrade wotblitz to 1.2.0",
     "Fixed *win-rate* command for new users.",
