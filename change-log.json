@@ -1,5 +1,6 @@
 {
   "unreleased": [
+    "Fixed message parsing to allow a resolved mention."
   ],
   "3.4.4": [
     "Upgrade bufferutil to 4.0.1",

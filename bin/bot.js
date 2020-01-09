@@ -74,7 +74,7 @@ client.on('message', message => {
 
 	const userId = message.author.id;
 	const id = message.id + ', ' + userId;
-	const mention = client.user.toString() + ' ';
+	const mentionRE = new RegExp(`<@!?${client.user.id}> `);
 	const text = message.content.replace(/\s{2,}/g, ' ');
 	const m = text.match(/^[\t ]*\b(n|na|e|eu|r|ru|a|asia)\b/i);
 
@@ -99,11 +99,11 @@ client.on('message', message => {
 	}
 
 	if (message.channel.type !== 'dm') {
-		start = text.indexOf(mention);
+		const mention = text.match(mentionRE);
 
-		if (start < 0) return;
+		if (!mention) return;
 
-		start += mention.length;
+		start = mention.index + mention[0].length;
 	}
 
 	let end = text.indexOf(' ', start);
