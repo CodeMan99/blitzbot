@@ -1,5 +1,11 @@
 {
   "unreleased": [
+  ],
+  "3.4.5": [
+    "Upgrade eslint to 6.8.0",
+    "Upgrade eslint-plugin-json to 2.0.1",
+    "Upgrade nock to 11.7.2",
+    "Upgrade tape to 4.13.0",
     "Fixed message parsing to allow a resolved mention."
   ],
   "3.4.4": [
