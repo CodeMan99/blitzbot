@@ -259,14 +259,14 @@ test('command.winRate.tankWinRate', t => {
 		const mentions = [{
 			id: 'fakediscordid0',
 			username: 'buddy5 [CL]',
-			mention: function() {
+			toString: function() {
 				return `<@${this.id}>`;
 			},
 			bot: false
 		}, {
 			id: '0101',
 			username: 'testbot',
-			mention: function() {
+			toString: function() {
 				return `<@${this.id}>`;
 			},
 			bot: true

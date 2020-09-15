@@ -54,7 +54,6 @@ const regionLetter = {
 };
 
 process.title = pkg.name;
-client.rest.userAgentManager.set({url: pkg.homepage, version: pkg.version});
 
 client.on('ready', () => {
 	console.log('blitzbot ready!');
@@ -65,7 +64,7 @@ client.on('ready', () => {
 
 client.on('message', message => {
 	// Bot will only respond in a DM or when mentioned.
-	if (message.channel.type !== 'dm' && !message.isMentioned(client.user)) return;
+	if (message.channel.type !== 'dm' && !message.mentions.has(client.user)) return;
 	if (message.author.id === client.user.id || message.author.bot) return;
 
 	const perms = message.channel.type === 'text' ? message.channel.permissionsFor(client.user) : true;
