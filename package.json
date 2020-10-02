@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/CodeMan99/blitzbot#readme",
   "dependencies": {
+    "async": "^3.2.0",
     "bufferutil": "^4.0.1",
     "discord.js": "^12.3.1",
     "erlpack": "github:discordapp/erlpack",

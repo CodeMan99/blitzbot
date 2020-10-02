@@ -202,8 +202,15 @@ Promise.all([
 	loadDatabase({db: master}),
 	client.login(auth.user.token)
 ]).then(() => {
+	const exposeReferences = {
+		auth: auth,
+		client: client,
+		master: master,
+		regions: regions
+	};
+
 	// not using a promise because this server is event based, not assuming any event occurs only once
-	serveReferences(Object.assign({bot: client}, regions), 8008, serverErr => {
+	serveReferences(exposeReferences, 8008, serverErr => {
 		if (serverErr) return console.error(serverErr.stack || serverErr);
 	});
 }, error => {
