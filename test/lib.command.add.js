@@ -60,7 +60,9 @@ test('command.add', t => {
 				sentMsg: '@joe234 [CLAN1], Welcome! You now have access to all commands. :)',
 				updateFields: {
 					nickname: 'Joe234',
-					account_id: 1009218110
+					account_id: 1009218110,
+					wins: 0,
+					battles: 0
 				}
 			}, 'found correct document in response');
 

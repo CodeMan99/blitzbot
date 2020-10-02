@@ -1,5 +1,6 @@
 {
   "unreleased": [
+    "Fixed *add* command by reseting values for *win-rate*.",
     "Added internal maintenance tooling.",
     "Upgrade discord.js to 12.3.1",
     "Upgrade cross-env to 7.0.2",

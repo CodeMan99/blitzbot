@@ -401,7 +401,9 @@ test('command.winRate.winRate', t => {
 		const accountInfo = accountInfoMock(100994563, 8691, 14280);
 
 		callWinRate(mocks.createMessage(null, 'bigguy20 [CL]'), {
-			account_id: 100994563
+			account_id: 100994563,
+			wins: 0,
+			battles: 0
 		}).then(result => {
 			st.deepEqual(result, {
 				sentMsg: '@bigguy20 [CL], You have won 8691 of 14280 battles. That is 60.86% victory!',
