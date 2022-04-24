@@ -40,7 +40,7 @@ test('helpers.getFieldByPath', t => {
 	t.equal(fieldByPath(complexObj, 'name.first'), 'Big', 'valid long path returns the string value');
 	t.equal(fieldByPath(complexObj, 'location.state.full'), 'Washington', 'valid long path returns the string value');
 
-	t.equal(fieldByPath(complexObj, 'name.last.toString'), 'Guy', 'returns null if path is not an object');
+	t.equal(fieldByPath(complexObj, 'name.last.toString'), null, 'returns null if path is not an object');
 	t.equal(fieldByPath(complexObj, 'status.age.toString'), null, 'returns null if path is not an object');
 	t.equal(fieldByPath(complexObj, 'status.married.toString'), null, 'returns null if path is not an object');
 	t.equal(fieldByPath(complexObj, 'status.single.toString'), null, 'returns null if path is not an object');
