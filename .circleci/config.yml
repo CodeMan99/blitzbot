@@ -6,12 +6,14 @@ jobs:
       - image: cimg/node:16.14
     steps:
       - checkout
-      - run:
-          name: "Install Dependencies"
-          command: "npm ci"
+      - node/install-packages:
+          pkg-manager: npm
       - run:
           name: "Execute Unit Tests"
           command: "npm test"
+      - lint:
+          name: "Lint Check"
+          command: "npm run lint"
 
 workflows:
   pr:
