@@ -14,7 +14,7 @@ jobs:
       - run:
           name: "Execute Unit Tests"
           command: "npm test"
-      - lint:
+      - run:
           name: "Lint Check"
           command: "npm run lint"
 
