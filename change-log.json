@@ -1,5 +1,6 @@
 {
   "unreleased": [
+    "Moved from travisci to circleci."
   ],
   "3.5.0": [
     "Fixed *add* command by reseting values for *win-rate*.",
