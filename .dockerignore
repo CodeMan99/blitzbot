@@ -1,0 +1,9 @@
+.git/
+.circleci/
+test/
+.eslintrc.json
+.gitattributes
+.gitignore
+*.md
+Dockerfile
+.dockerignore
