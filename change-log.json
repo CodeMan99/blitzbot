@@ -1,5 +1,7 @@
 {
   "unreleased": [
+  ],
+  "3.5.1": [
     "Upgrade async to 3.2.3",
     "Upgrade bufferutil to 4.0.6",
     "Upgrade nock to 13.2.4",
