@@ -1,5 +1,5 @@
 const test = require('tape');
-const Datastore = require('nedb');
+const Datastore = require('../lib/datastore.js');
 const nock = require('nock');
 const mocks = require('./mocks');
 const vehicleList = require('./mocks/vehicles.json');

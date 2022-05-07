@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const {Commands} = require('../lib/command');
-const Datastore = require('nedb');
+const Datastore = require('../lib/datastore.js');
 const Discord = require('discord.js');
 const auth = require('../blitzbot.json');
 const helpers = require('../lib/helpers.js');
@@ -88,12 +88,8 @@ client.on('message', message => {
 			region = regionLetter[region];
 		}
 	} else {
-		region = new Promise((resolve, reject) => {
-			master.findOne({_id: userId}, (error, record) => {
-				if (error) return reject(error);
-
-				resolve((record && record.region) || auth.wotblitz.default_region || 'na');
-			});
+		region = master.findOne({_id: userId}).then(record => {
+			return (record && record.region) || auth.wotblitz.default_region || 'na';
 		});
 	}
 
@@ -128,22 +124,18 @@ client.on('message', message => {
 		console.log(id + ' -- running command: "' + command + '"');
 
 		if (passRecord) {
-			run = new Promise((resolve, reject) => {
-				db.findOne({_id: userId}, (error, record) => {
-					if (error) return reject(error);
+			run = db.findOne({_id: userId}).then(record => {
+				// commands require a saved 'account_id'.
+				if (record && record.account_id) {
+					return commands[command](message, record, ...args);
+				} else {
+					return message.reply('I don\'t know who you are! Do `@' + client.user.username + ' add <screen-name>` first.')
+						.then(sent => {
+							console.log(id + ' -- sent msg: ' + sent);
 
-					// commands require a saved 'account_id'.
-					if (record && record.account_id) {
-						resolve(commands[command](message, record, ...args));
-					} else {
-						resolve(message.reply('I don\'t know who you are! Do `@' + client.user.username + ' add <screen-name>` first.')
-							.then(sent => {
-								console.log(id + ' -- sent msg: ' + sent);
-
-								return null;
-							}));
-					}
-				});
+							return null;
+						});
+				}
 			});
 		} else {
 			run = commands[command](message, ...args);
@@ -168,12 +160,7 @@ client.on('message', message => {
 		update._id = userId;
 		delete update.updatedAt;
 
-		return new Promise((resolve, reject) => {
-			db.update({_id: userId}, {$set: update}, {upsert: true}, error => {
-				if (error) return reject(error);
-				resolve();
-			});
-		});
+		return db.update({_id: userId}, {$set: update}, {upsert: true});
 	}).then(() => {
 		console.log(id + ' -- done: ' + command);
 	}).catch(error => {
@@ -185,21 +172,12 @@ client.on('message', message => {
 	});
 });
 
-function loadDatabase(commands) {
-	return new Promise((resolve, reject) => {
-		commands.db.loadDatabase(error => {
-			if (error) return reject(error);
-			resolve();
-		});
-	});
-}
-
 Promise.all([
-	loadDatabase(regions.na),
-	loadDatabase(regions.eu),
-	loadDatabase(regions.ru),
-	loadDatabase(regions.asia),
-	loadDatabase({db: master}),
+	regions.na.db.loadDatabase(),
+	regions.eu.db.loadDatabase(),
+	regions.ru.db.loadDatabase(),
+	regions.asia.db.loadDatabase(),
+	master.loadDatabase(),
 	client.login(auth.user.token)
 ]).then(() => {
 	const exposeReferences = {
