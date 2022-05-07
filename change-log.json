@@ -1,5 +1,6 @@
 {
   "unreleased": [
+    "Remove faucet."
   ],
   "3.5.1": [
     "Upgrade async to 3.2.3",
