@@ -5,8 +5,8 @@
   "bin": "bin/bot.js",
   "private": true,
   "scripts": {
-    "test": "cross-env APPLICATION_ID=test-app-id-invalid tape test/*.js | faucet",
-    "lint": "eslint --format tap bin/*.js lib/*.js lib/command/*.js test/*.js test/mocks/*.js *.json | faucet"
+    "test": "cross-env APPLICATION_ID=test-app-id-invalid tape test/*.js",
+    "lint": "eslint bin/*.js lib/*.js lib/command/*.js test/*.js test/mocks/*.js *.json"
   },
   "repository": {
     "type": "git",
@@ -38,7 +38,6 @@
     "cross-env": "^7.0.2",
     "eslint": "^7.10.0",
     "eslint-plugin-json": "^2.1.2",
-    "faucet": "0.0.1",
     "mockery": "^2.1.0",
     "nock": "^13.2.4",
     "tape": "^5.5.3"
