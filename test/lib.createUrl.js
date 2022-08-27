@@ -1,8 +1,6 @@
 const test = require('tape');
-const qs = require('querystring');
 const mockery = require('mockery');
 
-mockery.registerAllowable('querystring');
 mockery.registerAllowable('../lib/createUrl.js');
 mockery.registerMock('../blitzbot.json', {
 	app: {
@@ -18,9 +16,9 @@ mockery.deregisterAll();
 
 // the permissions is the only thing that varies in createUrl at the moment
 function parse(url) {
-	const right = url.split('?')[1];
+	const u = new URL(url);
 
-	return qs.parse(right).permissions;
+	return u.searchParams.get('permissions');
 }
 
 test('createUrl', t => {
