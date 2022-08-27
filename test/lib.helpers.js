@@ -93,7 +93,9 @@ test('helpers.messageToString', t => {
 	t.equal(mts(), '', 'undefined argument is empty string');
 	t.equal(mts(null), '', 'null argument is empty string');
 	t.equal(mts('passthrough'), 'passthrough', 'string argument is passed through');
-	t.equal(mts(['1', '2']), '1\n2', 'array argument is joined on newline');
+	t.equal(mts([]), '', 'empty array argument is empty string');
+	t.equal(mts(['one']), 'one', 'array(1) argument is the element');
+	t.equal(mts(['1', '2']), '1\n2', 'array(2) argument is joined on newline');
 	t.equal(mts(Object('string')), 'string', 'object argument is the result of toString');
 
 	t.end();
