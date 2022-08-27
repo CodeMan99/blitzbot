@@ -3,6 +3,7 @@ const nock = require('nock');
 const mocks = require('./mocks');
 const whoami = require('../lib/command/whoami.js');
 const callWhoami = (msg, record) => whoami.fn.call(mocks.commands, msg, record);
+const application_id = process.env.APPLICATION_ID;
 
 test('command.whoami', t => {
 	t.deepEqual(whoami.fn.options, {
@@ -20,7 +21,7 @@ test('command.whoami', t => {
 				account_id: '1008921043',
 				extra: '',
 				fields: 'nickname',
-				application_id: process.env.APPLICATION_ID,
+				application_id,
 				language: 'en'
 			})
 			.reply(200, {
@@ -52,7 +53,7 @@ test('command.whoami', t => {
 				account_id: '1008921054',
 				extra: '',
 				fields: 'nickname',
-				application_id: process.env.APPLICATION_ID,
+				application_id,
 				language: 'en'
 			})
 			.reply(200, {

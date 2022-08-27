@@ -3,6 +3,7 @@ const nock = require('nock');
 const mocks = require('./mocks');
 const add = require('../lib/command/add.js');
 const callAdd = add.fn.bind(mocks.commands);
+const application_id = process.env.APPLICATION_ID;
 
 test('command.add', t => {
 	t.deepEqual(add.fn.options, {
@@ -31,7 +32,7 @@ test('command.add', t => {
 	t.test('valid username argument', st => {
 		nock('https://api.wotblitz.com')
 			.post('/wotb/account/list/', {
-				application_id: process.env.APPLICATION_ID,
+				application_id,
 				fields: '',
 				language: 'en',
 				limit: '',
@@ -76,7 +77,7 @@ test('command.add', t => {
 	t.test('invalid username argument', st => {
 		nock('https://api.wotblitz.com')
 			.post('/wotb/account/list/', {
-				application_id: process.env.APPLICATION_ID,
+				application_id,
 				fields: '',
 				language: 'en',
 				limit: '',

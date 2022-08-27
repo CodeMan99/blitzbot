@@ -3,6 +3,7 @@ const nock = require('nock');
 const mocks = require('./mocks');
 const maxXp = require('../lib/command/maxXp');
 const callMaxXp = maxXp.fn.bind(mocks.commands);
+const application_id = process.env.APPLICATION_ID;
 
 test('command.maxXp', t => {
 	t.equal(maxXp.name, 'max-xp', 'verify Commands method name');
@@ -19,7 +20,7 @@ test('command.maxXp', t => {
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
 				account_id: '1009634067',
-				application_id: process.env.APPLICATION_ID,
+				application_id,
 				fields: 'tank_id,all.max_xp',
 				in_garage: '',
 				language: 'en',
@@ -92,7 +93,7 @@ test('command.maxXp', t => {
 			});
 		const vehicles = nock('https://api.wotblitz.com')
 			.post('/wotb/encyclopedia/vehicles/', {
-				application_id: process.env.APPLICATION_ID,
+				application_id,
 				fields: 'name,tier,nation',
 				language: 'en',
 				nation: '',
@@ -186,7 +187,7 @@ test('command.maxXp', t => {
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
 				account_id: '1009823019',
-				application_id: process.env.APPLICATION_ID,
+				application_id,
 				fields: 'tank_id,all.max_xp',
 				in_garage: '',
 				language: 'en',
@@ -218,7 +219,7 @@ test('command.maxXp', t => {
 			});
 		const vehicles = nock('https://api.wotblitz.com')
 			.post('/wotb/encyclopedia/vehicles/', {
-				application_id: process.env.APPLICATION_ID,
+				application_id,
 				fields: 'name,tier,nation',
 				language: 'en',
 				nation: '',

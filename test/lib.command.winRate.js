@@ -11,6 +11,7 @@ const dbInstance = new Datastore({
 });
 const callTankWinRate = wr.tankWinRate.fn.bind(Object.assign(mocks.commands, {db: dbInstance}));
 const callWinRate = wr.winRate.fn.bind(mocks.commands);
+const application_id = process.env.APPLICATION_ID;
 
 test('command.winRate.tankWinRate', t => {
 	t.deepEqual(wr.tankWinRate.fn.options, {
@@ -43,7 +44,7 @@ test('command.winRate.tankWinRate', t => {
 	const encyclopediaVehiclesMock = () => {
 		return nock('https://api.wotblitz.com')
 			.post('/wotb/encyclopedia/vehicles/', {
-				application_id: process.env.APPLICATION_ID,
+				application_id,
 				fields: 'name,nation,tier',
 				language: 'en',
 				nation: '',
@@ -79,7 +80,7 @@ test('command.winRate.tankWinRate', t => {
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
 				account_id: '100998143',
-				application_id: process.env.APPLICATION_ID,
+				application_id,
 				fields: 'tank_id,all.battles,all.wins',
 				in_garage: '',
 				language: 'en',
@@ -115,7 +116,7 @@ test('command.winRate.tankWinRate', t => {
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
 				account_id: '100998144',
-				application_id: process.env.APPLICATION_ID,
+				application_id,
 				in_garage: '',
 				fields: 'tank_id,all.battles,all.wins',
 				language: 'en',
@@ -156,7 +157,7 @@ test('command.winRate.tankWinRate', t => {
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
 				account_id: '100998145',
-				application_id: process.env.APPLICATION_ID,
+				application_id,
 				fields: 'tank_id,all.battles,all.wins',
 				language: 'en',
 				in_garage: '',
@@ -206,7 +207,7 @@ test('command.winRate.tankWinRate', t => {
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
 				account_id: '100996799',
-				application_id: process.env.APPLICATION_ID,
+				application_id,
 				fields: 'tank_id,all.battles,all.wins',
 				in_garage: '',
 				language: 'en',
@@ -291,7 +292,7 @@ test('command.winRate.tankWinRate', t => {
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
 				account_id: '100998149',
-				application_id: process.env.APPLICATION_ID,
+				application_id,
 				fields: 'tank_id,all.battles,all.wins',
 				in_garage: '',
 				language: 'en',
@@ -374,7 +375,7 @@ test('command.winRate.winRate', t => {
 			.post('/wotb/account/info/', {
 				access_token: '',
 				account_id: accountId.toString(),
-				application_id: process.env.APPLICATION_ID,
+				application_id,
 				extra: '',
 				fields: 'statistics.all.battles,statistics.all.wins',
 				language: 'en'

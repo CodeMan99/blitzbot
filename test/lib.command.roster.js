@@ -3,6 +3,7 @@ const nock = require('nock');
 const mocks = require('./mocks');
 const roster = require('../lib/command/roster.js');
 const callRoster = roster.fn.bind(mocks.commands);
+const application_id = process.env.APPLICATION_ID;
 
 test('command.roster', t => {
 	t.deepEqual(roster.fn.options, {
@@ -23,7 +24,7 @@ test('command.roster', t => {
 		const accountInfo = nock('https://api.wotblitz.com')
 			.post('/wotb/clans/accountinfo/', {
 				account_id: '10996722',
-				application_id: process.env.APPLICATION_ID,
+				application_id,
 				extra: '',
 				fields: 'clan_id',
 				language: 'en'
@@ -41,7 +42,7 @@ test('command.roster', t => {
 			});
 		const clanInfo = nock('https://api.wotblitz.com')
 			.post('/wotb/clans/info/', {
-				application_id: process.env.APPLICATION_ID,
+				application_id,
 				clan_id: '82',
 				extra: 'members',
 				fields: 'clan_id,name,members',
@@ -107,7 +108,7 @@ test('command.roster', t => {
 	t.test('no argument, clan_id in database', st => {
 		const clanInfo = nock('https://api.wotblitz.com')
 			.post('/wotb/clans/info/', {
-				application_id: process.env.APPLICATION_ID,
+				application_id,
 				clan_id: '3',
 				extra: 'members',
 				fields: 'clan_id,name,members',
@@ -162,7 +163,7 @@ test('command.roster', t => {
 	t.test('valid tag argument', st => {
 		const clanList = nock('https://api.wotblitz.com')
 			.post('/wotb/clans/list/', {
-				application_id: process.env.APPLICATION_ID,
+				application_id,
 				fields: 'clan_id,tag',
 				language: 'en',
 				limit: '',
@@ -187,7 +188,7 @@ test('command.roster', t => {
 			});
 		const clanInfo = nock('https://api.wotblitz.com')
 			.post('/wotb/clans/info/', {
-				application_id: process.env.APPLICATION_ID,
+				application_id,
 				clan_id: '725',
 				extra: 'members',
 				fields: 'clan_id,name,members',
@@ -290,7 +291,7 @@ test('command.roster', t => {
 	t.test('valid tag argument, but empty result', st => {
 		const clanList = nock('https://api.wotblitz.com')
 			.post('/wotb/clans/list/', {
-				application_id: process.env.APPLICATION_ID,
+				application_id,
 				fields: 'clan_id,tag',
 				language: 'en',
 				limit: '',
@@ -320,7 +321,7 @@ test('command.roster', t => {
 	t.test('valid tag argument, but no clan found', st => {
 		const clanList = nock('https://api.wotblitz.com')
 			.post('/wotb/clans/list/', {
-				application_id: process.env.APPLICATION_ID,
+				application_id,
 				fields: 'clan_id,tag',
 				language: 'en',
 				limit: '',
@@ -360,7 +361,7 @@ test('command.roster', t => {
 		const accountInfo = nock('https://api.wotblitz.com')
 			.post('/wotb/clans/accountinfo/', {
 				account_id: '10996727',
-				application_id: process.env.APPLICATION_ID,
+				application_id,
 				extra: '',
 				fields: 'clan_id',
 				language: 'en'
