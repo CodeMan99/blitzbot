@@ -1,5 +1,6 @@
 {
   "unreleased": [
+    "Add VSCode devcontainer.",
     "Remove faucet."
   ],
   "3.5.1": [
