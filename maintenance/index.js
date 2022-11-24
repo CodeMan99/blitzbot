@@ -36,7 +36,7 @@ Object.defineProperty(Maintenance.prototype, 'region', {
 		if (region in this.regions) {
 			this.activeRegion = region;
 		} else {
-			const error =  new Error('Invalid region value: ' + region);
+			const error = new Error('Invalid region value: ' + region);
 
 			error.code = 'EREGION';
 			this.activeRegion = null;

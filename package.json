@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "test": "cross-env APPLICATION_ID=test-app-id-invalid tape test/*.js",
-    "lint": "eslint bin/*.js lib/*.js lib/command/*.js test/*.js test/mocks/*.js *.json"
+    "lint": "eslint bin/*.js lib/*.js lib/command/*.js test/*.js test/mocks/*.js maintenance/*.js *.json"
   },
   "repository": {
     "type": "git",
