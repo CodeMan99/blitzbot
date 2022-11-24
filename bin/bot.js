@@ -62,7 +62,7 @@ client.on('ready', () => {
 	console.error('===============');
 });
 
-client.on('message', message => {
+client.on('message', async (message) => {
 	// Bot will only respond in a DM or when mentioned.
 	if (message.channel.type !== 'dm' && !message.mentions.has(client.user)) return;
 	if (message.author.id === client.user.id || message.author.bot) return;
@@ -112,64 +112,57 @@ client.on('message', message => {
 	// when the command is not "help" and this is a text channel, check for write privledges
 	if (command !== 'help' && perms !== true && !perms.has('SEND_MESSAGES')) return;
 
-	Promise.resolve(region).then(settledRegion => {
+	try {
+		const settledRegion = await Promise.resolve(region);
 		const commands = regions[settledRegion];
 		const db = commands.db;
 		const {argCount, argSplit, passRecord} = commands[command].options;
 		const textArgs = text.slice(end).trim();
 		const args = textArgs && argCount > 0 ? textArgs.split(argSplit).slice(0, argCount) : [];
 
-		let run;
-
 		console.log(id + ' -- running command: "' + command + '"');
 
 		if (passRecord) {
-			run = db.findOne({_id: userId}).then(record => {
-				// commands require a saved 'account_id'.
-				if (record && record.account_id) {
-					return commands[command](message, record, ...args);
-				} else {
-					return message.reply('I don\'t know who you are! Do `@' + client.user.username + ' add <screen-name>` first.')
-						.then(sent => {
-							console.log(id + ' -- sent msg: ' + sent);
+			const record = await db.findOne({_id: userId});
 
-							return null;
-						});
-				}
-			});
-		} else {
-			run = commands[command](message, ...args);
+			// commands require a saved 'account_id'.
+			if (record && record.account_id) {
+				args.unshift(record);
+			} else {
+				await message.reply('I don\'t know who you are! Do `@' + client.user.username + ' add <screen-name>` first.');
+
+				return;
+			}
 		}
 
-		return Promise.all([run, db]);
-	}).then(([result, db]) => {
-		if (!result) return;
+		const result = await commands[command](message, ...args);
 
 		console.log(id + ' -- sent msg: ' + helpers.messageToString(result.sentMsg));
 
-		const update = result.updateFields;
+		if (result.updateFields) {
+			const update = result.updateFields;
 
-		if (!update) return;
-		if (result.master) {
-			db = master;
+			// add '_id' and remove 'updatedAt' so that upserting works every time, safely.
+			update._id = userId;
+			delete update.updatedAt;
+
+			if (result.master) {
+				console.log(id + ' -- update document ' + master.filename);
+				await master.update({_id: userId}, {$set: update}, {upsert: true});
+			} else {
+				console.log(id + ' -- update document ' + db.filename);
+				await db.update({_id: userId}, {$set: update}, {upsert: true});
+			}
 		}
-
-		console.log(id + ' -- update document ' + db.filename);
-
-		// add '_id' and remove 'updatedAt' so that upserting works every time, safely.
-		update._id = userId;
-		delete update.updatedAt;
-
-		return db.update({_id: userId}, {$set: update}, {upsert: true});
-	}).then(() => {
-		console.log(id + ' -- done: ' + command);
-	}).catch(error => {
+	} catch (error) {
 		console.error(id + ' -- error: ' + command);
 
 		if (!error) return console.log(id + ' -- error: Unknown');
 
 		console.error(helpers.getFieldByPath(error, 'response.error.text') || error.stack || error);
-	});
+	} finally {
+		console.log(id + ' -- done: ' + command);
+	}
 });
 
 Promise.all([
