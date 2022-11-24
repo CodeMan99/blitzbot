@@ -1,5 +1,14 @@
 {
   "unreleased": [
+    "Upgrade eslint to 8.28.0",
+    "Upgrade eslint-plugin-json to 3.1.0",
+    "Upgrade discord/erlpack",
+    "Upgrade tape to 5.6.1",
+    "Upgrade nock to 13.2.9",
+    "Upgrade cross-env to 7.0.3",
+    "Upgrade remove-accents to 0.4.4",
+    "Upgrade bufferutil to 4.0.7",
+    "Upgrade async to 3.2.4",
     "Add VSCode devcontainer.",
     "Remove faucet."
   ],
