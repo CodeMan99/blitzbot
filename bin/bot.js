@@ -62,7 +62,7 @@ client.on('ready', () => {
 	console.error('===============');
 });
 
-client.on('message', async (message) => {
+client.on('message', async message => {
 	// Bot will only respond in a DM or when mentioned.
 	if (message.channel.type !== 'dm' && !message.mentions.has(client.user)) return;
 	if (message.author.id === client.user.id || message.author.bot) return;
