@@ -39,7 +39,7 @@
     "eslint": "^7.10.0",
     "eslint-plugin-json": "^2.1.2",
     "mockery": "^2.1.0",
-    "nock": "^13.2.4",
+    "nock": "^13.2.9",
     "tape": "^5.5.3"
   }
 }

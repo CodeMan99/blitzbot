@@ -1,5 +1,6 @@
 {
   "unreleased": [
+    "Upgrade nock to 13.2.9",
     "Upgrade cross-env to 7.0.3",
     "Upgrade remove-accents to 0.4.4",
     "Upgrade bufferutil to 4.0.7",
