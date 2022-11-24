@@ -1,5 +1,6 @@
 {
   "unreleased": [
+    "Upgrade async to 3.2.4",
     "Add VSCode devcontainer.",
     "Remove faucet."
   ],
