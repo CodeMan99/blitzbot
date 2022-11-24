@@ -106,6 +106,7 @@ UpdateWinRate.prototype.updateAll = function(regionName, callback) {
 				};
 
 				for (const record of records) {
+					// eslint-disable-next-line eqeqeq
 					if (info[record.account_id] != null) {
 						const all = info[record.account_id].statistics.all;
 
