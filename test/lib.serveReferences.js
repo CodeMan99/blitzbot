@@ -4,20 +4,22 @@ const inspectHandle = {};
 
 process.title = 'testbot';
 
-function SocketMock() {
-	this.bytesRead = 0;
-	this.bytesWritten = 0;
+class SocketMock {
+	constructor() {
+		this.bytesRead = 0;
+		this.bytesWritten = 0;
+	}
+
+	write(s) {
+		this.bytesWritten += s.length;
+	}
+
+	read(buf) {
+		this.bytesRead += buf.length;
+	}
+
+	unref() { }
 }
-
-SocketMock.prototype.write = function(s) {
-	this.bytesWritten += s.length;
-};
-
-SocketMock.prototype.read = function(buf) {
-	this.bytesRead += buf.length;
-};
-
-SocketMock.prototype.unref = function() {};
 
 mockery.registerAllowable('../lib/serveReferences.js');
 mockery.registerMock('net', {

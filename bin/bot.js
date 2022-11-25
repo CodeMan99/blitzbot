@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const {Commands} = require('../lib/command');
-const Datastore = require('nedb');
+const Datastore = require('../lib/datastore.js');
 const Discord = require('discord.js');
 const auth = require('../blitzbot.json');
 const helpers = require('../lib/helpers.js');
@@ -62,7 +62,7 @@ client.on('ready', () => {
 	console.error('===============');
 });
 
-client.on('message', message => {
+client.on('message', async message => {
 	// Bot will only respond in a DM or when mentioned.
 	if (message.channel.type !== 'dm' && !message.mentions.has(client.user)) return;
 	if (message.author.id === client.user.id || message.author.bot) return;
@@ -88,12 +88,8 @@ client.on('message', message => {
 			region = regionLetter[region];
 		}
 	} else {
-		region = new Promise((resolve, reject) => {
-			master.findOne({_id: userId}, (error, record) => {
-				if (error) return reject(error);
-
-				resolve((record && record.region) || auth.wotblitz.default_region || 'na');
-			});
+		region = master.findOne({_id: userId}).then(record => {
+			return (record && record.region) || auth.wotblitz.default_region || 'na';
 		});
 	}
 
@@ -116,90 +112,65 @@ client.on('message', message => {
 	// when the command is not "help" and this is a text channel, check for write privledges
 	if (command !== 'help' && perms !== true && !perms.has('SEND_MESSAGES')) return;
 
-	Promise.resolve(region).then(settledRegion => {
+	try {
+		const settledRegion = await Promise.resolve(region);
 		const commands = regions[settledRegion];
 		const db = commands.db;
 		const {argCount, argSplit, passRecord} = commands[command].options;
 		const textArgs = text.slice(end).trim();
 		const args = textArgs && argCount > 0 ? textArgs.split(argSplit).slice(0, argCount) : [];
 
-		let run;
-
 		console.log(id + ' -- running command: "' + command + '"');
 
 		if (passRecord) {
-			run = new Promise((resolve, reject) => {
-				db.findOne({_id: userId}, (error, record) => {
-					if (error) return reject(error);
+			const record = await db.findOne({_id: userId});
 
-					// commands require a saved 'account_id'.
-					if (record && record.account_id) {
-						resolve(commands[command](message, record, ...args));
-					} else {
-						resolve(message.reply('I don\'t know who you are! Do `@' + client.user.username + ' add <screen-name>` first.')
-							.then(sent => {
-								console.log(id + ' -- sent msg: ' + sent);
+			// commands require a saved 'account_id'.
+			if (record && record.account_id) {
+				args.unshift(record);
+			} else {
+				await message.reply('I don\'t know who you are! Do `@' + client.user.username + ' add <screen-name>` first.');
 
-								return null;
-							}));
-					}
-				});
-			});
-		} else {
-			run = commands[command](message, ...args);
+				return;
+			}
 		}
 
-		return Promise.all([run, db]);
-	}).then(([result, db]) => {
-		if (!result) return;
+		const result = await commands[command](message, ...args);
 
 		console.log(id + ' -- sent msg: ' + helpers.messageToString(result.sentMsg));
 
-		const update = result.updateFields;
+		if (result.updateFields) {
+			const update = result.updateFields;
 
-		if (!update) return;
-		if (result.master) {
-			db = master;
+			// add '_id' and remove 'updatedAt' so that upserting works every time, safely.
+			update._id = userId;
+			delete update.updatedAt;
+
+			if (result.master) {
+				console.log(id + ' -- update document ' + master.filename);
+				await master.update({_id: userId}, {$set: update}, {upsert: true});
+			} else {
+				console.log(id + ' -- update document ' + db.filename);
+				await db.update({_id: userId}, {$set: update}, {upsert: true});
+			}
 		}
-
-		console.log(id + ' -- update document ' + db.filename);
-
-		// add '_id' and remove 'updatedAt' so that upserting works every time, safely.
-		update._id = userId;
-		delete update.updatedAt;
-
-		return new Promise((resolve, reject) => {
-			db.update({_id: userId}, {$set: update}, {upsert: true}, error => {
-				if (error) return reject(error);
-				resolve();
-			});
-		});
-	}).then(() => {
-		console.log(id + ' -- done: ' + command);
-	}).catch(error => {
+	} catch (error) {
 		console.error(id + ' -- error: ' + command);
 
 		if (!error) return console.log(id + ' -- error: Unknown');
 
 		console.error(helpers.getFieldByPath(error, 'response.error.text') || error.stack || error);
-	});
+	} finally {
+		console.log(id + ' -- done: ' + command);
+	}
 });
 
-function loadDatabase(commands) {
-	return new Promise((resolve, reject) => {
-		commands.db.loadDatabase(error => {
-			if (error) return reject(error);
-			resolve();
-		});
-	});
-}
-
 Promise.all([
-	loadDatabase(regions.na),
-	loadDatabase(regions.eu),
-	loadDatabase(regions.ru),
-	loadDatabase(regions.asia),
-	loadDatabase({db: master}),
+	regions.na.db.loadDatabase(),
+	regions.eu.db.loadDatabase(),
+	regions.ru.db.loadDatabase(),
+	regions.asia.db.loadDatabase(),
+	master.loadDatabase(),
 	client.login(auth.user.token)
 ]).then(() => {
 	const exposeReferences = {
