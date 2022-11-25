@@ -1,5 +1,6 @@
 {
   "unreleased": [
+    "Change to async / await patterns."
   ],
   "3.5.2": [
     "Upgrade eslint to 8.28.0",
