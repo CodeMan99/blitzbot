@@ -1,5 +1,6 @@
 const test = require('tape');
 const nock = require('nock');
+const {autoEndTest} = require('./.utility.js');
 const mocks = require('./mocks');
 const roster = require('../lib/command/roster.js');
 const callRoster = roster.fn.bind(mocks.commands);
@@ -20,7 +21,7 @@ test('command.roster', t => {
 
 	t.equal(roster.name, 'roster', 'verify Commands method name');
 
-	t.test('no argument, clan_id *not* in database', st => {
+	t.test('no argument, clan_id *not* in database', autoEndTest(async st => {
 		const accountInfo = nock('https://api.wotblitz.com')
 			.post('/wotb/clans/accountinfo/', {
 				account_id: '10996722',
@@ -86,26 +87,21 @@ test('command.roster', t => {
 					}
 				}
 			});
-
-		callRoster(mocks.createMessage(null, 'maker84 [TANKS]'), {
+		const result = await callRoster(mocks.createMessage(null, 'maker84 [TANKS]'), {
 			account_id: 10996722
-		}).then(result => {
-			st.deepEqual(result, {
-				sentMsg: '@maker84 [TANKS], The roster for `Love our Tanks` is: **mocker2**, *joker47*, baker12, maker84',
-				updateFields: {
-					clan_id: 82
-				}
-			}, 'replies and indicates a record update');
-
-			st.ok(accountInfo.isDone() && clanInfo.isDone(), 'made two wotblitz api calls');
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
 		});
-	});
 
-	t.test('no argument, clan_id in database', st => {
+		st.deepEqual(result, {
+			sentMsg: '@maker84 [TANKS], The roster for `Love our Tanks` is: **mocker2**, *joker47*, baker12, maker84',
+			updateFields: {
+				clan_id: 82
+			}
+		}, 'replies and indicates a record update');
+
+		st.ok(accountInfo.isDone() && clanInfo.isDone(), 'made two wotblitz api calls');
+	}));
+
+	t.test('no argument, clan_id in database', autoEndTest(async st => {
 		const clanInfo = nock('https://api.wotblitz.com')
 			.post('/wotb/clans/info/', {
 				application_id,
@@ -140,27 +136,22 @@ test('command.roster', t => {
 					}
 				}
 			});
-
-		callRoster(mocks.createMessage(null, 'magie~67 [BANG]'), {
+		const result = await callRoster(mocks.createMessage(null, 'magie~67 [BANG]'), {
 			clan_id: 3,
 			account_id: 10996723
-		}).then(result => {
-			st.deepEqual(result, {
-				sentMsg: '@magie~67 [BANG], The roster for `Big Bang Theory` is: **magie\\~67**, *player\\_10996688*',
-				updateFields: {
-					clan_id: 3
-				}
-			}, 'replies and indicates a record update');
-
-			st.ok(clanInfo.isDone(), 'made wotblitz api call');
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
 		});
-	});
 
-	t.test('valid tag argument', st => {
+		st.deepEqual(result, {
+			sentMsg: '@magie~67 [BANG], The roster for `Big Bang Theory` is: **magie\\~67**, *player\\_10996688*',
+			updateFields: {
+				clan_id: 3
+			}
+		}, 'replies and indicates a record update');
+
+		st.ok(clanInfo.isDone(), 'made wotblitz api call');
+	}));
+
+	t.test('valid tag argument', autoEndTest(async st => {
 		const clanList = nock('https://api.wotblitz.com')
 			.post('/wotb/clans/list/', {
 				application_id,
@@ -250,45 +241,36 @@ test('command.roster', t => {
 					}
 				}
 			});
-
-		callRoster(mocks.createMessage(null, 'greg14 [DNFX2]'), {
+		const result = await callRoster(mocks.createMessage(null, 'greg14 [DNFX2]'), {
 			account_id: 10996724
-		}, 'DNFX').then(result => {
-			st.deepEqual(result, {
-				sentMsg: [
-					'@greg14 [DNFX2], ',
-					'The roster for `Den Fox 1` is: ',
-					'**Commander**, ',
-					'*Officer\\*1*, ',
-					'*Officer\\*2*, ',
-					'Private\\_1, ',
-					'Private\\_2, ',
-					'Private\\_3, ',
-					'Private\\_4'
-				].join('')
-			}, 'valid response, respecting order of rank and join date, formatting as needed');
+		}, 'DNFX');
 
-			st.ok(clanList.isDone() && clanInfo.isDone(), 'made two wotblitz api calls');
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		st.deepEqual(result, {
+			sentMsg: [
+				'@greg14 [DNFX2], ',
+				'The roster for `Den Fox 1` is: ',
+				'**Commander**, ',
+				'*Officer\\*1*, ',
+				'*Officer\\*2*, ',
+				'Private\\_1, ',
+				'Private\\_2, ',
+				'Private\\_3, ',
+				'Private\\_4'
+			].join('')
+		}, 'valid response, respecting order of rank and join date, formatting as needed');
 
-	t.test('invalid tag format argument', st => {
-		callRoster(mocks.createMessage(null, 'jake3 [NOAME]'), {
+		st.ok(clanList.isDone() && clanInfo.isDone(), 'made two wotblitz api calls');
+	}));
+
+	t.test('invalid tag format argument', autoEndTest(async st => {
+		const result = await callRoster(mocks.createMessage(null, 'jake3 [NOAME]'), {
 			account_id: 10996725
-		}, 'NO@ME').then(result => {
-			st.notOk(result, 'resolved without a response');
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		}, 'NO@ME');
 
-	t.test('valid tag argument, but empty result', st => {
+		st.notOk(result, 'resolved without a response');
+	}));
+
+	t.test('valid tag argument, but empty result', autoEndTest(async st => {
 		const clanList = nock('https://api.wotblitz.com')
 			.post('/wotb/clans/list/', {
 				application_id,
@@ -305,20 +287,15 @@ test('command.roster', t => {
 				},
 				data: []
 			});
-
-		callRoster(mocks.createMessage(null, 'bill3 [NOT22]'), {
+		const result = await callRoster(mocks.createMessage(null, 'bill3 [NOT22]'), {
 			account_id: 10996726
-		}, 'NOT23').then(result => {
-			st.notOk(result, 'resolved without a response');
-			st.ok(clanList.isDone(), 'made wotblitz api call');
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		}, 'NOT23');
 
-	t.test('valid tag argument, but no clan found', st => {
+		st.notOk(result, 'resolved without a response');
+		st.ok(clanList.isDone(), 'made wotblitz api call');
+	}));
+
+	t.test('valid tag argument, but no clan found', autoEndTest(async st => {
 		const clanList = nock('https://api.wotblitz.com')
 			.post('/wotb/clans/list/', {
 				application_id,
@@ -344,20 +321,15 @@ test('command.roster', t => {
 					tag: 'NOT2B'
 				}]
 			});
-
-		callRoster(mocks.createMessage(null, 'jake3 [NOT21]'), {
+		const result = await callRoster(mocks.createMessage(null, 'jake3 [NOT21]'), {
 			account_id: 10996726
-		}, 'NOT21').then(result => {
-			st.notOk(result, 'resolved without a response');
-			st.ok(clanList.isDone(), 'made wotblitz api call');
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		}, 'NOT21');
 
-	t.test('no argument, but not in a clan', st => {
+		st.notOk(result, 'resolved without a response');
+		st.ok(clanList.isDone(), 'made wotblitz api call');
+	}));
+
+	t.test('no argument, but not in a clan', autoEndTest(async st => {
 		const accountInfo = nock('https://api.wotblitz.com')
 			.post('/wotb/clans/accountinfo/', {
 				account_id: '10996727',
@@ -375,18 +347,13 @@ test('command.roster', t => {
 					'10996727': null
 				}
 			});
-
-		callRoster(mocks.createMessage(null, 'frogger8 [MYTH]'), {
+		const result = await callRoster(mocks.createMessage(null, 'frogger8 [MYTH]'), {
 			account_id: 10996727
-		}).then(result => {
-			st.notOk(result, 'resolved without a response');
-			st.ok(accountInfo.isDone(), 'made wotblitz api call');
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
 		});
-	});
+
+		st.notOk(result, 'resolved without a response');
+		st.ok(accountInfo.isDone(), 'made wotblitz api call');
+	}));
 
 	t.end();
 });
