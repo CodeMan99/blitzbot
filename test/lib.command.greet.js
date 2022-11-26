@@ -1,4 +1,5 @@
 const test = require('tape');
+const {autoEndTest} = require('./.utility.js');
 const mocks = require('./mocks');
 const greet = require('../lib/command/greet.js');
 const callHello = greet.hello.fn.bind(mocks.commands);
@@ -18,12 +19,11 @@ test('greet.hello', t => {
 
 	t.equal(greet.hello.name, 'hello', 'verify Commands method name');
 
-	t.test('greet.hello call', st => {
-		callHello(mocks.createMessage(null, 'zack32')).then(result => {
-			st.deepEqual(result, {sentMsg: '@zack32, Hello! Try saying `@testbot help` to learn about me'}, 'valid response');
-			st.end();
-		}, error => { st.fail(error); st.end(); });
-	});
+	t.test('greet.hello call', autoEndTest(async st => {
+		const result = await callHello(mocks.createMessage(null, 'zack32'));
+
+		st.deepEqual(result, {sentMsg: '@zack32, Hello! Try saying `@testbot help` to learn about me'}, 'valid response');
+	}));
 
 	t.end();
 });
