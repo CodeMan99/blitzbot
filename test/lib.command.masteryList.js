@@ -1,5 +1,6 @@
 const test = require('tape');
 const nock = require('nock');
+const {autoEndTest} = require('./.utility.js');
 const mocks = require('./mocks');
 const masteryList = require('../lib/command/masteryList.js');
 const callMasteryList = masteryList.fn.bind(mocks.commands);
@@ -20,7 +21,7 @@ test('command.masteryList', t => {
 
 	t.equal(masteryList.name, 'mastery-list', 'verify Commands method name');
 
-	t.test('no argument default', st => {
+	t.test('no argument default', autoEndTest(async st => {
 		nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
@@ -98,26 +99,21 @@ test('command.masteryList', t => {
 				}
 			});
 
-		callMasteryList(mocks.createMessage(null, 'john2 [TC]'), {
+		const result = await callMasteryList(mocks.createMessage(null, 'john2 [TC]'), {
 			nickname: 'john2',
 			account_id: 100991240
-		}).then(result => {
-			st.deepEqual(result, {
-				sentMsg: [
-					'@john2 [TC], T-34 (ussr, 5)',
-					'T1 Heavy (usa, 5)',
-					'You have 2 tanks at Mastery, 20.00% of your 10 total tanks.'
-				].join('\n')
-			}, 'responds with the "Mastery" list');
-
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
 		});
-	});
 
-	t.test('list "none"', st => {
+		st.deepEqual(result, {
+			sentMsg: [
+				'@john2 [TC], T-34 (ussr, 5)',
+				'T1 Heavy (usa, 5)',
+				'You have 2 tanks at Mastery, 20.00% of your 10 total tanks.'
+			].join('\n')
+		}, 'responds with the "Mastery" list');
+	}));
+
+	t.test('list "none"', autoEndTest(async st => {
 		nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
@@ -203,27 +199,22 @@ test('command.masteryList', t => {
 				}
 			});
 
-		callMasteryList(mocks.createMessage(null, 'bill4 [TC]'), {
+		const result = await callMasteryList(mocks.createMessage(null, 'bill4 [TC]'), {
 			nickname: 'bill4',
 			account_id: 100991241
-		}, 'none').then(result => {
-			st.deepEqual(result, {
-				sentMsg: [
-					'@bill4 [TC], Löwe (germany, 8)',
-					'Centurion Mk. I (uk, 8)',
-					'STA-1 (japan, 8)',
-					'You have 3 tanks at None, 27.27% of your 11 total tanks.'
-				].join('\n')
-			}, 'responds with the "None" list');
+		}, 'none');
 
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		st.deepEqual(result, {
+			sentMsg: [
+				'@bill4 [TC], Löwe (germany, 8)',
+				'Centurion Mk. I (uk, 8)',
+				'STA-1 (japan, 8)',
+				'You have 3 tanks at None, 27.27% of your 11 total tanks.'
+			].join('\n')
+		}, 'responds with the "None" list');
+	}));
 
-	t.test('list "3rd class"', st => {
+	t.test('list "3rd class"', autoEndTest(async st => {
 		nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
@@ -318,27 +309,22 @@ test('command.masteryList', t => {
 				}
 			});
 
-		callMasteryList(mocks.createMessage(null, 'greg3 [TC]'), {
+		const result = await callMasteryList(mocks.createMessage(null, 'greg3 [TC]'), {
 			nickname: 'greg3',
 			account_id: 100991242
-		}, '3rd class').then(result => {
-			st.deepEqual(result, {
-				sentMsg: [
-					'@greg3 [TC], T-26 (ussr, 2)',
-					'Pz.Kpfw. II (germany, 2)',
-					'T2 Medium Tank (usa, 2)',
-					'You have 3 tanks at 3rd class, 21.43% of your 14 total tanks.'
-				].join('\n')
-			}, 'responds with the "3rd class" list');
+		}, '3rd class');
 
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		st.deepEqual(result, {
+			sentMsg: [
+				'@greg3 [TC], T-26 (ussr, 2)',
+				'Pz.Kpfw. II (germany, 2)',
+				'T2 Medium Tank (usa, 2)',
+				'You have 3 tanks at 3rd class, 21.43% of your 14 total tanks.'
+			].join('\n')
+		}, 'responds with the "3rd class" list');
+	}));
 
-	t.test('list "2nd class"', st => {
+	t.test('list "2nd class"', autoEndTest(async st => {
 		nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
@@ -440,29 +426,24 @@ test('command.masteryList', t => {
 				}
 			});
 
-		callMasteryList(mocks.createMessage(null, 'dude9 [TC]'), {
+		const result = await callMasteryList(mocks.createMessage(null, 'dude9 [TC]'), {
 			nickname: 'dude9',
 			account_id: 100991243
-		}, '2nd class').then(result => {
-			st.deepEqual(result, {
-				sentMsg: [
-					'@dude9 [TC], BT-2 (ussr, 2)',
-					'Pz.Kpfw. II Ausf. G (germany, 3)',
-					'Vickers Medium Mk. II (uk, 2)',
-					'M2 Medium Tank (usa, 3)',
-					'Pz.Kpfw. 38 t (germany, 3)',
-					'You have 5 tanks at 2nd class, 38.46% of your 13 total tanks.'
-				].join('\n')
-			}, 'responds with the "2nd class" list');
+		}, '2nd class');
 
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		st.deepEqual(result, {
+			sentMsg: [
+				'@dude9 [TC], BT-2 (ussr, 2)',
+				'Pz.Kpfw. II Ausf. G (germany, 3)',
+				'Vickers Medium Mk. II (uk, 2)',
+				'M2 Medium Tank (usa, 3)',
+				'Pz.Kpfw. 38 t (germany, 3)',
+				'You have 5 tanks at 2nd class, 38.46% of your 13 total tanks.'
+			].join('\n')
+		}, 'responds with the "2nd class" list');
+	}));
 
-	t.test('list "1st class"', st => {
+	t.test('list "1st class"', autoEndTest(async st => {
 		nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
@@ -554,27 +535,22 @@ test('command.masteryList', t => {
 				}
 			});
 
-		callMasteryList(mocks.createMessage(null, 'bigjoe [TC]'), {
+		const result = await callMasteryList(mocks.createMessage(null, 'bigjoe [TC]'), {
 			nickname: 'bigjoe',
 			account_id: 100991244
-		}, '1st class').then(result => {
-			st.deepEqual(result, {
-				sentMsg: [
-					'@bigjoe [TC], M4 Sherman (usa, 5)',
-					'Covenanter (uk, 4)',
-					'Type 3 Chi-Nu Kai (japan, 5)',
-					'You have 3 tanks at 1st class, 23.08% of your 13 total tanks.'
-				].join('\n')
-			}, 'responds with the "1st class" list');
+		}, '1st class');
 
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		st.deepEqual(result, {
+			sentMsg: [
+				'@bigjoe [TC], M4 Sherman (usa, 5)',
+				'Covenanter (uk, 4)',
+				'Type 3 Chi-Nu Kai (japan, 5)',
+				'You have 3 tanks at 1st class, 23.08% of your 13 total tanks.'
+			].join('\n')
+		}, 'responds with the "1st class" list');
+	}));
 
-	t.test('list "m"', st => {
+	t.test('list "m"', autoEndTest(async st => {
 		nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
@@ -673,39 +649,30 @@ test('command.masteryList', t => {
 				}
 			});
 
-		callMasteryList(mocks.createMessage(null, 'lilgal [TC]'), {
+		const result = await callMasteryList(mocks.createMessage(null, 'lilgal [TC]'), {
 			nickname: 'lilgal',
 			account_id: 100991245
-		}, 'm').then(result => {
-			st.deepEqual(result, {
-				sentMsg: [
-					'@lilgal [TC], T-34 (ussr, 5)',
-					'T1 Heavy (usa, 5)',
-					'You have 2 tanks at Mastery, 11.76% of your 17 total tanks.'
-				].join('\n')
-			}, 'responds with the "Mastery" list');
+		}, 'm');
 
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		st.deepEqual(result, {
+			sentMsg: [
+				'@lilgal [TC], T-34 (ussr, 5)',
+				'T1 Heavy (usa, 5)',
+				'You have 2 tanks at Mastery, 11.76% of your 17 total tanks.'
+			].join('\n')
+		}, 'responds with the "Mastery" list');
+	}));
 
-	t.test('invalid level argument', st => {
-		callMasteryList(mocks.createMessage(null, 'jake48 [TC]'), {
+	t.test('invalid level argument', autoEndTest(async st => {
+		const result = await callMasteryList(mocks.createMessage(null, 'jake48 [TC]'), {
 			nickname: 'jake48',
 			account_id: 100991246
-		}, 'third class').then(result => {
-			st.notOk(result, 'resolved without a response');
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		}, 'third class');
 
-	t.test('empty list', st => {
+		st.notOk(result, 'resolved without a response');
+	}));
+
+	t.test('empty list', autoEndTest(async st => {
 		nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
@@ -777,22 +744,17 @@ test('command.masteryList', t => {
 				}
 			});
 
-		callMasteryList(mocks.createMessage(null, 'bill93 [TC]'), {
+		const result = await callMasteryList(mocks.createMessage(null, 'bill93 [TC]'), {
 			nickname: 'bill93',
 			account_id: 100991247
-		}, 'n').then(result => {
-			st.deepEqual(result, {
-				sentMsg: '@bill93 [TC], I did *not* find any tanks at "None".'
-			}, 'responds with text saying no tank was found');
+		}, 'n');
 
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		st.deepEqual(result, {
+			sentMsg: '@bill93 [TC], I did *not* find any tanks at "None".'
+		}, 'responds with text saying no tank was found');
+	}));
 
-	t.test('long list (higher than 100 limit of tankopedia endpoint)', st => {
+	t.test('long list (higher than 100 limit of tankopedia endpoint)', autoEndTest(async st => {
 		const count = Math.floor(Math.random() * 99) + 101; // [101,200)
 		const tankStats = nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
@@ -862,32 +824,24 @@ test('command.masteryList', t => {
 					return dataObj;
 				}, {})
 			});
-
-		callMasteryList(mocks.createMessage(null, 'tanker2 [TC]'), {
+		const result = await callMasteryList(mocks.createMessage(null, 'tanker2 [TC]'), {
 			nickname: 'tanker2',
 			account_id: 100991248
-		}, '1st').then(result => {
-			st.ok(result.sentMsg.length > 1, 'sent multiple messages');
+		}, '1st');
+		const lineCount = result.sentMsg.join('\n').split('\n').length;
 
-			const lineCount = result.sentMsg.join('\n').split('\n').length;
+		st.ok(result.sentMsg.length > 1, 'sent multiple messages');
+		st.equal(lineCount, count + 1, 'responded with the expected number of lines');
+		st.equal(
+			result.sentMsg[result.sentMsg.length - 1],
+			'@tanker2 [TC], You have ' + count + ' tanks at 1st class, 100.00% of your ' + count + ' total tanks.',
+			'last line of the response is correct'
+		);
 
-			st.equal(lineCount, count + 1, 'responded with the expected number of lines');
-			st.equal(
-				result.sentMsg[result.sentMsg.length - 1],
-				'@tanker2 [TC], You have ' + count + ' tanks at 1st class, 100.00% of your ' + count + ' total tanks.',
-				'last line of the response is correct'
-			);
+		st.ok(tankStats.isDone() && tankopedia1.isDone() && tankopedia2.isDone(), 'three requests were made');
+	}));
 
-			st.ok(tankStats.isDone() && tankopedia1.isDone() && tankopedia2.isDone(), 'three requests were made');
-
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
-
-	t.test('Missing tank_id', st => {
+	t.test('Missing tank_id', autoEndTest(async st => {
 		const tankStats = nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
@@ -927,26 +881,20 @@ test('command.masteryList', t => {
 					'32786': null
 				}
 			});
-
-		callMasteryList(mocks.createMessage(null, 'youbounced [TC]'), {
+		const result = await callMasteryList(mocks.createMessage(null, 'youbounced [TC]'), {
 			nickname: 'youbounced',
 			account_id: 100991249
-		}, 'm').then(result => {
-			st.deepEqual(result, {
-				sentMsg: [
-					'@youbounced [TC], Vehicle not in tankopedia, 32786.',
-					'You have 1 tanks at Mastery, 100.00% of your 1 total tanks.'
-				].join('\n')
-			}, 'responds with the "Mastery" list');
+		}, 'm');
 
-			st.ok(tankStats.isDone() && tankopedia.isDone(), 'two requests were made');
+		st.deepEqual(result, {
+			sentMsg: [
+				'@youbounced [TC], Vehicle not in tankopedia, 32786.',
+				'You have 1 tanks at Mastery, 100.00% of your 1 total tanks.'
+			].join('\n')
+		}, 'responds with the "Mastery" list');
 
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		st.ok(tankStats.isDone() && tankopedia.isDone(), 'two requests were made');
+	}));
 
 	t.end();
 });
