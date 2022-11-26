@@ -1,5 +1,6 @@
 const test = require('tape');
 const nock = require('nock');
+const {autoEndTest} = require('./.utility.js');
 const mocks = require('./mocks');
 const maxXp = require('../lib/command/maxXp');
 const callMaxXp = maxXp.fn.bind(mocks.commands);
@@ -15,7 +16,7 @@ test('command.maxXp', t => {
 		signatures: ['@BOTNAME max-xp']
 	}, 'verify options');
 
-	t.test('call', st => {
+	t.test('call', autoEndTest(async st => {
 		const stats = nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
@@ -171,18 +172,13 @@ test('command.maxXp', t => {
 				'10, 900 xp: Cruiser Mk. III (uk, 2)'
 			].join('\n')
 		};
+		const result = await callMaxXp(mocks.createMessage(null, 'SillyGamer5'), {account_id: 1009634067});
 
-		callMaxXp(mocks.createMessage(null, 'SillyGamer5'), {account_id: 1009634067}).then(result => {
-			st.deepEqual(result, expected, 'verify response');
-			st.ok(stats.isDone() && vehicles.isDone(), 'made two api calls');
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		st.deepEqual(result, expected, 'verify response');
+		st.ok(stats.isDone() && vehicles.isDone(), 'made two api calls');
+	}));
 
-	t.test('vehicle not in tankopedia, only 3 vehicles', st => {
+	t.test('vehicle not in tankopedia, only 3 vehicles', autoEndTest(async st => {
 		const stats = nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
 				access_token: '',
@@ -251,16 +247,11 @@ test('command.maxXp', t => {
 				'3, 884 xp: T2 Medium (us, 2)'
 			].join('\n')
 		};
+		const result = await callMaxXp(mocks.createMessage(null, 'BigTanks'), {account_id: 1009823019});
 
-		callMaxXp(mocks.createMessage(null, 'BigTanks'), {account_id: 1009823019}).then(result => {
-			st.deepEqual(result, expected, 'verify response');
-			st.ok(stats.isDone() && vehicles.isDone(), 'made two api calls');
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		st.deepEqual(result, expected, 'verify response');
+		st.ok(stats.isDone() && vehicles.isDone(), 'made two api calls');
+	}));
 
 	t.end();
 });
