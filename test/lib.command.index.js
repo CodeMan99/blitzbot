@@ -1,4 +1,5 @@
 const test = require('tape');
+const {autoEndTest} = require('./.utility.js');
 const mocks = require('./mocks');
 const cmdModule = require('../lib/command/index.js');
 const Commands = cmdModule.Commands;
@@ -62,29 +63,27 @@ test('createHelp', t => {
 
 	const callHelp = help.fn.bind(mocks.commands);
 
-	t.test('call help command without collection', st => {
+	t.test('call help command without collection', autoEndTest(async st => {
 		st.equal(Commands.has('help'), false, 'verify help is not part of the collection');
 
-		callHelp(mocks.createMessage()).then(result => {
-			st.deepEqual(result, {
-				sentMsg: [
-					'`@testbot help [command]` -- List of all known commands or get help for a particular command.',
-					'`(in direct message) help [command]` -- List of all known commands or get help for a particular command.'
-				]
-			}, 'help adds its own description');
+		const result = await callHelp(mocks.createMessage());
 
-			st.end();
-		}, error => { st.fail(error); st.end(); });
-	});
+		st.deepEqual(result, {
+			sentMsg: [
+				'`@testbot help [command]` -- List of all known commands or get help for a particular command.',
+				'`(in direct message) help [command]` -- List of all known commands or get help for a particular command.'
+			]
+		}, 'help adds its own description');
+	}));
 
 	t.end();
 });
 
 test('Commands and help together.', t => {
-	Commands.add(new Command(function echo(msg) { // eslint-disable-line prefer-arrow-callback
-		return msg.channel.send(msg.content).then(sent => {
-			return {sentMsg: sent};
-		});
+	Commands.add(new Command(async function echo(msg) { // eslint-disable-line prefer-arrow-callback
+		const sent = await msg.channel.send(msg.content);
+
+		return {sentMsg: sent};
 	}, {
 		description: 'Echo whatever you say to me.',
 		signatures: ['@BOTNAME echo']
@@ -102,48 +101,41 @@ test('Commands and help together.', t => {
 	t.ok(commands.echo, 'has the echo command as a method');
 	t.ok(commands.help, 'has the help command as a method');
 
-	t.test('help, all commands', st => {
-		commands.help(mocks.createMessage()).then(result => {
-			st.deepEqual(result, {
-				sentMsg: [
-					'`@testbot1 echo` -- Echo whatever you say to me.',
-					'`@testbot1 help [command]` -- List of all known commands or get help for a particular command.',
-					'`(in direct message) help [command]` -- List of all known commands or get help for a particular command.'
-				]
-			}, 'help adds its own description.');
+	t.test('help, all commands', autoEndTest(async st => {
+		const result = await commands.help(mocks.createMessage());
 
-			st.end();
-		}, error => { st.fail(error); st.end(); });
-	});
+		st.deepEqual(result, {
+			sentMsg: [
+				'`@testbot1 echo` -- Echo whatever you say to me.',
+				'`@testbot1 help [command]` -- List of all known commands or get help for a particular command.',
+				'`(in direct message) help [command]` -- List of all known commands or get help for a particular command.'
+			]
+		}, 'help adds its own description.');
+	}));
 
-	t.test('help, the "echo" command', st => {
-		commands.help(mocks.createMessage(), 'echo').then(result => {
-			st.deepEqual(result, {
-				sentMsg: ['`@testbot1 echo` -- Echo whatever you say to me.']
-			}, 'help can tell about a specific command.');
+	t.test('help, the "echo" command', autoEndTest(async st => {
+		const result = await commands.help(mocks.createMessage(), 'echo');
 
-			st.end();
-		}, error => { st.fail(error); st.end(); });
-	});
+		st.deepEqual(result, {
+			sentMsg: ['`@testbot1 echo` -- Echo whatever you say to me.']
+		}, 'help can tell about a specific command.');
+	}));
 
-	t.test('help, non-existant command', st => {
+	t.test('help, non-existant command', autoEndTest(async st => {
 		st.equal(Commands.has('non-existant'), false, 'verify command does not exist');
 
-		commands.help(mocks.createMessage(), 'non-existant').then(result => {
-			st.deepEqual(result, {
-				sentMsg: ['Unknown command: non-existant']
-			}, 'response regardless of command');
+		const result = await commands.help(mocks.createMessage(), 'non-existant');
 
-			st.end();
-		}, error => { st.fail(error); st.end(); });
-	});
+		st.deepEqual(result, {
+			sentMsg: ['Unknown command: non-existant']
+		}, 'response regardless of command');
+	}));
 
-	t.test('call the "echo" command', st => {
-		commands.echo(mocks.createMessage('repeat after me')).then(result => {
-			st.deepEqual(result, {sentMsg: 'repeat after me'}, 'successful call to echo');
-			st.end();
-		}, error => { st.fail(error); st.end(); });
-	});
+	t.test('call the "echo" command', autoEndTest(async st => {
+		const result = await commands.echo(mocks.createMessage('repeat after me'));
+
+		st.deepEqual(result, {sentMsg: 'repeat after me'}, 'successful call to echo');
+	}));
 
 	t.end();
 });

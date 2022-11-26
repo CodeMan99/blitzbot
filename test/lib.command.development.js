@@ -1,5 +1,6 @@
 const test = require('tape');
 const mockery = require('mockery');
+const {autoEndTest} = require('./.utility.js');
 const mocks = require('./mocks');
 
 mockery.registerAllowable('./index.js');
@@ -39,40 +40,35 @@ test('development.changes', t => {
 
 	t.equal(dev.changes.name, 'changes', 'verify Commands method name');
 
-	t.test('no version argument', st => {
-		callChanges(mocks.createMessage(null, 'bill32')).then(result => {
-			st.deepEqual(result, {
-				sentMsg: [
-					'@bill32, Change Log for `testname`, version **1.3.4**.',
-					'change 2',
-					'change 1'
-				].join('\n')
-			}, 'sent message about current version');
+	t.test('no version argument', autoEndTest(async st => {
+		const result = await callChanges(mocks.createMessage(null, 'bill32'));
 
-			st.end();
-		}, error => { st.fail(error); st.end(); });
-	});
+		st.deepEqual(result, {
+			sentMsg: [
+				'@bill32, Change Log for `testname`, version **1.3.4**.',
+				'change 2',
+				'change 1'
+			].join('\n')
+		}, 'sent message about current version');
+	}));
 
-	t.test('valid version argument', st => {
-		callChanges(mocks.createMessage(null, 'greg14'), '1.3.3').then(result => {
-			st.deepEqual(result, {
-				sentMsg: [
-					'@greg14, Change Log for `testname`, version **1.3.3**.',
-					'fix 2',
-					'fix 1'
-				].join('\n')
-			}, 'sent message about specifed version');
+	t.test('valid version argument', autoEndTest(async st => {
+		const result = await callChanges(mocks.createMessage(null, 'greg14'), '1.3.3');
 
-			st.end();
-		}, error => { st.fail(error); st.end(); });
-	});
+		st.deepEqual(result, {
+			sentMsg: [
+				'@greg14, Change Log for `testname`, version **1.3.3**.',
+				'fix 2',
+				'fix 1'
+			].join('\n')
+		}, 'sent message about specifed version');
+	}));
 
-	t.test('invalid version argument', st => {
-		callChanges(mocks.createMessage(null, 'jack81'), '1.3.5').then(result => {
-			st.notOk(result, 'no response without error');
-			st.end();
-		}, error => { st.fail(error); st.end(); });
-	});
+	t.test('invalid version argument', autoEndTest(async st => {
+		const result = await callChanges(mocks.createMessage(null, 'jack81'), '1.3.5');
+
+		st.notOk(result, 'no response without error');
+	}));
 
 	t.end();
 });
@@ -88,15 +84,13 @@ test('development.version', t => {
 
 	t.equal(dev.changes.name, 'changes', 'verify Commands method name');
 
-	t.test('valid call', st => {
-		callVersion(mocks.createMessage(null, 'joe65')).then(result => {
-			st.deepEqual(result, {
-				sentMsg: '@joe65, testname version 1.3.4, written by <@86558039594774528>'
-			}, 'valid response.');
+	t.test('valid call', autoEndTest(async st => {
+		const result = await callVersion(mocks.createMessage(null, 'joe65'));
 
-			st.end();
-		}, error => { st.fail(error); st.end(); });
-	});
+		st.deepEqual(result, {
+			sentMsg: '@joe65, testname version 1.3.4, written by <@86558039594774528>'
+		}, 'valid response.');
+	}));
 
 	t.end();
 });

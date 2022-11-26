@@ -1,5 +1,6 @@
 const test = require('tape');
 const nock = require('nock');
+const {autoEndTest} = require('./.utility.js');
 const mocks = require('./mocks');
 const whoami = require('../lib/command/whoami.js');
 const callWhoami = (msg, record) => whoami.fn.call(mocks.commands, msg, record);
@@ -14,7 +15,7 @@ test('command.whoami', t => {
 		signatures: ['@BOTNAME whoami']
 	}, 'verify options');
 
-	t.test('nickname has not changed', st => {
+	t.test('nickname has not changed', autoEndTest(async st => {
 		const accountInfo = nock('https://api.wotblitz.com')
 			.post('/wotb/account/info/', {
 				access_token: '',
@@ -35,18 +36,13 @@ test('command.whoami', t => {
 					}
 				}
 			});
+		const result = await callWhoami(mocks.createMessage(null, 'cooldude01'), {account_id: 1008921043, nickname: 'cooldude01'});
 
-		callWhoami(mocks.createMessage(null, 'cooldude01'), {account_id: 1008921043, nickname: 'cooldude01'}).then(result => {
-			st.deepEqual(result, {sentMsg: '@cooldude01, You are using `cooldude01` (account_id: 1008921043)'}, 'replies');
-			st.ok(accountInfo.isDone(), 'made one wotblitz api call');
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		st.deepEqual(result, {sentMsg: '@cooldude01, You are using `cooldude01` (account_id: 1008921043)'}, 'replies');
+		st.ok(accountInfo.isDone(), 'made one wotblitz api call');
+	}));
 
-	t.test('nickname changed', st => {
+	t.test('nickname changed', autoEndTest(async st => {
 		const accountInfo = nock('https://api.wotblitz.com')
 			.post('/wotb/account/info/', {
 				access_token: '',
@@ -67,22 +63,17 @@ test('command.whoami', t => {
 					}
 				}
 			});
+		const result = await callWhoami(mocks.createMessage(null, 'SomeDude'), {account_id: 1008921054, nickname: 'bigdude08'});
 
-		callWhoami(mocks.createMessage(null, 'SomeDude'), {account_id: 1008921054, nickname: 'bigdude08'}).then(result => {
-			st.deepEqual(result, {
-				sentMsg: '@SomeDude, You are using `lamedude04` (account_id: 1008921054)',
-				updateFields: {
-					nickname: 'lamedude04'
-				}
-			}, 'replies and indicates to update nickname');
+		st.deepEqual(result, {
+			sentMsg: '@SomeDude, You are using `lamedude04` (account_id: 1008921054)',
+			updateFields: {
+				nickname: 'lamedude04'
+			}
+		}, 'replies and indicates to update nickname');
 
-			st.ok(accountInfo.isDone(), 'made one wotblitz api call');
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		st.ok(accountInfo.isDone(), 'made one wotblitz api call');
+	}));
 
 	t.end();
 });

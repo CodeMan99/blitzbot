@@ -1,5 +1,6 @@
 const test = require('tape');
 const mockery = require('mockery');
+const {autoEndTest} = require('./.utility.js');
 const mocks = require('./mocks');
 
 mockery.registerAllowable('./index.js');
@@ -29,14 +30,12 @@ test('donate', t => {
 
 	t.equal(donate.name, 'donate', 'verify Commands method name');
 
-	t.test('command', st => {
-		callDonate(mocks.createMessage(null, 'NiceDude [CL]')).then(result => {
-			const link = result.sentMsg.split(' ').slice(-1)[0];
+	t.test('command', autoEndTest(async st => {
+		const result = await callDonate(mocks.createMessage(null, 'NiceDude [CL]'));
+		const link = result.sentMsg.split(' ').slice(-1)[0];
 
-			st.equal(link, 'https://paypal.me/CodeMan99', 'link is at the end of reply');
-			st.end();
-		}, error => { st.fail(error); st.end(); });
-	});
+		st.equal(link, 'https://paypal.me/CodeMan99', 'link is at the end of reply');
+	}));
 
 	t.end();
 });
