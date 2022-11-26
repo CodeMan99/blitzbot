@@ -1,5 +1,6 @@
 const test = require('tape');
 const mockery = require('mockery');
+const {autoEndTest} = require('./.utility.js');
 const mocks = require('./mocks');
 
 mockery.registerAllowable('./index.js');
@@ -29,7 +30,7 @@ test('command.setRegion', t => {
 
 	t.equal(setRegion.name, 'set-region', 'verify Commands method name');
 
-	t.test('no argument', st => {
+	t.test('no argument', autoEndTest(async st => {
 		const msg = mocks.createMessage(null, 'mark');
 		const expected = {
 			sentMsg: '@mark, Region set to "na".',
@@ -38,13 +39,12 @@ test('command.setRegion', t => {
 				region: 'na'
 			}
 		};
+		const result = await callSetRegion(msg);
 
-		callSetRegion(msg)
-			.then(result => st.deepEqual(result, expected, 'sets the region "na"'), error => st.fail(error))
-			.then(() => st.end());
-	});
+		st.deepEqual(result, expected, 'sets the region "na"');
+	}));
 
-	t.test('set "na"', st => {
+	t.test('set "na"', autoEndTest(async st => {
 		const msg = mocks.createMessage(null, 'bill');
 		const expected = {
 			sentMsg: '@bill, Region set to "na".',
@@ -53,13 +53,12 @@ test('command.setRegion', t => {
 				region: 'na'
 			}
 		};
+		const result = await callSetRegion(msg, 'na');
 
-		callSetRegion(msg, 'na')
-			.then(result => st.deepEqual(result, expected, 'sets the region "na"'), error => st.fail(error))
-			.then(() => st.end());
-	});
+		st.deepEqual(result, expected, 'sets the region "na"');
+	}));
 
-	t.test('set "n"', st => {
+	t.test('set "n"', autoEndTest(async st => {
 		const msg = mocks.createMessage(null, 'greg');
 		const expected = {
 			sentMsg: '@greg, Region set to "na".',
@@ -68,13 +67,12 @@ test('command.setRegion', t => {
 				region: 'na'
 			}
 		};
+		const result = await callSetRegion(msg, 'n');
 
-		callSetRegion(msg, 'n')
-			.then(result => st.deepEqual(result, expected, 'sets the region "na"'), error => st.fail(error))
-			.then(() => st.end());
-	});
+		st.deepEqual(result, expected, 'sets the region "na"');
+	}));
 
-	t.test('set "eu"', st => {
+	t.test('set "eu"', autoEndTest(async st => {
 		const msg = mocks.createMessage(null, 'wendy');
 		const expected = {
 			sentMsg: '@wendy, Region set to "eu".',
@@ -83,13 +81,12 @@ test('command.setRegion', t => {
 				region: 'eu'
 			}
 		};
+		const result = await callSetRegion(msg, 'eu');
 
-		callSetRegion(msg, 'eu')
-			.then(result => st.deepEqual(result, expected, 'sets the region "eu"'), error => st.fail(error))
-			.then(() => st.end());
-	});
+		st.deepEqual(result, expected, 'sets the region "eu"');
+	}));
 
-	t.test('set "e"', st => {
+	t.test('set "e"', autoEndTest(async st => {
 		const msg = mocks.createMessage(null, 'steve');
 		const expected = {
 			sentMsg: '@steve, Region set to "eu".',
@@ -98,13 +95,12 @@ test('command.setRegion', t => {
 				region: 'eu'
 			}
 		};
+		const result = await callSetRegion(msg, 'e');
 
-		callSetRegion(msg, 'e')
-			.then(result => st.deepEqual(result, expected, 'sets the region "eu"'), error => st.fail(error))
-			.then(() => st.end());
-	});
+		st.deepEqual(result, expected, 'sets the region "eu"');
+	}));
 
-	t.test('set "ru"', st => {
+	t.test('set "ru"', autoEndTest(async st => {
 		const msg = mocks.createMessage(null, 'garry');
 		const expected = {
 			sentMsg: '@garry, Region set to "ru".',
@@ -113,13 +109,12 @@ test('command.setRegion', t => {
 				region: 'ru'
 			}
 		};
+		const result = await callSetRegion(msg, 'ru');
 
-		callSetRegion(msg, 'ru')
-			.then(result => st.deepEqual(result, expected, 'sets the region "ru"'), error => st.fail(error))
-			.then(() => st.end());
-	});
+		st.deepEqual(result, expected, 'sets the region "ru"');
+	}));
 
-	t.test('set "r"', st => {
+	t.test('set "r"', autoEndTest(async st => {
 		const msg = mocks.createMessage(null, 'terry');
 		const expected = {
 			sentMsg: '@terry, Region set to "ru".',
@@ -128,13 +123,12 @@ test('command.setRegion', t => {
 				region: 'ru'
 			}
 		};
+		const result = await callSetRegion(msg, 'r');
 
-		callSetRegion(msg, 'r')
-			.then(result => st.deepEqual(result, expected, 'sets the region "ru"'), error => st.fail(error))
-			.then(() => st.end());
-	});
+		st.deepEqual(result, expected, 'sets the region "ru"');
+	}));
 
-	t.test('set "asia"', st => {
+	t.test('set "asia"', autoEndTest(async st => {
 		const msg = mocks.createMessage(null, 'marge');
 		const expected = {
 			sentMsg: '@marge, Region set to "asia".',
@@ -143,13 +137,12 @@ test('command.setRegion', t => {
 				region: 'asia'
 			}
 		};
+		const result = await callSetRegion(msg, 'asia');
 
-		callSetRegion(msg, 'asia')
-			.then(result => st.deepEqual(result, expected, 'sets the region "asia"'), error => st.fail(error))
-			.then(() => st.end());
-	});
+		st.deepEqual(result, expected, 'sets the region "asia"');
+	}));
 
-	t.test('set "a"', st => {
+	t.test('set "a"', autoEndTest(async st => {
 		const msg = mocks.createMessage(null, 'jill');
 		const expected = {
 			sentMsg: '@jill, Region set to "asia".',
@@ -158,11 +151,10 @@ test('command.setRegion', t => {
 				region: 'asia'
 			}
 		};
+		const result = await callSetRegion(msg, 'a');
 
-		callSetRegion(msg, 'a')
-			.then(result => st.deepEqual(result, expected, 'sets the region "asia"'), error => st.fail(error))
-			.then(() => st.end());
-	});
+		st.deepEqual(result, expected, 'sets the region "asia"');
+	}));
 
 	t.end();
 });
