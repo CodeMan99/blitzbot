@@ -1,5 +1,6 @@
 const test = require('tape');
 const nock = require('nock');
+const {autoEndTest} = require('./.utility.js');
 const mocks = require('./mocks');
 const add = require('../lib/command/add.js');
 const callAdd = add.fn.bind(mocks.commands);
@@ -16,20 +17,15 @@ test('command.add', t => {
 
 	t.equal(add.name, 'add', 'verify Commands method name');
 
-	t.test('no arguments response', st => {
-		callAdd(mocks.createMessage(null, 'Jim [CLN12]')).then(result => {
-			st.deepEqual(result, {
-				sentMsg: '@Jim [CLN12], You must specify your Blitz username. Do *not* include the clan tag.'
-			}, 'correct validation response');
+	t.test('no arguments response', autoEndTest(async st => {
+		const result = await callAdd(mocks.createMessage(null, 'Jim [CLN12]'));
 
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		st.deepEqual(result, {
+			sentMsg: '@Jim [CLN12], You must specify your Blitz username. Do *not* include the clan tag.'
+		}, 'correct validation response');
+	}));
 
-	t.test('valid username argument', st => {
+	t.test('valid username argument', autoEndTest(async st => {
 		nock('https://api.wotblitz.com')
 			.post('/wotb/account/list/', {
 				application_id,
@@ -56,25 +52,20 @@ test('command.add', t => {
 				}]
 			});
 
-		callAdd(mocks.createMessage(null, 'joe234 [CLAN1]'), 'joe234').then(result => {
-			st.deepEqual(result, {
-				sentMsg: '@joe234 [CLAN1], Welcome! You now have access to all commands. :)',
-				updateFields: {
-					nickname: 'Joe234',
-					account_id: 1009218110,
-					wins: 0,
-					battles: 0
-				}
-			}, 'found correct document in response');
+		const result = await callAdd(mocks.createMessage(null, 'joe234 [CLAN1]'), 'joe234');
 
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		st.deepEqual(result, {
+			sentMsg: '@joe234 [CLAN1], Welcome! You now have access to all commands. :)',
+			updateFields: {
+				nickname: 'Joe234',
+				account_id: 1009218110,
+				wins: 0,
+				battles: 0
+			}
+		}, 'found correct document in response');
+	}));
 
-	t.test('invalid username argument', st => {
+	t.test('invalid username argument', autoEndTest(async st => {
 		nock('https://api.wotblitz.com')
 			.post('/wotb/account/list/', {
 				application_id,
@@ -101,17 +92,12 @@ test('command.add', t => {
 				}]
 			});
 
-		callAdd(mocks.createMessage(null, 'TankKiller [CLAN2]'), 'TANKKILLER').then(result => {
-			st.deepEqual(result, {
-				sentMsg: '@TankKiller [CLAN2], No Blitz account found for `tankkiller`...'
-			}, 'found no document in the response');
+		const result = await callAdd(mocks.createMessage(null, 'TankKiller [CLAN2]'), 'TANKKILLER');
 
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		st.deepEqual(result, {
+			sentMsg: '@TankKiller [CLAN2], No Blitz account found for `tankkiller`...'
+		}, 'found no document in the response');
+	}));
 
 	t.end();
 });
