@@ -1,6 +1,7 @@
 const test = require('tape');
 const Datastore = require('../lib/datastore.js');
 const nock = require('nock');
+const {autoEndTest} = require('./.utility.js');
 const mocks = require('./mocks');
 const vehicleList = require('./mocks/vehicles.json');
 const wr = require('../lib/command/winRate.js');
@@ -28,18 +29,13 @@ test('command.winRate.tankWinRate', t => {
 
 	t.equal(wr.tankWinRate.name, 'tank-win-rate', 'verify Commands method name');
 
-	t.test('provided no argument', st => {
-		callTankWinRate(mocks.createMessage(null, 'dumb43 [CL]'), { /* record */ }).then(result => {
-			st.deepEqual(result, {
-				sentMsg: '@dumb43 [CL], Must specify a vehicle for "tank-win-rate".'
-			}, 'tells the user to provide an argument');
+	t.test('provided no argument', autoEndTest(async st => {
+		const result = await callTankWinRate(mocks.createMessage(null, 'dumb43 [CL]'), { /* record */ });
 
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		st.deepEqual(result, {
+			sentMsg: '@dumb43 [CL], Must specify a vehicle for "tank-win-rate".'
+		}, 'tells the user to provide an argument');
+	}));
 
 	const encyclopediaVehiclesMock = () => {
 		return nock('https://api.wotblitz.com')
@@ -59,22 +55,17 @@ test('command.winRate.tankWinRate', t => {
 			});
 	};
 
-	t.test('no tank name matches argument', st => {
+	t.test('no tank name matches argument', autoEndTest(async st => {
 		const tankopediaVehicles = encyclopediaVehiclesMock();
-
-		callTankWinRate(mocks.createMessage(null, 'jake81 [CL]'), {
+		const result = await callTankWinRate(mocks.createMessage(null, 'jake81 [CL]'), {
 			account_id: 100996734
-		}, 'no tank matches').then(result => {
-			st.notOk(result, 'resolves without a response');
-			st.ok(tankopediaVehicles.isDone(), 'make one api call');
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		}, 'no tank matches');
 
-	t.test('argument is a valid tank, but has no record', st => {
+		st.notOk(result, 'resolves without a response');
+		st.ok(tankopediaVehicles.isDone(), 'make one api call');
+	}));
+
+	t.test('argument is a valid tank, but has no record', autoEndTest(async st => {
 		const tankopediaVehicles = encyclopediaVehiclesMock();
 		const tankStats = nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
@@ -95,22 +86,17 @@ test('command.winRate.tankWinRate', t => {
 					'100998143': null
 				}
 			});
+		const result =
+			await callTankWinRate(mocks.createMessage(null, 'meganthetanker [CL]', []), {account_id: 100998143}, 'T7 Combat Car');
 
-		callTankWinRate(mocks.createMessage(null, 'meganthetanker [CL]', []), {account_id: 100998143}, 'T7 Combat Car')
-			.then(result => {
-				st.deepEqual(result, {
-					sentMsg: '@meganthetanker [CL], I found no stats related to your search.'
-				}, 'verify response explains that the tank has yet to be played');
+		st.deepEqual(result, {
+			sentMsg: '@meganthetanker [CL], I found no stats related to your search.'
+		}, 'verify response explains that the tank has yet to be played');
 
-				st.ok(tankopediaVehicles.isDone() && tankStats.isDone(), 'make two api calls');
-				st.end();
-			}, error => {
-				st.fail(error);
-				st.end();
-			});
-	});
+		st.ok(tankopediaVehicles.isDone() && tankStats.isDone(), 'make two api calls');
+	}));
 
-	t.test('argument returns one tank', st => {
+	t.test('argument returns one tank', autoEndTest(async st => {
 		const tankopediaVehicles = encyclopediaVehiclesMock();
 		const tankStats = nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
@@ -137,21 +123,16 @@ test('command.winRate.tankWinRate', t => {
 					}]
 				}
 			});
+		const result = await callTankWinRate(mocks.createMessage(null, 'hulkhogan [CL]', []), {account_id: 100998144}, 'Löwe');
 
-		callTankWinRate(mocks.createMessage(null, 'hulkhogan [CL]', []), {account_id: 100998144}, 'Löwe').then(result => {
-			st.deepEqual(result, {
-				sentMsg: '@hulkhogan [CL], Löwe (germany, 8): 56.18% after 283 battles.'
-			}, 'verify response');
+		st.deepEqual(result, {
+			sentMsg: '@hulkhogan [CL], Löwe (germany, 8): 56.18% after 283 battles.'
+		}, 'verify response');
 
-			st.ok(tankopediaVehicles.isDone() && tankStats.isDone(), 'make two api calls');
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		st.ok(tankopediaVehicles.isDone() && tankStats.isDone(), 'make two api calls');
+	}));
 
-	t.test('argument returns two tanks', st => {
+	t.test('argument returns two tanks', autoEndTest(async st => {
 		const tankopediaVehicles = encyclopediaVehiclesMock();
 		const tankStats = nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
@@ -184,24 +165,19 @@ test('command.winRate.tankWinRate', t => {
 					}]
 				}
 			});
+		const result = await callTankWinRate(mocks.createMessage(null, 'jessie5 [CL]', []), {account_id: 100998145}, 'Pershing');
 
-		callTankWinRate(mocks.createMessage(null, 'jessie5 [CL]', []), {account_id: 100998145}, 'Pershing').then(result => {
-			st.deepEqual(result, {
-				sentMsg: [
-					'@jessie5 [CL], M26 Pershing (usa, 8): 71.72% after 534 battles.',
-					'T26E4 SuperPershing (usa, 8): 52.70% after 74 battles.'
-				].join('\n')
-			}, 'verify response');
+		st.deepEqual(result, {
+			sentMsg: [
+				'@jessie5 [CL], M26 Pershing (usa, 8): 71.72% after 534 battles.',
+				'T26E4 SuperPershing (usa, 8): 52.70% after 74 battles.'
+			].join('\n')
+		}, 'verify response');
 
-			st.ok(tankopediaVehicles.isDone() && tankStats.isDone(), 'make two api calls');
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		st.ok(tankopediaVehicles.isDone() && tankStats.isDone(), 'make two api calls');
+	}));
 
-	t.test('matches tank names with accents', st => {
+	t.test('matches tank names with accents', autoEndTest(async st => {
 		const tankopediaVehicles = encyclopediaVehiclesMock();
 		const tankStats = nock('https://api.wotblitz.com')
 			.post('/wotb/tanks/stats/', {
@@ -228,33 +204,23 @@ test('command.winRate.tankWinRate', t => {
 					}]
 				}
 			});
+		const result = await callTankWinRate(mocks.createMessage(null, 'statdude [STAT]', []), {account_id: 100996799}, 'Lowe');
 
-		callTankWinRate(mocks.createMessage(null, 'statdude [STAT]', []), {account_id: 100996799}, 'Lowe').then(result => {
-			st.deepEqual(result, {sentMsg: '@statdude [STAT], Löwe (germany, 8): 57.14% after 112 battles.'}, 'verify response');
-			st.ok(tankopediaVehicles.isDone() && tankStats.isDone(), 'made two api calls');
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		st.deepEqual(result, {sentMsg: '@statdude [STAT], Löwe (germany, 8): 57.14% after 112 battles.'}, 'verify response');
+		st.ok(tankopediaVehicles.isDone() && tankStats.isDone(), 'made two api calls');
+	}));
 
-	t.test('argument matches more than 100 limit of tankopedia endpoint', st => {
+	t.test('argument matches more than 100 limit of tankopedia endpoint', autoEndTest(async st => {
 		const tankopediaVehicles = encyclopediaVehiclesMock();
+		const result = await callTankWinRate(mocks.createMessage(null, 'noshootingheretonight'), {account_id: 100998146}, 't');
 
-		callTankWinRate(mocks.createMessage(null, 'noshootingheretonight'), {account_id: 100998146}, 't').then(result => {
-			st.deepEqual(result, {
-				sentMsg: '@noshootingheretonight, Found too many vehicles with `t`.'
-			}, 'verify response');
-			st.ok(tankopediaVehicles.isDone(), 'make one api call');
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		st.deepEqual(result, {
+			sentMsg: '@noshootingheretonight, Found too many vehicles with `t`.'
+		}, 'verify response');
+		st.ok(tankopediaVehicles.isDone(), 'make one api call');
+	}));
 
-	t.test('mention another user that does not exist in the database', st => {
+	t.test('mention another user that does not exist in the database', autoEndTest(async st => {
 		// TODO: This request should be done in parallel with the database query
 		const tankopediaVehicles = encyclopediaVehiclesMock();
 		const mentions = [{
@@ -272,20 +238,16 @@ test('command.winRate.tankWinRate', t => {
 			},
 			bot: true
 		}];
+		const result =
+			await callTankWinRate(mocks.createMessage(null, 'bigtanker5 [CL]', mentions), {account_id: 100998147}, 'Pershing');
 
-		callTankWinRate(mocks.createMessage(null, 'bigtanker5 [CL]', mentions), {account_id: 100998147}, 'Pershing').then(result => {
-			st.deepEqual(result, {
-				sentMsg: '@bigtanker5 [CL], I do not know who <@fakediscordid0> is. Sorry about that.'
-			}, 'verify response');
-			st.ok(tankopediaVehicles.isDone(), 'make one api call'); // technically wrong (see TODO above)
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
-		});
-	});
+		st.deepEqual(result, {
+			sentMsg: '@bigtanker5 [CL], I do not know who <@fakediscordid0> is. Sorry about that.'
+		}, 'verify response');
+		st.ok(tankopediaVehicles.isDone(), 'make one api call'); // technically wrong (see TODO above)
+	}));
 
-	t.test('mention another user to get their stats', st => {
+	t.test('mention another user to get their stats', autoEndTest(async st => {
 		// TODO: This request should be done in parallel with the database query
 		const tankopediaVehicles = encyclopediaVehiclesMock();
 		const tankStats = nock('https://api.wotblitz.com')
@@ -329,28 +291,19 @@ test('command.winRate.tankWinRate', t => {
 			bot: true
 		}];
 
-		dbInstance.insert({
+		await dbInstance.insert({
 			_id: 'fakediscordid1',
 			account_id: 100998149
-		}, insertErr => {
-			if (insertErr) {
-				st.fail(insertErr);
-				st.end();
-			}
-
-			callTankWinRate(mocks.createMessage(null, 'iambesttanker [CL]', mentions), {account_id: 100998148}, 'Tiger I')
-				.then(result => {
-					st.deepEqual(result, {
-						sentMsg: '@iambesttanker [CL], Tiger I (germany, 7): 53.30% after 227 battles.'
-					}, 'verify response');
-					st.ok(tankopediaVehicles.isDone() && tankStats.isDone(), 'make two api calls');
-					st.end();
-				}, error => {
-					st.fail(error);
-					st.end();
-				});
 		});
-	});
+
+		const result =
+			await callTankWinRate(mocks.createMessage(null, 'iambesttanker [CL]', mentions), {account_id: 100998148}, 'Tiger I');
+
+		st.deepEqual(result, {
+			sentMsg: '@iambesttanker [CL], Tiger I (germany, 7): 53.30% after 227 battles.'
+		}, 'verify response');
+		st.ok(tankopediaVehicles.isDone() && tankStats.isDone(), 'make two api calls');
+	}));
 
 	t.end();
 });
@@ -398,105 +351,85 @@ test('command.winRate.winRate', t => {
 			});
 	};
 
-	t.test('initial call', st => {
+	t.test('initial call', autoEndTest(async st => {
 		const accountInfo = accountInfoMock(100994563, 8691, 14280);
-
-		callWinRate(mocks.createMessage(null, 'bigguy20 [CL]'), {
+		const result = await callWinRate(mocks.createMessage(null, 'bigguy20 [CL]'), {
 			account_id: 100994563,
 			wins: 0,
 			battles: 0
-		}).then(result => {
-			st.deepEqual(result, {
-				sentMsg: '@bigguy20 [CL], You have won 8691 of 14280 battles. That is 60.86% victory!',
-				updateFields: {
-					wins: 8691,
-					battles: 14280
-				}
-			}, 'verify response and record update');
-
-			st.ok(accountInfo.isDone(), 'made one API call');
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
 		});
-	});
 
-	t.test('follow up call, no additional battles', st => {
+		st.deepEqual(result, {
+			sentMsg: '@bigguy20 [CL], You have won 8691 of 14280 battles. That is 60.86% victory!',
+			updateFields: {
+				wins: 8691,
+				battles: 14280
+			}
+		}, 'verify response and record update');
+
+		st.ok(accountInfo.isDone(), 'made one API call');
+	}));
+
+	t.test('follow up call, no additional battles', autoEndTest(async st => {
 		const accountInfo = accountInfoMock(100994564, 7682, 18290);
-
-		callWinRate(mocks.createMessage(null, 'littleguy21 [CL]'), {
+		const result = await callWinRate(mocks.createMessage(null, 'littleguy21 [CL]'), {
 			account_id: 100994564,
 			wins: 7682,
 			battles: 18290
-		}).then(result => {
-			st.deepEqual(result, {
-				sentMsg: '@littleguy21 [CL], You have won 7682 of 18290 battles. That is 42.00% victory!'
-			}, 'verify response');
-
-			st.ok(accountInfo.isDone(), 'made one API call');
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
 		});
-	});
 
-	t.test('follow up call, one additional battle', st => {
+		st.deepEqual(result, {
+			sentMsg: '@littleguy21 [CL], You have won 7682 of 18290 battles. That is 42.00% victory!'
+		}, 'verify response');
+
+		st.ok(accountInfo.isDone(), 'made one API call');
+	}));
+
+	t.test('follow up call, one additional battle', autoEndTest(async st => {
 		const accountInfo = accountInfoMock(100994565, 9260, 13933);
-
-		callWinRate(mocks.createMessage(null, 'biggirl22 [CL]'), {
+		const result = await callWinRate(mocks.createMessage(null, 'biggirl22 [CL]'), {
 			account_id: 100994565,
 			wins: 9259,
 			battles: 13932
-		}).then(result => {
-			st.deepEqual(result, {
-				sentMsg: [
-					'@biggirl22 [CL], You have won 9260 of 13933 battles. That is 66.46% victory!',
-					'Last time you asked was 1 battles ago, at 66.46% victory.',
-					'Over those 1 battles, you won 100.00%!'
-				].join('\n'),
-				updateFields: {
-					wins: 9260,
-					battles: 13933
-				}
-			}, 'verify response and record update');
-
-			st.ok(accountInfo.isDone(), 'made one API call');
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
 		});
-	});
 
-	t.test('follow up call, several additional battles', st => {
+		st.deepEqual(result, {
+			sentMsg: [
+				'@biggirl22 [CL], You have won 9260 of 13933 battles. That is 66.46% victory!',
+				'Last time you asked was 1 battles ago, at 66.46% victory.',
+				'Over those 1 battles, you won 100.00%!'
+			].join('\n'),
+			updateFields: {
+				wins: 9260,
+				battles: 13933
+			}
+		}, 'verify response and record update');
+
+		st.ok(accountInfo.isDone(), 'made one API call');
+	}));
+
+	t.test('follow up call, several additional battles', autoEndTest(async st => {
 		const accountInfo = accountInfoMock(100994566, 5003, 11502);
-
-		callWinRate(mocks.createMessage(null, 'littlegirl23 [CL]'), {
+		const result = await callWinRate(mocks.createMessage(null, 'littlegirl23 [CL]'), {
 			account_id: 100994566,
 			wins: 4992,
 			battles: 11483
-		}).then(result => {
-			st.deepEqual(result, {
-				sentMsg: [
-					'@littlegirl23 [CL], You have won 5003 of 11502 battles. That is 43.50% victory!',
-					'Last time you asked was 19 battles ago, at 43.47% victory.',
-					'Over those 19 battles, you won 57.89%!'
-				].join('\n'),
-				updateFields: {
-					wins: 5003,
-					battles: 11502
-				}
-			}, 'verify response and record update');
-
-			st.ok(accountInfo.isDone(), 'made one API call');
-			st.end();
-		}, error => {
-			st.fail(error);
-			st.end();
 		});
-	});
+
+		st.deepEqual(result, {
+			sentMsg: [
+				'@littlegirl23 [CL], You have won 5003 of 11502 battles. That is 43.50% victory!',
+				'Last time you asked was 19 battles ago, at 43.47% victory.',
+				'Over those 19 battles, you won 57.89%!'
+			].join('\n'),
+			updateFields: {
+				wins: 5003,
+				battles: 11502
+			}
+		}, 'verify response and record update');
+
+		st.ok(accountInfo.isDone(), 'made one API call');
+	}));
 
 	t.end();
 });
