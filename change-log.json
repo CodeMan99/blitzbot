@@ -1,5 +1,6 @@
 {
   "unreleased": [
+    "Upgrade eslint to 8.31.0",
     "Upgrade wotblitz to 1.3.0",
     "Change to async / await patterns."
   ],
