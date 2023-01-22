@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const {Commands} = require('../lib/command');
-const Datastore = require('../lib/datastore.js');
+const Datastore = require('@seald-io/nedb');
 const Discord = require('discord.js');
 const auth = require('../blitzbot.json');
 const helpers = require('../lib/helpers.js');
@@ -88,7 +88,7 @@ client.on('message', async message => {
 			region = regionLetter[region];
 		}
 	} else {
-		region = master.findOne({_id: userId}).then(record => {
+		region = master.findOneAsync({_id: userId}).then(record => {
 			return (record && record.region) || auth.wotblitz.default_region || 'na';
 		});
 	}
@@ -123,7 +123,7 @@ client.on('message', async message => {
 		console.log(id + ' -- running command: "' + command + '"');
 
 		if (passRecord) {
-			const record = await db.findOne({_id: userId});
+			const record = await db.findOneAsync({_id: userId});
 
 			// commands require a saved 'account_id'.
 			if (record && record.account_id) {
@@ -148,10 +148,10 @@ client.on('message', async message => {
 
 			if (result.master) {
 				console.log(id + ' -- update document ' + master.filename);
-				await master.update({_id: userId}, {$set: update}, {upsert: true});
+				await master.updateAsync({_id: userId}, {$set: update}, {upsert: true});
 			} else {
 				console.log(id + ' -- update document ' + db.filename);
-				await db.update({_id: userId}, {$set: update}, {upsert: true});
+				await db.updateAsync({_id: userId}, {$set: update}, {upsert: true});
 			}
 		}
 	} catch (error) {
@@ -166,11 +166,11 @@ client.on('message', async message => {
 });
 
 Promise.all([
-	regions.na.db.loadDatabase(),
-	regions.eu.db.loadDatabase(),
-	regions.ru.db.loadDatabase(),
-	regions.asia.db.loadDatabase(),
-	master.loadDatabase(),
+	regions.na.db.loadDatabaseAsync(),
+	regions.eu.db.loadDatabaseAsync(),
+	regions.ru.db.loadDatabaseAsync(),
+	regions.asia.db.loadDatabaseAsync(),
+	master.loadDatabaseAsync(),
 	client.login(auth.user.token)
 ]).then(() => {
 	const exposeReferences = {

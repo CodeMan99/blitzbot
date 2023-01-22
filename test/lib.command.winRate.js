@@ -1,5 +1,5 @@
 const test = require('tape');
-const Datastore = require('../lib/datastore.js');
+const Datastore = require('@seald-io/nedb');
 const nock = require('nock');
 const {autoEndTest} = require('./.utility.js');
 const mocks = require('./mocks');
@@ -291,7 +291,7 @@ test('command.winRate.tankWinRate', t => {
 			bot: true
 		}];
 
-		await dbInstance.insert({
+		await dbInstance.insertAsync({
 			_id: 'fakediscordid1',
 			account_id: 100998149
 		});
