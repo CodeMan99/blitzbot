@@ -2,26 +2,21 @@
 
 const bb = require('../blitzbot.json');
 
-/**
- * @constructor
- */
-function Maintenance(master, regions) {
-	this.master = master;
-	this.regions = regions;
-	this.discordUser = null;
+class Maintenance {
+	constructor(master, regions) {
+		this.master = master;
+		this.regions = regions;
+		this.discordUser = null;
 
-	Object.defineProperty(this, 'activeRegion', {
-		configurable: true,
-		enumerable: false,
-		value: null,
-		writable: true
-	});
-}
+		Object.defineProperty(this, 'activeRegion', {
+			configurable: true,
+			enumerable: false,
+			value: null,
+			writable: true
+		});
+	}
 
-Object.defineProperty(Maintenance.prototype, 'region', {
-	configurable: true,
-	enumerable: true,
-	get: function() {
+	get region() {
 		if (this.activeRegion === null) {
 			const error = new Error('Set the region first');
 
@@ -31,64 +26,44 @@ Object.defineProperty(Maintenance.prototype, 'region', {
 		}
 
 		return this.regions[this.activeRegion];
-	},
-	set: function(region) {
+	}
+
+	set region(region) {
 		if (region in this.regions) {
 			this.activeRegion = region;
 		} else {
 			const error = new Error('Invalid region value: ' + region);
 
 			error.code = 'EREGION';
-			this.activeRegion = null;
 
 			throw error;
 		}
 	}
-});
 
-Object.defineProperty(Maintenance.prototype, 'client', {
-	configurable: true,
-	enumerable: true,
-	get: function() {
+	get client() {
 		return this.region.client;
 	}
-});
 
-Object.defineProperty(Maintenance.prototype, 'db', {
-	configurable: true,
-	enumerable: true,
-	get: function() {
+	get db() {
 		return this.region.db;
 	}
-});
 
-Object.defineProperty(Maintenance.prototype, 'wotblitz', {
-	configurable: true,
-	enumerable: true,
-	get: function() {
+	get wotblitz() {
 		return this.region.wotblitz;
 	}
-});
 
-Maintenance.prototype.setupForUser = function(id, callback) {
-	this.discordUser = id;
-	this.master.findOne({_id: id}, (err, data) => {
-		if (err) return callback(err);
+	async setupForUser(id) {
+		this.discordUser = id;
+		const data = await this.master.findOneAsync({_id: id});
 
-		try {
-			if (data && data.region) {
-				this.region = data.region;
-			} else {
-				this.region = bb.wotblitz.default_region || 'na';
-			}
-
-			err = null;
-		} catch (e) {
-			err = e;
+		if (data && data.region) {
+			this.region = data.region;
+		} else {
+			this.region = bb.wotblitz.default_region || 'na';
 		}
 
-		callback(err, this.activeRegion);
-	});
-};
+		return this.activeRegion;
+	}
+}
 
 exports.Maintenance = Maintenance;

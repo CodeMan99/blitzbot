@@ -1,7 +1,6 @@
 'use strict';
 
 const {Maintenance} = require('.');
-const async = require('async');
 
 /**
  * @param {*} value
@@ -12,136 +11,90 @@ function delay(value, n) {
 	return new Promise(resolve => setTimeout(resolve, n, value));
 }
 
-/**
- * @constructor
- */
-function UpdateWinRate(master, regions) {
-	Maintenance.call(this, master, regions);
-}
-
-UpdateWinRate.super_ = Maintenance;
-UpdateWinRate.prototype = Object.create(Maintenance.prototype, {
-	constructor: {
-		configurable: true,
-		enumerable: false,
-		value: UpdateWinRate,
-		writable: true
-	}
-});
-
-UpdateWinRate.prototype.updateSingleRecord = function(callback) {
-	let db = null;
-	let wotblitz = null;
-
-	try {
-		db = this.db;
-		wotblitz = this.wotblitz;
-	} catch (e) {
-		return void setImmediate(callback, e);
-	}
-
-	db.findOne({_id: this.discordUser}, (err, data) => {
-		if (err) return callback(err);
-
+class UpdateWinRate extends Maintenance {
+	async updateSingleRecord() {
+		const db = this.db;
+		const wotblitz = this.wotblitz;
+		const data = await db.findOneAsync({_id: this.discordUser});
 		const result = {
 			previous: {
 				wins: data.wins,
 				battles: data.battles
 			}
 		};
+		const info = await wotblitz.account.info(data.account_id, null, null, ['statistics.all.wins', 'statistics.all.battles']);
+		const {wins, battles} = info[data.account_id].statistics.all;
+		const update = {wins, battles};
 
-		wotblitz.account.info(data.account_id, null, null, ['statistics.all.wins', 'statistics.all.battles'])
-			.then(info => {
-				const wins = info[data.account_id].statistics.all.wins;
-				const battles = info[data.account_id].statistics.all.battles;
-				const update = {
-					wins: wins,
-					battles: battles
-				};
+		await db.updateAsync({_id: this.discordUser}, {$set: update}, {upsert: true});
 
-				db.update({_id: this.discordUser}, {$set: update}, {upsert: true}, error => {
-					if (error) return callback(error);
+		result.current = update;
 
-					result.current = update;
-					callback(null, result);
-				});
-			})
-			.catch(callback);
-	});
-};
-
-UpdateWinRate.prototype.updateAll = function(regionName, callback) {
-	let db = null;
-	let wotblitz = null;
-
-	try {
-		this.region = regionName;
-		db = this.db;
-		wotblitz = this.wotblitz;
-	} catch (e) {
-		return void setImmediate(callback, e);
+		return result;
 	}
 
-	db.find({}, {_id: 1, account_id: 1, wins: 1, battles: 1}, (err, records) => {
-		if (err) return callback(err);
+	async updateAll(regionName) {
+		this.region = regionName;
 
+		const db = this.db;
+		const wotblitz = this.wotblitz;
+		const records = await db.findAsync({}, {_id: 1, account_id: 1, wins: 1, battles: 1});
 		const accountIds = records.map(r => r.account_id);
 		const infoRequests = [];
-		const fields = ['statistics.all.wins', 'statistics.all.battles'];
 
 		for (let i = 0; i < accountIds.length; i += 100) {
+			// delay every request by 125 milliseconds to avoid rate limiting
 			infoRequests.push(
-				// delay every request by 125 milliseconds to avoid rate limiting
 				delay(i, i * 1000 / 800)
-					.then(index => wotblitz.account.info(accountIds.slice(index, index + 100), null, null, fields))
+					.then(index => getInfoChunk(accountIds, wotblitz, index))
 			);
 		}
 
-		Promise.all(infoRequests)
-			.then(responses => {
-				const info = Object.assign({}, ...responses);
-				const updates = [];
-				const describe = {
-					updatedCount: 0
-				};
+		const infoResponses = await Promise.all(infoRequests);
+		const info = Object.assign({}, ...infoResponses);
+		const updates = [];
+		const describe = {
+			updatedCount: 0
+		};
 
-				for (const record of records) {
-					// eslint-disable-next-line eqeqeq
-					if (info[record.account_id] != null) {
-						const all = info[record.account_id].statistics.all;
+		for (const record of records) {
+			// eslint-disable-next-line eqeqeq
+			if (info[record.account_id] != null) {
+				const all = info[record.account_id].statistics.all;
 
-						if (record.wins <= record.battles && record.wins <= all.wins && record.battles <= all.battles) {
-							describe[record.account_id] = {exists: true, updated: false};
-							continue;
-						}
+				if (record.wins <= record.battles && record.wins <= all.wins && record.battles <= all.battles) {
+					describe[record.account_id] = {exists: true, updated: false};
+					continue;
+				}
 
-						updates.push([
-							{_id: record._id},
-							{$set: {
-								wins: all.wins,
-								battles: all.battles
-							}}
-						]);
-						describe[record.account_id] = {exists: true, updated: true};
-					} else {
-						describe[record.account_id] = {exists: false, updated: false};
+				const update = db.updateAsync({_id: record._id}, {
+					$set: {
+						wins: all.wins,
+						battles: all.battles
 					}
-				}
+				}, {upsert: true});
 
-				describe.updatedCount = updates.length;
+				updates.push(update);
+				describe[record.account_id] = {exists: true, updated: true};
+			} else {
+				describe[record.account_id] = {exists: false, updated: false};
+			}
+		}
 
-				if (updates.length === 0) {
-					return callback(null, describe);
-				}
+		describe.updatedCount = updates.length;
 
-				async.each(updates, (update, cb) => db.update(...update, {upsert: true}, cb), error => {
-					if (error) return callback(error);
+		await Promise.all(updates);
 
-					callback(null, describe);
-				});
-			})
-			.catch(callback);
-	});
-};
+		return describe;
+	}
+}
+
+async function getInfoChunk(accountIds, wotblitz, i) {
+	const accountIdsChunk = accountIds.slice(i, i + 100);
+	const fields = ['statistics.all.wins', 'statistics.all.battles'];
+	const infoChunk = await wotblitz.account.info(accountIdsChunk, null, null, fields);
+
+	return infoChunk;
+}
 
 exports.UpdateWinRate = UpdateWinRate;
