@@ -1,5 +1,11 @@
 {
   "unreleased": [
+    "Upgrade tape to 5.7.2",
+    "Upgrade nock to 13.3.7",
+    "Upgrade eslint to 8.52.0",
+    "Upgrade woblitz to 1.3.2",
+    "Upgrade bufferutil to 4.0.7",
+    "Upgrade @seald-io/nedb to 4.0.2",
     "Change to async / await patterns.",
     "Remove async dependency."
   ],
