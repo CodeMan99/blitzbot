@@ -3,6 +3,10 @@ blitzbot [![CircleCI](https://circleci.com/gh/CodeMan99/blitzbot.svg?style=svg)]
 
 Statistics chat bot for World of Tanks Blitz on Discord.
 
+# IMPORTANT: END OF LIFE
+
+As of February 5, 2024 this project is officially at end of life. The active discord instance will stop indefinitely on February 29, 2024. The repository will also be marked as _archived_.
+
 Commands
 --------
 
